@@ -1053,9 +1053,8 @@ $(document).ready(function(){
       var $this = $(this),
           window_width = $(window).width();
 
-      $this.width('100%');
       // Set Tab Width for each tab
-      var $num_tabs = $(this).children('li').length;
+      var $num_tabs = $this.children('li').length;
       $this.children('li').each(function() {
         $(this).width((100/$num_tabs)+'%');
       });
@@ -1069,10 +1068,10 @@ $(document).ready(function(){
 
       // If no match is found, use the first link or any with class 'active' as the initial active tab.
       if ($active.length === 0) {
-          $active = $(this).find('li.tab a.active').first();
+          $active = $this.find('li.tab a.active').first();
       }
       if ($active.length === 0) {
-        $active = $(this).find('li.tab a').first();
+        $active = $this.find('li.tab a').first();
       }
 
       $active.addClass('active');

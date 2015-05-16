@@ -1,0 +1,1 @@
+$(function(){var t=$("#search"),c=$("#search-term");c.change(function(){}),t.find("a").click(function(){t.hasClass("active")?(t.blur(),setTimeout(function(){t.removeClass("active")},100),setTimeout(function(){c.val("")},500)):(t.addClass("active"),setTimeout(function(){c.focus()},300))})});
