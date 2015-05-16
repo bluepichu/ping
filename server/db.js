@@ -29,7 +29,7 @@ var query = function(collection, query, cb){
  * Returns the result of a database query projected onto the projection object.
  * @param {string} collection The collection on which to run the query
  * @param {object} query The query to run on the collection (formatted mongo-style)
- * @param {object} query The object on which to project the query (formatted mongo-style)
+ * @param {object} projection The object on which to project the query (formatted mongo-style)
  * @param {function} cb Callback function for completion, taking two arguments - the data on a succesful request and the error on an unsuccesful one
  */
 var project = function(collection, query, projection, cb){
