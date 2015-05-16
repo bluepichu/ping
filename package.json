@@ -1,0 +1,12 @@
+{
+  "name": "ping",
+  "version": "0.0.1",
+  "description": "The best event pager ever",
+  "dependencies": {
+    "body-parser": "^1.10.2",
+    "crypto": "^0.0.3",
+    "express": "^4.11.1",
+    "mongojs": "^0.18.1",
+	"bcrypt": "^0.8.3"
+  }
+}
