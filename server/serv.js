@@ -264,9 +264,10 @@ app.get("/qrtest", function(req, res){ // testing only
 });
 
 app.get("/twitter", function(req, res){ // testing only
-	res.send(tweet(function(data){
-		alert(data)
-	}, "@ping_1t"));
+	tweet(function(data){
+		console.log('Hi');
+	}, "@ping_1t");
+	res.send();
 });
 
 app.get("/dbtest", function(req, res){
