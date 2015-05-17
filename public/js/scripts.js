@@ -1,6 +1,6 @@
 $(function() {
 	$('select').material_select();
-	
+	$(".button-collapse").sideNav();
 	var $search = $("#search"),
 		$searchTerm = $("#search-term");
 
