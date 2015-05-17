@@ -296,4 +296,9 @@ $(function() {
 		}
 		$(this).data("previous", $(this).val());
 	});
+	
+	$("#new-channel").click(function(){
+		$("#modal-event").closeModal();
+		setTimeout(function() {$("#modal-add-channel").openModal()}, 300);
+	});
 });

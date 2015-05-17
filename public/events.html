@@ -58,6 +58,23 @@
 					<i class="large mdi-content-add"></i>
 				</a>
 			</div>
+			<!-- Modal Add Channel -->
+			<div id="modal-add-channel" class="modal">
+				<div class="modal-content">
+					<form>
+						<h4>Add Channel</h4>
+						<div class="input">
+							<input id="channel-name" name="name" type="text" autocomplete="off" required>
+							<label for="channel-name">Channel Name</label>
+							<span class="bar"></span>
+						</div>
+					</form>
+					<div class="modal-footer">
+						<a class="waves-effect btn-flat modal-action" id="create-event">Create</a>
+						<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+					</div>
+				</div>
+			</div>
 			<!-- Modal Login -->
 			<div id="modal-login" class="modal">
 				<div class="modal-content">
@@ -266,6 +283,7 @@
 				<div class="modal-footer">
 					<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
 					<a class="waves-effect btn-flat modal-action modal-close">Done</a>
+					<a class="waves-effect btn-flat modal-action" id="new-channel">New Channel</a>
 				</div>
 			</div>
 			<div id="modal-more" class="modal modal-fixed-footer">
