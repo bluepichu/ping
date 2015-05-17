@@ -130,6 +130,18 @@ app.get("/qrtest", function(req, res){ // testing only
 	res.send(qr("tsa-smash4"));
 });
 
+app.get("/dbtest", function(req, res){
+	db.getEventModel().findOne({name:"HackTJ 3.0"},function(err, evt){
+		db.getChannelModel().findOne({name:"HackTJ 3.0 main channel"}, function(err, chan){
+			db.createSubChannel(chan.id, "Workshops", evt.id);	
+		});
+	});
+	//Event.findOne({name:"HackTJ 2.0"}, function(err, evt){
+	//	db.newSubEvent(evt.id, "Cookie Baking Workshop", "Learn to bake cookies!", new Date());
+	//});
+	res.send("DB tested.");
+});
+
 app.get("/", static("/"));
 
 app.get("/user/new", static("/user/new.html"));

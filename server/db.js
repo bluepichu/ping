@@ -24,13 +24,14 @@ db.once("open", function (callback) {
 		name		: String,
 		phone		: String,
 		
-		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }], // channels
+		subscriptions	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }], // channels
 		organized	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is running
 		participated: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is going to
 		spectated	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is spectating
 		
 		password	: String,
-		salt		: String
+		salt		: String,
+		authTokens	: [String]
 	});
 	var eventSchema = mongoose.Schema({
 		name		: String,
@@ -68,10 +69,11 @@ db.once("open", function (callback) {
 
 console.log("pingdb initialized");
 
-var newEvent = function(name, description){
+var newEvent = function(name, description, format){
 	var evt = new Event();
 	evt.name = name;
 	evt.description = description;
+	evt.format = format;
 	evt.channels.push( newChannel(name + " main channel", evt.id) );
 	evt.save(function(err, evt_saved){
 	    if(err){
@@ -85,9 +87,21 @@ var newEvent = function(name, description){
 };
 
 var newSubEvent = function(parentID, name, description, time){
+	
 	var subevt	= new SubEvent();
 	subevt.name	= name;
+	
 	subevt.parentEvent = parentID;
+	
+	Event.findById(parentID, function(err, parent){
+		if(err){
+			throw err;
+			console.log(err);
+		} else{
+			parent.subEvents.push(subevt.id);
+		}
+	});
+	
 	subevt.time = time;
 	subevt.channels.push( newChannel(name + " subevent channel", parentID) );
 	subevt.save(function(err, evt_saved){
@@ -128,7 +142,17 @@ var attachSubChannel = function(channelID, subchannelID){
 					console.log("subchannel does not exist");
 				}
 			});
+			console.log("pushing subchannel");
 			chan.subChannels.push(subchannelID);
+			chan.save(function(err, evt_saved){
+			    if(err){
+			        throw err;
+			        console.log(err);
+			    }else{
+			        console.log("new channel saved!");
+			    }
+			});
+			console.log(chan.subChannels);
 		}
 	});
 };
@@ -138,11 +162,27 @@ var createSubChannel = function(parentID, name, eventID){
 	attachSubChannel(parentID, subID);
 };
 
+var getChannelModel = function(){
+	return Channel;
+}
+
+var getUserModel = function(){
+	return User;
+}
+
+var getEventModel = function(){
+	return Event;
+}
+
+var getSubEventModel = function(){
+	return SubEvent;
+}
+
 module.exports = {
-	Channel		: Channel,
-	User		: User,
-	Event		: Event,
-	SubEvent	: SubEvent,
+	getChannelModel		: getChannelModel,
+	getUserModel		: getUserModel,
+	getEventModel		: getEventModel,
+	getSubEventModel	: getSubEventModel,
 	newEvent	: newEvent,
 	newSubEvent	: newSubEvent,
 	newChannel	: newChannel,
