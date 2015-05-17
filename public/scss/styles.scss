@@ -89,6 +89,7 @@ header nav {
 }
 .input {
 	position:relative;
+	margin: 24px 0;
 	input {
 		font-size: 18px;
 		display: block;
@@ -109,16 +110,18 @@ header nav {
 			top: -20px;
 			font-size: 1em;
 			color: $primary-color;
+			opacity: 1;
 		}
 	}
 	label {
-		color: #999;
+		position: absolute;
+		left: 5px;
+		top: -5px;
+		color: black;
 		font-size: 1.4em;
 		font-weight: normal;
-		position: absolute;
 		pointer-events: none;
-		left: 5px;
-		top: 10px;
+		opacity: 0.56;
 		transition: 0.2s ease all;
 	}
 	.bar {
@@ -222,6 +225,17 @@ main {
 	bottom: 2rem;
 	right: 2rem;
 }
+#modal-login .modal-content {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	h4 {
+		padding-bottom: 1rem;
+	}
+	.input {
+		margin-bottom: 0;
+	}
+}
 #modal-event .modal-content {
 	#event-description {
 		padding: 1rem 0.75rem;
@@ -244,6 +258,11 @@ main {
 			font-size: 200%;
 			line-height: 2rem;
 		}
+	}
+}
+#modal-create .modal-content {
+	.input {
+		margin: 0;
 	}
 }
 h4, h5 {

@@ -1691,11 +1691,11 @@ $(document).ready(function(){
     var newToast = createToast(message);
     container.appendChild(newToast);
 
-    newToast.style.top = '35px';
+    newToast.style.bottom = '35px';
     newToast.style.opacity = 0;
 
     // Animate toast in
-    Vel(newToast, { "top" : "0px", opacity: 1 }, {duration: 300,
+    Vel(newToast, { "bottom" : "0px", opacity: 1 }, {duration: 300,
       easing: 'easeOutCubic',
       queue: false});
 
@@ -1714,7 +1714,7 @@ $(document).ready(function(){
 
       if (timeLeft <= 0) {
         // Animate toast out
-        Vel(newToast, {"opacity": 0, marginTop: '-40px'}, { duration: 375,
+        Vel(newToast, {"opacity": 0, marginBottom: '-40px'}, { duration: 375,
             easing: 'easeOutExpo',
             queue: false,
             complete: function(){
@@ -1770,7 +1770,7 @@ $(document).ready(function(){
 
           // If toast dragged past activation point
           if (Math.abs(deltaX) > activationDistance) {
-            Vel(toast, {marginTop: '-40px'}, { duration: 375,
+            Vel(toast, {marginBottom: '-40px'}, { duration: 375,
                 easing: 'easeOutExpo',
                 queue: false,
                 complete: function(){

@@ -74,11 +74,11 @@ $(function() {
 						this.addParticipant(rec.participants[i]);
 					}
 				}
-			}*/
+			}
 			// TODO write this handle I think lol
 			xmlhttp.open("GET","/event/:handle");
 			xmlhttp.send();
-			
+			*/
 			//if (part of user's events...)
 			this.favorite = true;
 			this.$submit.text("Remove");
