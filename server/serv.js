@@ -12,6 +12,7 @@ var twilio = require("./twilio");
 var qr = require("./qr");
 var cryptoString = require("random-crypto-string");
 var crypto = require("crypto");
+var extend = require("extend");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
@@ -64,6 +65,9 @@ var checkSchema = function(object, schema){
 	for(field in schema){
 		if(schema[field].indexOf("optional") < 0 && !(field in object)){
 			return false;
+		}
+		if(schema[field].indexOf("optional") >= 0 && !(field in object)){
+			continue;
 		}
 		if(schema[field].indexOf((object[field].constructor === Array) ? "array" : typeof(object[field])) < 0){
 			return false;
@@ -217,6 +221,7 @@ app.post("/user/auth", function(req, res){
 		password: "string"
 	})){
 		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		return;
 	}
 
 	db.getUserModel().find({
@@ -226,11 +231,12 @@ app.post("/user/auth", function(req, res){
 		}
 	}, function(err, data){
 		if(err || !data){
-			res.status(500).send("Internal error: failed retreiving data.");
+			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
 		if(data.length != 1){
 			res.status(200).send("{ok: false, reason: 'Named user does not exist.'}");
+			return;
 		}
 		user = data[0];
 		if(user.password == passwordHash(req.body.password, user.salt)){
@@ -240,8 +246,7 @@ app.post("/user/auth", function(req, res){
 					return;
 				}
 				res.cookie("authToken", token);
-				res.status(200);
-				res.send("{ok: true}");
+				res.status(200).send("{ok: true}");
 				db.getUserModel().update({
 					phone: req.body.phone
 				}, {
@@ -258,12 +263,43 @@ app.post("/user/auth", function(req, res){
 	});
 });
 
+app.post("/event/new", function(req, res){
+	if(!checkSchema(req.body, {
+		name: "string",
+		slug: "optional string",
+		description: "optional string",
+		format: "optional string"
+	})){
+		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		return;
+	}
+	extend(req.body, {
+		slug: req.body.name.toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""),
+		format: "panel"
+	});
+	db.getEventModel().find({
+		slug: req.body.slug
+	}, function(err, data){
+		if(err || !data){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		if(data.length > 0){
+			res.status(200).send("{ok: false, reason: 'An event with that slug already exists.'}");
+			return;
+		}
+		db.getEventModel().create(req.body, function(err, dat){
+			if(err || !dat){
+				res.status(500).send("Internal error: failed inserting data.");
+				return;
+			}
+			res.status(200).send("{ok: true}");
+		});
+	});
+});
+
 app.get("/", static("/"));
 
 app.get("/events", static("/events.html"));
-
-app.post("/", function(req, res){
-	res.send("yes ");
-});
 
 http.listen(process.env.PORT || 1337, function(){});
