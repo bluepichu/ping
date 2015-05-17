@@ -69,8 +69,6 @@ $(function() {
 		this.show = function(id) {
 			//console.log(id);
 			this.id = id;
-			// Grab title, description, participants
-			//this.participants = // give array of participants
 			var me = this;
 			var xhr = new XMLHttpRequest();
 			xhr.onload = function(){
@@ -79,14 +77,14 @@ $(function() {
 				} else {
 					var rec = JSON.parse(xhr.responseText);	
 					if( rec.ok ){
-						this.setTitle(rec.name);
-						this.setDescription(rec.description);
+						me.setTitle(rec.name);
+						me.setDescription(rec.description);
 						for(var i = 0; i < rec.participants.length; i++){
-							this.addParticipant(rec.participants[i]);
+							me.addParticipant(rec.participants[i]);
 						}	
 						//if (part of user's events...)
-						this.favorite = true;
-						this.$submit.text("Remove");
+						me.favorite = true;
+						me.$submit.text("Remove");
 						//} else {
 							//this.favorite = false;
 							//this.$submit.text("Add");
@@ -98,11 +96,12 @@ $(function() {
 					}
 				}
 			}
-			xhr.open("GET", "/event/:handle", true);
+			xhr.open("GET", "/event/:handle&slug=" + this.id, true);
 			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify({"id":id}));
+			//console.log("stringy " + JSON.stringify( {id:this.id} ));
+			xhr.send();
 			
-			};
+		};
 		this.setTitle = function(title) {
 			$("#event-title").text(title);
 		};
@@ -224,8 +223,32 @@ $(function() {
 	}();
 	modalEvent.addParticipant("hi");
 	modalEvent.addChannel("hi again");
+	
+	var getEventList = function(){
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			if(this.status != 200){
+				Materialize.toast(this.responseText, 4000);
+			} else {
+				var rec = JSON.parse(xhr.responseText);	
+				if( rec.ok ){
+					for(var i = 0; i < rec.events.length; i++){
+						cards.add(rec.events[i].name, rec.events[i].slug);
+					}
+				}
+				else{
+					Materialize.toast("Request failed: " + rec.reason, 4000);
+				}
+			}
+		}
+		xhr.open("GET", "/event/listall", true);
+		xhr.send();
+	}
+	
+	getEventList();
+	
 	cards.add("Smash Tourney", "test-id");
-
+	cards.add("Amaze", "amazing-race");
 	$("#create-form").submit(function(e){
 		e.preventDefault();
 

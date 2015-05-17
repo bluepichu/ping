@@ -58,6 +58,10 @@ $(function() {
 			clearAll();
 			$loginModal.openModal();
 		});
+		$("#logout").click(function() {
+			$.removeCookie("authToken");
+			location.reload();
+		});
 		$registerModal.find("#register-login").click(function() {
 			$loginUsername.val($registerUsername.val());
 			$registerModal.closeModal();

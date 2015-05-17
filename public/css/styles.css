@@ -99,21 +99,21 @@ header nav #slide-out {
               transition: border-bottom 0.2s ease; }
       .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
         width: 50%; }
-    .input input:focus ~ label, .input input:valid ~ label, .input input:invalid ~ label {
-      top: -20px;
+    .input input:focus ~ label, .input input:valid ~ label {
+      top: -20px !important;
       font-size: 1em;
       color: #29B6F6;
       opacity: 1; }
-    .input input:invalid ~ label {
-      color: #F44336; }
     .input input:valid ~ .bar:before, .input input:valid ~ .bar:after {
       background: #29B6F6; }
+    .input input:invalid ~ label {
+      color: #F44336; }
   .input label {
     position: absolute;
     left: 5px;
     top: -5px;
     color: black;
-    font-size: 1.4em;
+    font-size: 140%;
     font-weight: normal;
     pointer-events: none;
     opacity: 0.56;
@@ -258,6 +258,9 @@ main .card {
     line-height: 2rem; }
 #modal-event .modal-content .channel {
   margin-bottom: 0.75rem; }
+
+#logout {
+  float: left; }
 
 #modal-create .modal-content .input {
   margin: 0; }

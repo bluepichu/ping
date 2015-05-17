@@ -463,18 +463,39 @@ app.post("/event/new", function(req, res){
 	});
 });
 
-app.get("/event/:handle", function(req, res){
-	//console.log(req);
-	if(!req.body.slug && !req.body.id){
+app.get("/event/listall", function(req, res){
+	db.getEventModel().find({}, function(err, data){
+		if(err || data.length < 1){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		var message = {ok:true, events:[]};
+		for(var i = 0; i < data.length; i++){
+			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format});
+		}
+		res.status(200).send(JSON.stringify(message));
+	});
+});
+
+app.get("/event/:handle&slug=:slug", function(req, res){
+	//console.log(req.query, req.params.handle, req.params.id, req.params.slug);
+	//if(!req.params.slug && !req.params.id){
+	if(!req.params.slug){
+		//console.log("dbid " + req.params.id);
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
-	db.getEventModel().findOne({$or:[ {slug: req.body.slug}, {id: req.body.id}] }, function(err, data){
+	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){
+		if(err || !data){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		//console.log("gotv here");
 		var participantNames = [];
 		for(var i = 0; i < data.participants.length; i++){
 			db.getUserModel().findById( data.participants[i], function(errr, person){
 				if(errr || !person){
-					console.log("supposed participant did not exist");
+					//console.log("supposed participant did not exist");
 				}
 				else{
 					participantNames.push(person.name);
@@ -482,14 +503,11 @@ app.get("/event/:handle", function(req, res){
 			});
 		}
 
-		if(err || !data){
-			res.status(500).send("Internal error: failed retrieving data.");
-			return;
-		}
-		var message = {"ok":true};
-		extend(message, data);
+		var message = data.toObject();
+		message.ok = true;
 		message.participants = participantNames;
 		res.status(200).send(JSON.stringify(message));
+		//console.log(message);
 	});
 });
 
