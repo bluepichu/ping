@@ -35,12 +35,16 @@ db.once("open", function (callback) {
 	var eventSchema = mongoose.Schema({
 		name		: String,
 		description	: String,
-		phones		: [String], // for loose phones that have subscribed to something in the event
+		format		: String, // Tournament, Convention, Heats
+		
 		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }],
+		
+		phones		: [String], // for loose phones that have subscribed to something in the event
 		participants: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 		spectators	: [{ type: mongoose.Schema.ObjectId, ref: "User" }], // users who subscribe to something in the event?
 		subEvents	: [{ type: mongoose.Schema.ObjectId, ref: "SubEvent" }]
 		// time		: Date
+	
 	});
 	var subEventSchema = mongoose.Schema({ // match, heat, or panel
 		name		: String,
