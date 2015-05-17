@@ -9971,12 +9971,31 @@ header nav ul.tabs {
   width: 100%; }
 /* line 13, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 header nav #slide-out {
-  overflow: scroll; }
-  /* line 14, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  overflow: auto; }
+  /* line 15, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   header nav #slide-out li {
     width: 100%; }
+  /* line 18, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header nav #slide-out #logo-container {
+    height: 140px;
+    padding: 10px 60px; }
+    /* line 21, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    header nav #slide-out #logo-container:hover {
+      background-color: inherit; }
+  /* line 25, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header nav #slide-out #logo {
+    height: 120px;
+    width: 120px;
+    padding: 0;
+    background: url("../images/ping.png") no-repeat;
+    background-size: contain;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
 
-/* line 20, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 35, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.dropdown-content.select-dropdown {
+  z-index: 500; }
+
+/* line 38, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 #search {
   display: flex;
   align-items: center;
@@ -9984,50 +10003,50 @@ header nav #slide-out {
   float: right;
   margin-right: 3rem;
   overflow: hidden; }
-  /* line 28, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 46, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   #search.active .input {
     width: 300px; }
-  /* line 32, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 50, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   #search a {
     display: flex;
     align-items: center;
     justify-content: center;
     -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
-  /* line 38, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 56, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   #search i {
     height: auto;
     line-height: 100%; }
-  /* line 43, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 61, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   #search .input {
     float: right;
     width: 0;
     margin: 0;
     overflow: hidden;
     transition: width .5s cubic-bezier(.55, 0, .1, 1); }
-    /* line 49, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 67, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     #search .input input {
       border-bottom: 1px solid white;
       transition: border-bottom 0.2s ease; }
-    /* line 53, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 71, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     #search .input input:focus {
       border-bottom: 1px solid transparent;
       transition: border-bottom 0.2s ease; }
-    /* line 58, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 76, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     #search .input .bar:before, #search .input .bar:after {
       background: #29b6f6; }
 
-/* line 64, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 82, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 .progress {
   display: none;
   background-color: transparent; }
-  /* line 67, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 85, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .progress.active {
     display: block; }
 
-/* line 71, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 89, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 .input {
   position: relative; }
-  /* line 73, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 91, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input input {
     font-size: 18px;
     display: block;
@@ -10036,12 +10055,12 @@ header nav #slide-out {
     background-color: transparent;
     border-bottom: 1px solid #757575;
     transition: border-bottom 0.2s ease; }
-  /* line 82, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 100, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input input:focus {
     outline: none;
     border-bottom: 1px solid transparent;
     transition: border-bottom 0.2s ease; }
-  /* line 87, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 105, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input label {
     color: #999;
     font-size: 1.4em;
@@ -10051,17 +10070,17 @@ header nav #slide-out {
     left: 5px;
     top: 10px;
     transition: 0.2s ease all; }
-  /* line 97, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 115, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input input:focus ~ label, .input input:valid ~ label {
     top: -20px;
     font-size: 1em;
     color: #F44336; }
-  /* line 102, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 120, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input .bar {
     position: relative;
     display: block;
     width: 300px; }
-    /* line 106, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 124, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     .input .bar:before, .input .bar:after {
       position: absolute;
       bottom: 1px;
@@ -10070,18 +10089,69 @@ header nav #slide-out {
       width: 0;
       background: #F44336;
       transition: 0.2s ease all; }
-    /* line 115, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 133, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     .input .bar:before {
       left: 50%; }
-    /* line 118, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    /* line 136, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     .input .bar:after {
       right: 50%; }
-  /* line 122, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 140, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
     width: 50%; }
 
+/* line 145, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+main .card {
+  display: block;
+  background-color: #F44336;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: margin 0s; }
+  /* line 151, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card.active {
+    margin-top: 0.5rem;
+    transition: margin .5s ease-out; }
+  /* line 155, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .bookmark-icon {
+    text-align: center;
+    color: #FFF;
+    font-size: 200px; }
+  /* line 160, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .fill-card {
+    height: 100% !important; }
+  /* line 163, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .card-title {
+    width: 100%;
+    background-color: #F44336; }
+
+/* line 170, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content #event-description {
+  padding: 1rem 0.75rem; }
+/* line 173, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content .participant {
+  display: flex;
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  align-items: center; }
+  /* line 179, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-event .modal-content .participant span {
+    font-weight: 300; }
+  /* line 182, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-event .modal-content .participant img {
+    margin-right: 1rem;
+    height: 2rem;
+    width: 2rem; }
+
+/* line 189, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+h4, h5 {
+  font-weight: 300; }
+
+/* line 192, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+p {
+  font-weight: 300; }
+
 @media only screen and (min-width: 769px) {
-  /* line 127, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 198, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   header, main {
     padding-left: 240px; } }
 

@@ -2,17 +2,22 @@ var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
 app.use(bodyparser.urlencoded());
+app.use(bodyparser.json());
+var cookieparser = require("cookie-parser");
+app.use(cookieparser());
 var http = require("http").Server(app);
 var path = require("path");
 var db = require("./db");
 var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
 var qr = require("./qr");
+var cryptoString = require("random-crypto-string");
+var crypt = require("crypto");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
 
-var replies = {
+var REPLIES = {
 	subscribe: {
 		success: "You have been subscribed.",
 		missing: "You need to specify what to subscribe to!  Use PING SUBSCRIBE or PING SUB followed by an event handle (optionally with a channel)."
@@ -25,28 +30,55 @@ var replies = {
 	default: "I don't understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP."
 };
 
+var HASH_COUNT = 2;
+
 var subscribe = function(tel, path){
 	if(path.length < 1){
-		twilio.send(tel, replies.subscribe.missing, function(){});
+		twilio.send(tel, REPLIES.subscribe.missing, function(){});
 		return;
 	}
 	// TODO
-	twilio.send(tel, replies.subscribe.success, function(){});
+	twilio.send(tel, REPLIES.subscribe.success, function(){});
 }
 
 var unsubscribe = function(tel, path){
 	if(path.length < 1){
-		twilio.send(tel, replies.unsubscribe.missing, function(){});
+		twilio.send(tel, REPLIES.unsubscribe.missing, function(){});
 		return;
 	}
 	// TODO
-	twilio.send(tel, replies.unsubscribe.success, function(){});
+	twilio.send(tel, REPLIES.unsubscribe.success, function(){});
 }
 
 var static = function(pth){
 	return function(req, res){
 		res.sendFile(pth, {root: path.join(__dirname, "../public")});
 	}
+}
+
+var checkSchema = function(object, schema){
+	for(field in object){
+		if(!(field in schema)){
+			return false;
+		}
+	}
+	for(field in schema){
+		if(!schema[field].contains("optional") && !(field in object)){
+			return false;
+		}
+		if(!schema[field].contains((object[field].constructor === Array) ? "array" : typeof(object[field]))){
+			return false;
+		}
+	}
+	return true;
+}
+
+var passwordHash = function(password, salt){
+	for(var i = 0; i < HASH_COUNT; i++){
+		var hash = crypto.createHash("sha512");
+		password = hash.update(password).update(salt).digest("base64");
+	}
+	return password;
 }
 
 app.get("/css/:file", function(req, res){
@@ -69,7 +101,7 @@ app.post("/twilio", function(req, res){
 	var message = req.body.Body.toLowerCase().split(/[\s\/]/g);
 	
 	if(message[0] != "ping"){
-		twilio.send(req.body.From, replies.default, function(){});
+		twilio.send(req.body.From, REPLIES.default, function(){});
 		return;
 	}
 	
@@ -84,10 +116,10 @@ app.post("/twilio", function(req, res){
 			unsubscribe(req.body.From, message.slice(2));
 			break;
 		case "help":
-			twilio.send(req.body.From, replies.help, function(){});
+			twilio.send(req.body.From, REPLIES.help, function(){});
 			break;
 		case "default":
-			twilio.send(req.body.From, replies.default, function(){});
+			twilio.send(req.body.From, REPLIES.default, function(){});
 			break;
 	}
 	
@@ -103,5 +135,98 @@ app.get("/", static("/"));
 app.get("/user/new", static("/user/new.html"));
 
 app.get("/events", static("/events.html"));
+
+app.post("/user/new", function(req, res){
+	if(!checkSchema(req.body, {
+		phone: "string",
+		password: "string"
+	})){
+		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		return;
+	}
+	cryptoString(8, function(err, salt){
+		if(err || !salt){
+			res.status(500).send();
+			return;
+		} else {
+			db.query({
+				phone: req.body.phone,
+				$exists: {
+					password: true
+				}
+			}, function(err, data){
+				if(err || !data){
+					res.status(500).send();
+					return;
+				}
+				if(data.length > 0){
+					res.status(200).send("{ok: false, reason: 'Account already exists.'}");
+					return;
+				}
+				db.update({
+					phone: req.body.phone
+				}, {
+					$set: {
+						password: passwordHash(req.body.password, salt),
+						salt: salt
+					},
+						$setOnInsert: {
+							organized: [],
+							participated: [],
+							spectated: [],
+							subscriptions: []
+						}
+				}, {
+					upsert: true
+				}, function(err, dat){
+					res.status(200).send("{ok: true}");
+				});
+			});
+		}
+	});
+});
+
+app.post("/user/auth", function(req, res){
+	if(!sheckSchema(req.body, {
+		phone: "string",
+		password: "string"
+	})){
+		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+	}
+	
+	db.query({
+		phone: req.body.phone,
+		$exists: {
+			password: true
+		}
+	}, function(err, data){
+		if(err || !data){
+			res.status(500).send();
+			return;
+		}
+		if(data.length != 1){
+			res.status(200).send("{ok: false, reason: 'Named user does not exist.'}");
+		}
+		user = data[0];
+		if(user.password == passwordHash(req.body.password, user.password)){
+			cryptoString(24, function(token){
+				res.cookie("authToken", token);
+				res.status(200);
+				res.send("{ok: true}");
+				db.users.update({
+					phone: req.body.phone
+				}, {
+					$push: {
+						authTokens: token
+					}
+				});
+				return;
+			});
+		} else {
+			res.status(200).send("{ok: false, reason: 'Incorrect password.'}");
+			return;
+		}
+	});
+});
 
 http.listen(process.env.PORT || 1337, function(){});
