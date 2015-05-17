@@ -1,4 +1,6 @@
 $(function() {
+	$('select').material_select();
+	
 	var $search = $("#search"),
 		$searchTerm = $("#search-term");
 

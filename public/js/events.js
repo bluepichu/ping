@@ -4,7 +4,6 @@ $(function() {
 		// Reset modal to defaults
 		$modal.find("#create-name").val("");
 		$modal.find("#create-description").val("");
-		$modal.find("#create-format").val("tournament").material_select();
 		$modal.find("#create-public").prop('checked', true);
 		// Open modal
 		$modal.openModal();
