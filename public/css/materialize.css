@@ -7959,7 +7959,7 @@ main .card {
     margin-top: 0.5rem;
     -webkit-transition: margin .5s ease-out;
             transition: margin .5s ease-out; }
-  main .card .bookmark-icon {
+  main .card .icon {
     text-align: center;
     color: #FFF;
     font-size: 200px; }
@@ -7985,10 +7985,13 @@ main .card {
           align-items: center; }
   #modal-event .modal-content .participant span {
     font-weight: 300; }
-  #modal-event .modal-content .participant img {
+  #modal-event .modal-content .participant img, #modal-event .modal-content .participant i {
+    display: block;
     margin-right: 1rem;
     height: 2rem;
-    width: 2rem; }
+    width: 2rem;
+    font-size: 200%;
+    line-height: 2rem; }
 
 h4, h5 {
   font-weight: 300; }
