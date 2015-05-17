@@ -62,19 +62,19 @@ $(function() {
 		this.isOrganizer = false;
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
-		this.$modal.find("#event-channels").find(".channel").click(function() {
+		this.$modal.find("#event-channels").find(".channel input").click(function() {
 			console.log("clicked channel");
-			console.log($(this).find("input").is(':checked'));
-			console.log($(this).text());
-			//if ($(this).find("input").is(':checked')) {
-				$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
+			//console.log($(this).is(':checked'));
+			console.log($(this).parent().parent().parent().text());
+			if ($(this).is(':checked')) {
+				$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
 				var $qr = $("#z");
 				$qr.materialbox();
 				$qr.click();
 				$qr.click(function() {
 					$qr.remove();
 				});
-			//}
+			}
 		});
 
 		/**
