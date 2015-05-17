@@ -67,31 +67,38 @@ $(function() {
 			this.id = id;
 			// Grab title, description, participants
 			//this.participants = // give array of participants
-			/*
+			var me = this;
 			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function(){
-				if (xhr.readyState == 4 && xmlhttp.status == 200) {
-					var rec = JSON.parse(xhr.responseText);
-					this.setTitle(rec.name);
-					this.setDescription(rec.description);
-					for(var i = 0; i < rec.participants.length; i++){
-						this.addParticipant(rec.participants[i]);
+			xhr.onload = function(){
+				if(this.status != 200){
+					Materialize.toast(this.responseText, 4000);
+				} else {
+					var rec = JSON.parse(xhr.responseText);	
+					if( rec.ok ){
+						this.setTitle(rec.name);
+						this.setDescription(rec.description);
+						for(var i = 0; i < rec.participants.length; i++){
+							this.addParticipant(rec.participants[i]);
+						}	
+						//if (part of user's events...)
+						this.favorite = true;
+						this.$submit.text("Remove");
+						//} else {
+							//this.favorite = false;
+							//this.$submit.text("Add");
+						//}
+						me.$modal.openModal();
+					}
+					else{
+						Materialize.toast("Request failed: " + rec.reason, 4000);
 					}
 				}
 			}
-			// TODO write this handle I think lol
-			xmlhttp.open("GET","/event/:handle");
-			xmlhttp.send();
-			*/
-			//if (part of user's events...)
-			this.favorite = true;
-			this.$submit.text("Remove");
-			//} else {
-				//this.favorite = false;
-				//this.$submit.text("Add");
-			//}
-			this.$modal.openModal();
-		};
+			xhr.open("GET", "/event/:handle", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(JSON.stringify(json));
+			
+			};
 		this.setTitle = function(title) {
 			$("#event-title").text(title);
 		};
@@ -184,7 +191,7 @@ $(function() {
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
 			if (this.status != 200){
-				Materialize.toast(this.resoponseText, 4000);
+				Materialize.toast(this.responseText, 4000);
 			} else {
 				var response = JSON.parse(this.responseText);
 

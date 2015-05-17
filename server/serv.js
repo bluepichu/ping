@@ -422,15 +422,26 @@ app.get("/event/:handle", function(req, res){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
-	db.getEventModel().findOne({
-		slug: req.body.slug
-	}, function(err, data){
+	db.getEventModel().findOne({slug: req.body.slug}, function(err, data){
+		var participantNames = [];
+		for(var i = 0; i < data.participants.length; i++){
+			db.getUserModel().findById( data.participants[i], function(errr, person){
+				if(errr || !person){
+					console.log("supposed participant did not exist");
+				}
+				else{
+					participantNames.push(person.name);
+				}
+			});
+		}
+		
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
 		var message = {"ok":true};
 		extend(message, data);
+		message.participants = participantNames;
 		res.status(200).send(JSON.stringify(message));
 	});
 });
