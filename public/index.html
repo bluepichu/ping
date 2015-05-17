@@ -11,6 +11,7 @@
 	<!-- Should only appear on this main page -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="apple-touch-icon" href="images/launcher-icon-ios.png" />
+	<link href="images/apple-touch-startup-image-1242x2148.png" rel="apple-touch-startup-image">
 
 	<!--Import materialize.css and styles-->
 	<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection" />
@@ -20,13 +21,14 @@
 	<script type="text/javascript" src="js/min/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="js/min/jquery.cookie.min.js"></script>
 	<script type="text/javascript" src="js/scripts.js"></script>
+	<script type="text/javascript" src="js/preload.js"></script>
 </head>
 <body>
 <header>
 	<nav class="top-nav">
 		<div class="nav-wrapper">
-			<a id="page-title" href="./">Welcome</a>
-			<div id="search">
+			<span id="page-title">Welcome</span>
+			<div id="search" class="hide-on-small-and-down">
 				<a class="waves-effect waves-circle waves-light"><i class="mdi-action-search"></i></a>
 				<div class="input">
 					<input id="search-term" type="text" autocomplete="off" required>
@@ -44,6 +46,10 @@
 		<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 	</nav>
 </header>
+<div id="preload"></div>
+<div id="preload-image">
+	<img src="images/ping.png" />
+</div>
 <main>
 	<img src="images/ping_banner.png" class="banner"/>
 	<p class="flow-text">

@@ -1,4 +1,5 @@
 $(function() {
+	$(".button-collapse").sideNav();
 	var $search = $("#search"),
 		$searchTerm = $("#search-term");
 
