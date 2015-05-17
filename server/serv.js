@@ -8,6 +8,7 @@ var db = require("./db");
 var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
 var qr = require("./qr");
+var tweet = require("./twitter");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
@@ -96,6 +97,12 @@ app.post("/twilio", function(req, res){
 
 app.get("/qrtest", function(req, res){ // testing only
 	res.send(qr("tsa-smash4"));
+});
+
+app.get("/twitter", function(req, res){ // testing only
+	res.send(tweet(function(data){
+		alert(data)
+	}, "@ping_1t"));
 });
 
 app.get("/dbtest", function(req, res){
