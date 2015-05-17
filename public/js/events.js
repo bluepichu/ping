@@ -237,7 +237,7 @@ $(function() {
 				var rec = JSON.parse(xhr.responseText);	
 				if( rec.ok ){
 					for(var i = 0; i < rec.events.length; i++){
-						cards.add(rec.events[i].name, rec.events[i].slug);
+						cards.add(rec.events[i].name, rec.events[i].slug, rec.events[i].image);
 					}
 				}
 				else{

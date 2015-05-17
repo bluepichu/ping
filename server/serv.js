@@ -434,7 +434,7 @@ app.get("/event/listall", function(req, res){
 		}
 		var message = {ok:true, events:[]};
 		for(var i = 0; i < data.length; i++){
-			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format});
+			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format, image:data[i].image});
 		}
 		res.status(200).send(JSON.stringify(message));
 	});
