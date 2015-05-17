@@ -259,7 +259,10 @@ main .card {
   main .card .fill-card {
     height: 100% !important; }
   main .card img {
-    height: 100%; }
+    display: block;
+    height: 100%;
+    width: auto;
+    margin: 0 auto; }
   main .card .card-title {
     width: 100%;
     background-color: #F44336; }

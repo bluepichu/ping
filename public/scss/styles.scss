@@ -276,7 +276,10 @@ main {
 			height: 100% !important;
 		}
 		img {
+			display: block;
 			height: 100%;
+			width: auto;
+			margin: 0 auto;
 		}
 		.card-title {
 			width: 100%;
