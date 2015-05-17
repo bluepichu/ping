@@ -464,7 +464,7 @@ app.post("/event/new", function(req, res){
 });
 
 app.get("/event/:handle", function(req, res){
-	console.log(req);
+	//console.log(req);
 	if(!req.body.slug && !req.body.id){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
