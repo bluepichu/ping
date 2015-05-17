@@ -45,6 +45,26 @@ var unsubscribe = function(tel, path){
 	twilio.send(tel, replies.unsubscribe.success, function(){});
 }
 
+var encrypt = function(tel){
+	var enc = "";
+	
+	for(var i = 0; i < tel.length; i++){
+		enc += tel.charAt(i) + 5;
+	}
+	
+	return enc;
+}
+
+var decrypt = function(tel){
+	var dec = "";
+	
+	for(var i = 0; i < tel.length; i++){
+		dec += tel.charAt(i) - 5;
+	}
+	
+	return dec;
+}
+
 //
 
 app.get("/css/:file", function(req, res){
