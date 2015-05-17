@@ -84,10 +84,11 @@ var newEvent = function(name, description){
 	return evt.id;
 };
 
-var newSubEvent = function(parentID, name, description){
+var newSubEvent = function(parentID, name, description, time){
 	var subevt	= new SubEvent();
 	subevt.name	= name;
 	subevt.parentEvent = parentID;
+	subevt.time = time;
 	subevt.channels.push( newChannel(name + " subevent channel", parentID) );
 	subevt.save(function(err, evt_saved){
 	    if(err){
