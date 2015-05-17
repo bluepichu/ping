@@ -464,13 +464,14 @@ app.post("/event/new", function(req, res){
 });
 
 app.get("/event/:handle&slug=:slug", function(req, res){
-	console.log(req.query, req.params.handle, req.params.id, req.params.slug);
-	if(!req.params.slug && !req.params.id){
-		console.log("dbid " + req.params.id);
+	//console.log(req.query, req.params.handle, req.params.id, req.params.slug);
+	//if(!req.params.slug && !req.params.id){
+	if(!req.params.slug){
+		//console.log("dbid " + req.params.id);
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
-	db.getEventModel().findOne({$or:[ {slug: req.params.slug}, {id: req.params.id}] }, function(err, data){
+	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
