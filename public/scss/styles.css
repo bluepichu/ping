@@ -1,0 +1,299 @@
+/* line 6, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+header nav #page-title {
+  padding-left: 2rem;
+  font-size: 200%;
+  font-weight: 300; }
+/* line 11, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+header nav ul.tabs {
+  width: 100%; }
+/* line 14, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+header nav #slide-out {
+  overflow: auto; }
+  /* line 16, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header nav #slide-out li {
+    width: 100%; }
+  /* line 19, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header nav #slide-out #logo-container {
+    height: 140px;
+    padding: 10px 60px; }
+    /* line 22, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    header nav #slide-out #logo-container:hover {
+      background-color: inherit; }
+  /* line 26, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header nav #slide-out #logo {
+    height: 120px;
+    width: 120px;
+    padding: 0;
+    background: url("../images/ping.png") no-repeat;
+    background-size: contain;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
+
+/* line 36, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.dropdown-content.select-dropdown {
+  z-index: 500; }
+
+/* line 39, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#search {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  float: right;
+  margin-right: 3rem;
+  overflow: hidden; }
+  /* line 47, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #search.active .input {
+    width: 300px; }
+  /* line 51, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #search a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
+  /* line 57, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #search i {
+    height: auto;
+    line-height: 100%; }
+  /* line 62, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #search .input {
+    float: right;
+    width: 0;
+    margin: 0;
+    overflow: hidden;
+    transition: width .5s cubic-bezier(.55, 0, .1, 1); }
+    /* line 68, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    #search .input input {
+      border-bottom: 1px solid white;
+      transition: border-bottom 0.2s ease; }
+    /* line 72, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    #search .input input:focus {
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease; }
+    /* line 77, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    #search .input .bar:before, #search .input .bar:after {
+      background: white; }
+
+/* line 83, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.progress {
+  display: none;
+  background-color: transparent; }
+  /* line 86, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .progress.active {
+    display: block; }
+
+/* line 90, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.input {
+  position: relative;
+  margin: 24px 0; }
+  /* line 93, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .input input {
+    font-size: 18px;
+    display: block;
+    width: 300px;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #757575;
+    transition: border-bottom 0.2s ease; }
+    /* line 101, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input input:focus {
+      outline: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease; }
+      /* line 105, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+      .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
+        width: 50%; }
+    /* line 109, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input input:focus ~ label, .input input:valid ~ label, .input input:invalid ~ label {
+      top: -20px;
+      font-size: 1em;
+      color: #29B6F6;
+      opacity: 1; }
+    /* line 115, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input input:invalid ~ label {
+      color: #F44336; }
+    /* line 118, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input input:valid ~ .bar:before, .input input:valid ~ .bar:after {
+      background: #29B6F6; }
+  /* line 122, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .input label {
+    position: absolute;
+    left: 5px;
+    top: -5px;
+    color: black;
+    font-size: 1.4em;
+    font-weight: normal;
+    pointer-events: none;
+    opacity: 0.56;
+    transition: 0.2s ease all; }
+  /* line 133, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .input .bar {
+    position: relative;
+    display: block;
+    width: 300px; }
+    /* line 137, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input .bar:before, .input .bar:after {
+      position: absolute;
+      bottom: 1px;
+      content: "";
+      height: 2px;
+      width: 0;
+      background: #F44336;
+      transition: 0.2s ease all; }
+    /* line 146, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input .bar:before {
+      left: 50%; }
+    /* line 149, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input .bar:after {
+      right: 50%; }
+
+/* line 154, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.textarea {
+  position: relative; }
+  /* line 156, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .textarea textarea {
+    display: block;
+    height: 7rem;
+    width: 300px;
+    resize: none;
+    font-size: 18px;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #757575;
+    transition: border-bottom 0.2s ease; }
+    /* line 166, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .textarea textarea:focus {
+      outline: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease; }
+      /* line 170, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+      .textarea textarea:focus ~ .bar:before, .textarea textarea:focus ~ .bar:after {
+        width: 50%; }
+  /* line 175, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  .textarea .bar {
+    position: relative;
+    display: block;
+    width: 300px; }
+    /* line 179, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .textarea .bar:before, .textarea .bar:after {
+      position: absolute;
+      bottom: 1px;
+      content: "";
+      height: 2px;
+      width: 0;
+      background: #F44336;
+      transition: 0.2s ease all; }
+    /* line 188, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .textarea .bar:before {
+      left: 50%; }
+    /* line 191, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .textarea .bar:after {
+      right: 50%; }
+
+/* line 197, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+main .banner {
+  display: block;
+  max-width: 75%;
+  padding-top: 2rem;
+  margin: auto; }
+/* line 203, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+main p {
+  padding: 0 2rem; }
+/* line 206, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+main .card {
+  display: block;
+  background-color: #F44336;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: margin 0s; }
+  /* line 212, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card.active {
+    margin-top: 0.5rem;
+    transition: margin .5s ease-out; }
+  /* line 216, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .icon {
+    text-align: center;
+    color: #FFF;
+    font-size: 200px; }
+  /* line 221, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .fill-card {
+    height: 100% !important; }
+  /* line 224, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  main .card .card-title {
+    width: 100%;
+    background-color: #F44336; }
+
+/* line 230, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+.fixed-action-btn {
+  bottom: 2rem;
+  right: 2rem; }
+
+/* line 235, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-login .modal-content, #modal-register .modal-content {
+  display: flex;
+  align-content: center;
+  justify-content: center; }
+  /* line 239, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-login .modal-content h4, #modal-register .modal-content h4 {
+    padding-bottom: 1rem; }
+  /* line 242, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-login .modal-content .input, #modal-register .modal-content .input {
+    margin-bottom: 0; }
+/* line 246, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-login #login-register, #modal-login #register-login, #modal-register #login-register, #modal-register #register-login {
+  float: left; }
+
+/* line 251, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content #event-description {
+  padding: 0.75rem 1rem 0; }
+/* line 254, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content #event-more {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.24); }
+/* line 261, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content .participant {
+  display: flex;
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  align-items: center; }
+  /* line 267, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-event .modal-content .participant span {
+    font-weight: 300; }
+  /* line 270, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  #modal-event .modal-content .participant img, #modal-event .modal-content .participant i {
+    display: block;
+    margin-right: 1rem;
+    height: 2rem;
+    width: 2rem;
+    color: #F44336;
+    font-size: 200%;
+    line-height: 2rem; }
+/* line 280, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-event .modal-content .channel {
+  margin-bottom: 0.75rem; }
+
+/* line 285, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#modal-create .modal-content .input {
+  margin: 0; }
+
+/* line 289, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+h4, h5 {
+  font-weight: 300; }
+
+/* line 292, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+p {
+  font-weight: 300; }
+
+/* line 296, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+@media only screen and (min-width: 769px) {
+  /* line 303, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  header, main {
+    padding-left: 240px; } }
+
+/*# sourceMappingURL=styles.css.map */

@@ -30,7 +30,8 @@ db.once("open", function (callback) {
 		
 		password	: String,
 		salt		: String,
-		authTokens	: [String]
+		authTokens	: [String],
+		verification: mongoose.Schema.Types.Mixed
 	});
 	var eventSchema = mongoose.Schema({
 		name		: String,
