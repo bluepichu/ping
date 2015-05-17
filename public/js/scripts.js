@@ -21,4 +21,14 @@ $(function() {
 			}, 300);
 		}
 	});
+	$('#settings').click(function() {
+		$("#modal-settings").openModal();
+	});
+	$("#sorting-algorithm").material_select();
+	$("#unsubscribe").click(function() {
+		$("#modal-settings").closeModal();
+		setTimeout(function() {
+			$("#modal-confirmation").openModal();
+		}, 300);
+	})
 });

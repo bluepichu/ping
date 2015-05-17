@@ -11,11 +11,29 @@ header nav {
 		width: 100%;
 	}
 	#slide-out {
+		overflow: scroll;
 		li {
 			width: 100%;
 		}
-		overflow: scroll;
+		#logo-container {
+			height: 140px;
+			padding: 10px 60px;
+			&:hover {
+				background-color: inherit;
+			}
+		}
+		#logo {
+			height: 120px;
+			width: 120px;
+			padding: 0;
+			background: url("../images/ping.png") no-repeat;
+			background-size: contain;
+			-webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+		}
 	}
+}
+.dropdown-content.select-dropdown {
+	z-index: 500;
 }
 #search {
 	display: flex;
@@ -123,6 +141,34 @@ header nav {
 		width: 50%;
 	}
 }
+#modal-event .modal-content {
+	#event-description {
+		padding: 1rem 0.75rem;
+	}
+	.participant {
+		display: flex;
+		height: 2rem;
+		width: 100%;
+		margin-bottom: 0.75rem;
+		align-items: center;
+		span {
+			font-weight: 300;
+		}
+		img {
+			margin-right: 1rem;
+			height: 2rem;
+			width: 2rem;
+		}
+	}
+}
+h4 {
+	font-weight: 300;
+}
+p {
+	font-weight: 300;
+}
+
+
 @include desktop {
 	header, main {
 		padding-left: 240px;

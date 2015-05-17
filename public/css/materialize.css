@@ -7826,6 +7826,21 @@ header nav #slide-out {
   overflow: scroll; }
   header nav #slide-out li {
     width: 100%; }
+  header nav #slide-out #logo-container {
+    height: 140px;
+    padding: 10px 60px; }
+    header nav #slide-out #logo-container:hover {
+      background-color: inherit; }
+  header nav #slide-out #logo {
+    height: 120px;
+    width: 120px;
+    padding: 0;
+    background: url("../images/ping.png") no-repeat;
+    background-size: contain;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
+
+.dropdown-content.select-dropdown {
+  z-index: 500; }
 
 #search {
   display: -webkit-box;
@@ -7932,6 +7947,33 @@ header nav #slide-out {
       right: 50%; }
   .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
     width: 50%; }
+
+#modal-event .modal-content #event-description {
+  padding: 1rem 0.75rem; }
+#modal-event .modal-content .participant {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  #modal-event .modal-content .participant span {
+    font-weight: 300; }
+  #modal-event .modal-content .participant img {
+    margin-right: 1rem;
+    height: 2rem;
+    width: 2rem; }
+
+h4 {
+  font-weight: 300; }
+
+p {
+  font-weight: 300; }
 
 @media only screen and (min-width: 769px) {
   header, main {
