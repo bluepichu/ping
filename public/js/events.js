@@ -223,8 +223,32 @@ $(function() {
 	}();
 	modalEvent.addParticipant("hi");
 	modalEvent.addChannel("hi again");
+	
+	var getEventList = function(){
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			if(this.status != 200){
+				Materialize.toast(this.responseText, 4000);
+			} else {
+				var rec = JSON.parse(xhr.responseText);	
+				if( rec.ok ){
+					for(var i = 0; i < rec.events.length; i++){
+						cards.add(rec.events[i].name, rec.events[i].slug);
+					}
+				}
+				else{
+					Materialize.toast("Request failed: " + rec.reason, 4000);
+				}
+			}
+		}
+		xhr.open("GET", "/event/listall", true);
+		xhr.send();
+	}
+	
+	getEventList();
+	
 	cards.add("Smash Tourney", "test-id");
-
+	cards.add("Amaze", "amazing-race");
 	$("#create-form").submit(function(e){
 		e.preventDefault();
 
