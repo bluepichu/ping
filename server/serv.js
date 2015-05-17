@@ -416,13 +416,19 @@ app.post("/event/new", function(req, res){
 	});
 });
 
-app.get("/event/:handle", function(req, res){
-	//console.log(req);
-	if(!req.body.slug && !req.body.id){
+app.get("/event/:handle&slug=:slug", function(req, res){
+	console.log(req.query, req.params.handle, req.params.id, req.params.slug);
+	if(!req.params.slug && !req.params.id){
+		console.log("dbid " + req.params.id);
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
-	db.getEventModel().findOne({$or:[ {slug: req.body.slug}, {id: req.body.id}] }, function(err, data){
+	db.getEventModel().findOne({$or:[ {slug: req.params.slug}, {id: req.params.id}] }, function(err, data){
+		if(err || !data){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		console.log("gotv here");
 		var participantNames = [];
 		for(var i = 0; i < data.participants.length; i++){
 			db.getUserModel().findById( data.participants[i], function(errr, person){
@@ -434,15 +440,13 @@ app.get("/event/:handle", function(req, res){
 				}
 			});
 		}
+		console.log("got here too");
 		
-		if(err || !data){
-			res.status(500).send("Internal error: failed retrieving data.");
-			return;
-		}
-		var message = {"ok":true};
-		extend(message, data);
+		var message = data.toObject();
+		message.ok = true;
 		message.participants = participantNames;
 		res.status(200).send(JSON.stringify(message));
+		console.log(message);
 	});
 });
 
