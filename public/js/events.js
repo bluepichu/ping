@@ -1,5 +1,14 @@
 $(function() {
-
+	$(".fixed-action-btn").click(function() {
+		var $modal = $("#modal-create");
+		// Reset modal to defaults
+		$modal.find("#create-name").val("");
+		$modal.find("#create-description").val("");
+		$modal.find("#create-format").val("tournament").material_select();
+		$modal.find("#create-public").prop('checked', true);
+		// Open modal
+		$modal.openModal();
+	});
 	var cards = new function() {
 		this.count = 0;
 		this.defaultImg = "<div class=\"icon\"><i class=\"mdi-action-event\"></i></div>";
