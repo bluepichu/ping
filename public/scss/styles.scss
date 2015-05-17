@@ -106,11 +106,17 @@ header nav {
 				width: 50%;
 			}
 		}
-		&:focus ~ label, &:valid ~ label {
+		&:focus ~ label, &:valid ~ label, &:invalid ~ label {
 			top: -20px;
 			font-size: 1em;
-			color: $primary-color;
+			color: #29B6F6;
 			opacity: 1;
+		}
+		&:invalid ~ label {
+			color: $primary-color;
+		}
+		&:valid ~ .bar:before, &:valid ~ .bar:after {
+			background: #29B6F6
 		}
 	}
 	label {
@@ -225,15 +231,20 @@ main {
 	bottom: 2rem;
 	right: 2rem;
 }
-#modal-login .modal-content {
-	display: flex;
-	align-content: center;
-	justify-content: center;
-	h4 {
-		padding-bottom: 1rem;
+#modal-login, #modal-register {
+	.modal-content {
+		display: flex;
+		align-content: center;
+		justify-content: center;
+		h4 {
+			padding-bottom: 1rem;
+		}
+		.input {
+			margin-bottom: 0;
+		}
 	}
-	.input {
-		margin-bottom: 0;
+	#login-register, #register-login {
+		float: left;
 	}
 }
 #modal-event .modal-content {
@@ -245,6 +256,7 @@ main {
 		width: 100%;
 		text-align: center;
 		margin-bottom: 0.75rem;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.24);
 	}
 	.participant {
 		display: flex;
@@ -265,6 +277,9 @@ main {
 			line-height: 2rem;
 		}
 	}
+	.channel {
+		margin-bottom: 0.75rem;
+	}
 }
 #modal-create .modal-content {
 	.input {
@@ -276,6 +291,11 @@ h4, h5 {
 }
 p {
 	font-weight: 300;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 

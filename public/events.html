@@ -63,12 +63,12 @@
 			<form>
 				<h4>Login</h4>
 				<div class="input">
-					<input id="login-username" name="name" type="text" autocomplete="off" required>
-					<label for="login-username">Username</label>
+					<input id="login-username" name="name" type="number" autocomplete="off" required>
+					<label for="login-username">Phone Number</label>
 					<span class="bar"></span>
 				</div>
 				<div class="input">
-					<input id="login-password" name="name" type="text" autocomplete="off" required>
+					<input id="login-password" name="name" type="password" autocomplete="off" required>
 					<label for="login-password">Password</label>
 					<span class="bar"></span>
 				</div>
@@ -77,6 +77,34 @@
 		<div class="modal-footer">
 			<a class="waves-effect btn-flat modal-action modal-close" id="login">Login</a>
 			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+			<a class="waves-effect btn-flat modal-action" id="login-register">Register</a>
+		</div>
+	</div>
+	<div id="modal-register" class="modal">
+		<div class="modal-content">
+			<form>
+				<h4>Register</h4>
+				<div class="input">
+					<input id="register-username" name="name" type="number" autocomplete="off" required>
+					<label for="register-username">Phone Number</label>
+					<span class="bar"></span>
+				</div>
+				<div class="input">
+					<input id="register-password" name="name" type="password" autocomplete="off" required>
+					<label for="register-password">Password</label>
+					<span class="bar"></span>
+				</div>
+				<div class="input">
+					<input id="register-confirm" name="name" type="password" autocomplete="off" required>
+					<label for="register-confirm">Confirm password</label>
+					<span class="bar"></span>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a class="waves-effect btn-flat modal-action modal-close" id="register">Register</a>
+			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+			<a class="waves-effect btn-flat modal-action" id="register-login">Login</a>
 		</div>
 	</div>
 	<!-- Modal Settings -->
@@ -125,35 +153,84 @@
 		</div>
 	</div>
 	<!-- Modal View Event -->
-	<div id="modal-event" class="modal">
+	<div id="modal-event" class="modal modal-fixed-footer">
 		<div class="modal-content">
 			<h4 id="event-title">Smash 4 Tournament</h4>
 			<p id="event-description">
 				This is a real event!
 			</p>
 			<div class="waves-effect btn-flat" style="float: right" id="event-more">More Info</div>
-			<h5>Participants</h5>
-			<div class="row">
+			<h5>Organizers</h5>
+			<div class="row" id="event-organizers">
 				<div class="col s12 m6">
+				</div>
+				<div class="col s12 m6">
+				</div>
+			</div>
+			<h5>Participants</h5>
+			<div class="row" id="event-participants">
+				<div class="col s12 m6 l4">
 					<div class="participant">
 						<img src="images/ping.png" />
 						<span>BB</span>
 					</div>
 				</div>
-				<div class="col s12 m6">
+				<div class="col s12 m6 l4">
 					<div class="participant">
 						<img src="images/ping.png" />
 						<span>CC</span>
 					</div>
 				</div>
+				<div class="col s12 m6 l4">
+					<div class="participant">
+						<img src="images/ping.png" />
+						<span>DD</span>
+					</div>
+				</div>
 			</div>
+			<h5>Channels</h5>
+			<form class="row" id="event-channels">
+				<div class="col s12 m6 l4">
+					<div class="channel">
+						<span>Singles</span>
+						<div class="switch" style="float: right">
+							<label>
+								<input type="checkbox" checked="checked">
+								<span class="lever"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="col s12 m6 l4">
+					<div class="channel">
+						<span>Doubles</span>
+						<div class="switch" style="float: right">
+							<label>
+								<input type="checkbox" checked="checked">
+								<span class="lever"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="col s12 m6 l4">
+					<div class="channel">
+						<span>Quads</span>
+						<div class="switch" style="float: right">
+							<label>
+								<input type="checkbox" checked="checked">
+								<span class="lever"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
 		<div class="modal-footer">
 			<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
 			<a class="waves-effect btn-flat modal-action modal-close">Done</a>
 		</div>
 	</div>
-	<div id="modal-more" class="modal">
+	<div id="modal-more" class="modal modal-fixed-footer">
 		<div class="modal-content">
 			<h4 id="more-title"></h4>
 			<p id="more-description" class="flow-text"></p>
@@ -164,7 +241,7 @@
 		</div>
 	</div>
 	<!-- Modal Create Event -->
-	<div id="modal-create" class="modal">
+	<div id="modal-create" class="modal modal-fixed-footer">
 		<div class="modal-content">
 			<h4>New Event</h4>
 			<form id="create-form">

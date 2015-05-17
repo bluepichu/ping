@@ -47,10 +47,14 @@ $(function() {
 	};
 	var modalEvent = new function() {
 		var self = this;
-		this.colCount = 0;
 		this.$modal = $("#modal-event");
 		this.$more = $("#modal-more");
-		this.cols = this.$modal.find(".col");
+		this.$organizers = this.$modal.find("#event-organizers .col");
+		this.ocount = 0;
+		this.$participants = this.$modal.find("#event-participants .col");
+		this.pcount = 0;
+		this.$channels = this.$modal.find("#event-channels .col");
+		this.ccount = 0;
 		this.$submit = this.$modal.find("#submit-event");
 		this.id = undefined;
 		this.favorite = false;
@@ -105,19 +109,62 @@ $(function() {
 		this.setDescription = function(description) {
 			$("#event-description").text(description)
 		};
+		/**
+		 * Add an organizer
+		 * @param {string} name
+		 * @param {URL?} img
+		 */
+		this.addOrganizer = function(name, img) {
+			if (img === undefined) {
+				img = "<i class=\"mdi-action-account-circle\"></i>"
+			} else {
+				img = "<img src=\"" + img + "\" />";
+			}
+			$(this.$participants[this.ocount]).append(
+				"<div class=\"participant\">" + // Who cares if it uses the same css as participants
+				img +
+				"<span>" + name + "</span>" +
+				"</div>"
+			);
+			this.ocount = (this.ocount + 1) % 2;
+		};
+		/**
+		 * Add a participant
+		 * @param {string} name
+		 * @param {URL?} img
+		 */
 		this.addParticipant = function(name, img) {
 			if (img === undefined) {
 				img = "<i class=\"mdi-action-account-circle\"></i>"
 			} else {
 				img = "<img src=\"" + img + "\" />";
 			}
-			$(this.cols[this.colCount]).append(
+			$(this.$participants[this.pcount]).append(
 				"<div class=\"participant\">" +
 					img +
 					"<span>" + name + "</span>" +
 				"</div>"
 			);
-			this.colCount = (this.colCount + 1) % 2;
+			this.pcount = (this.pcount + 1) % 3;
+		};
+		/**
+		 * Add a channel
+		 * @param {string} channel
+		 * @param {string?} enabled
+		 */
+		this.addChannel = function(channel, enabled) {
+			$(this.$channels[this.ccount]).append(
+				"<div>" +
+					"<span>" + channel + "</span>" +
+					"<div class=\"switch\" style=\"float: right\">" +
+						"<label>" +
+							"<input type=\"checkbox\"" + (enabled ? "checked=\"checked\"" : "") + ">" +
+							"<span class=\"lever\"></span>" +
+						"</label>" +
+					"</div>" +
+				"</div>"
+			);
+			this.ccount = (this.ccount + 1) % 3;
 		};
 		// Add to/remove from user's events
 		this.toggle = function() {
@@ -129,6 +176,7 @@ $(function() {
 			}
 			this.favorite = !this.favorite;
 		};
+		// Reveal additional information modal
 		this.showMore = function() {
 			this.$modal.closeModal();
 			setTimeout(function() {self.$more.openModal({
@@ -175,8 +223,8 @@ $(function() {
 		}
 	}();
 	modalEvent.addParticipant("hi");
+	modalEvent.addChannel("hi again");
 	cards.add("Smash Tourney", "test-id");
-	//modalEvent.show();
 
 	$("#create-form").submit(function(e){
 		e.preventDefault();
