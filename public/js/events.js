@@ -58,9 +58,19 @@ $(function() {
 		this.id = undefined;
 		this.favorite = false;
 		this.participants = ["Bob", "Tom", "Odd"];
+		this.isOrganizer = false;
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
-		this.isOrganizer = false;
+		this.$modal.find(".channel").click(function() {
+			if ($(this).find("input").checked()) {
+				var $qr = $("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\"/>");
+				$qr.materialbox();
+				$qr.click();
+				$qr.click(function() {
+					$qr.remove();
+				})
+			}
+		});
 
 		/**
 		 * Populate modal with event information before showing the modal
