@@ -308,25 +308,72 @@ app.post("/user/new", function(req, res){
 				res.status(200).send("{\"ok\": false, \"reason\": \"Account already exists.\"}");
 				return;
 			}
+			cryptoString(8, function(err, verCode){
+				db.getUserModel().update({
+					phone: req.body.phone
+				}, {
+					$set: {
+						password: passwordHash(req.body.password, salt),
+						salt: salt,
+						verification: verCode
+					},
+					$setOnInsert: {
+						organized: [],
+						participated: [],
+						spectated: [],
+						subscriptions: [],
+						authTokens: []
+					}
+				}, {
+					upsert: true
+				}, function(err, dat){
+					res.status(200).send("{\"ok\": true}");
+					twilio.send(req.body.phone, "Your Ping account verification code is \"" + verCode + "\".  If you didn't try to make an account on Ping, you may ignore this message.");
+				});
+			});
+		});
+	});
+});
+
+app.post("/user/verify", function(req, res){
+	if(!checkSchema(req.body, {
+		phone: "string",
+		verificationCode: "string"
+	})){
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}");
+		return;
+	}
+
+	db.getUserModel().find({
+		phone: req.body.phone,
+		verification: req.body.verificationCode
+	}, function(err, data){
+		if(err || !data){
+			res.status(500).send("Inernal request: failed reading user data.");
+			return;
+		}
+		if(data.length != 1){
+			res.status(200).send("{\"ok\": false, \"reason\": \"Invalid verification code.\"}");
+			return;
+		}
+		cryptoString(24, function(err, token){
+			if(err || !token){
+				res.status(500).send("Internal error: failed generating token.");
+				return;
+			}
+			res.cookie("authToken", token).cookie("phone", req.body.phone);
+			res.status(200).send("{\"ok\": true}");
+			twilio.send(req.body.phone, "You have succesfully registered for Ping!");
 			db.getUserModel().update({
 				phone: req.body.phone
 			}, {
 				$set: {
-					password: passwordHash(req.body.password, salt),
-					salt: salt
+					verification: true
 				},
-				$setOnInsert: {
-					organized: [],
-					participated: [],
-					spectated: [],
-					subscriptions: [],
-					authTokens: []
+				$push: {
+					authTokens: token
 				}
-			}, {
-				upsert: true
-			}, function(err, dat){
-				res.status(200).send("{\"ok\": true}");
-			});
+			}, noCB);
 		});
 	});
 });
@@ -342,6 +389,7 @@ app.post("/user/auth", function(req, res){
 
 	db.getUserModel().find({
 		phone: req.body.phone,
+		verification: true,
 		password: {
 			$exists: true
 		}
@@ -370,7 +418,6 @@ app.post("/user/auth", function(req, res){
 						authTokens: token
 					}
 				}, noCB);
-				return;
 			});
 		} else {
 			res.status(200).send("{\"ok\": false, \"reason\": \"Incorrect password.\"}");
@@ -434,7 +481,7 @@ app.get("/event/:handle", function(req, res){
 				}
 			});
 		}
-		
+
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
