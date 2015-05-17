@@ -90,7 +90,7 @@ app.get("/twilio", function(req, res){ // testing only
 			console.log("failure", err);
 		}
 	});
-	res.send("<a href='sms://+17032096667&body=omg'>Message sent.</a>");
+	res.send("<a href='sms://+17032096667?body=omg123'>Message sent.</a>");
 });
 
 app.get("/qrtest", function(req, res){ // testing only
