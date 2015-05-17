@@ -64,7 +64,7 @@ var newEvent = function(name, description){
 	var evt = new Event();
 	evt.name = name;
 	evt.description = description;
-	//evt.channels.push();
+	evt.channels.push( newChannel(name + " main channel", evt.id) );
 	evt.save(function(err, evt_saved){
 	    if(err){
 	        throw err;
@@ -80,7 +80,7 @@ var newSubEvent = function(parentID, name, description){
 	var subevt	= new SubEvent();
 	subevt.name	= name;
 	subevt.parentEvent = parentID;
-	// push new channel
+	subevt.channels.push( newChannel(name + " subevent channel", parentID) );
 	subevt.save(function(err, evt_saved){
 	    if(err){
 	        throw err;
@@ -104,15 +104,38 @@ var newChannel = function(name, eventID){
 	        console.log("new channel saved!");
 	    }
 	});
+	return chnl.id;
 };
 
-var addSubChannel = function(channelID, subchannelID){
+var attachSubChannel = function(channelID, subchannelID){
+	Channel.findById(channelID, function(err, chan){
+		// console.log("sub-chan is too kawaii");
+		if(err){
+			console.log("channel does not exist");
+		}
+		if(chan){
+			Channel.findById(subchannelID, function(err, schan){
+				if(err){
+					console.log("subchannel does not exist");
+				}
+			});
+			chan.subChannels.push(subchannelID);
+		}
+	});
+};
+
+var createSubChannel = function(parentID, name, eventID){
+	var subID = newChannel(name, eventID);
+	attachSubChannel(parentID, subID);
 };
 
 module.exports = {
-	newEvent	: newEvent,
 	Channel		: Channel,
 	User		: User,
 	Event		: Event,
-	SubEvent	: SubEvent
+	SubEvent	: SubEvent,
+	newEvent	: newEvent,
+	newSubEvent	: newSubEvent,
+	newChannel	: newChannel,
+	createSubChannel:createSubChannel
 };
