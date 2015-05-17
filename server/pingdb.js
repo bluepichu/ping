@@ -9,6 +9,12 @@ var mongoose = require('mongoose');
 mongoose.connect(uristring);
 
 var db = mongoose.connection;
+
+var Channel;
+var User;
+var Event;
+var SubEvent;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
 	var channelSchema = mongoose.Schema({
@@ -48,13 +54,16 @@ db.once('open', function (callback) {
 		// endTime	: Date
 	});
 	
-	var Channel	= mongoose.model('Channel', channelSchema);
-	var User	= mongoose.model('User', userSchema);
-	var Event	= mongoose.model('Event', eventSchema);
-	var SubEvent= mongoose.model('SubEvent', subEventSchema);
+	Channel	= mongoose.model('Channel', channelSchema);
+	User	= mongoose.model('User', userSchema);
+	Event	= mongoose.model('Event', eventSchema);
+	SubEvent= mongoose.model('SubEvent', subEventSchema);
+	
 });
 
-function newEvent(name, description){
+console.log("pingdb initialized");
+
+var newEvent = function(name, description){
 	var evt = new Event();
 	evt.name = name;
 	evt.description = description;
@@ -67,5 +76,14 @@ function newEvent(name, description){
 	    }
 	});
 	return evt;
+}
+
+
+module.exports = {
+	newEvent	: newEvent,
+	Channel		: Channel,
+	User		: User,
+	Event		: Event,
+	SubEvent	: SubEvent
 }
 
