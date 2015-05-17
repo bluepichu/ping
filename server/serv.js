@@ -7,7 +7,7 @@ var path = require("path");
 var db = require("./db");
 var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
-var getQR = require("./qrcode");
+var qr = require("./qr");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
@@ -80,6 +80,8 @@ app.post("/twilio", function(req, res){
 			twilio.send(req.body.From, replies.default, function(){});
 			break;
 	}
+	
+	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
 app.get("/twilio", function(req, res){ // testing only
@@ -94,7 +96,7 @@ app.get("/twilio", function(req, res){ // testing only
 });
 
 app.get("/qrtest", function(req, res){ // testing only
-	getQR.getQR("handle");
+	res.send(qr("tsa-smash4"));
 });
 
 http.listen(process.env.PORT || 1337, function(){});
