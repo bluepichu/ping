@@ -8,11 +8,10 @@ app.use(cookieparser());
 var http = require("http").Server(app);
 var path = require("path");
 var db = require("./db");
-var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
 var qr = require("./qr");
 var cryptoString = require("random-crypto-string");
-var crypt = require("crypto");
+var crypto = require("crypto");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
@@ -63,10 +62,10 @@ var checkSchema = function(object, schema){
 		}
 	}
 	for(field in schema){
-		if(!schema[field].contains("optional") && !(field in object)){
+		if(schema[field].indexOf("optional") < 0 && !(field in object)){
 			return false;
 		}
-		if(!schema[field].contains((object[field].constructor === Array) ? "array" : typeof(object[field]))){
+		if(schema[field].indexOf((object[field].constructor === Array) ? "array" : typeof(object[field])) < 0){
 			return false;
 		}
 	}
@@ -99,12 +98,12 @@ app.get("/images/:file", function(req, res){
 
 app.post("/twilio", function(req, res){
 	var message = req.body.Body.toLowerCase().split(/[\s\/]/g);
-	
+
 	if(message[0] != "ping"){
 		twilio.send(req.body.From, REPLIES.default, function(){});
 		return;
 	}
-	
+
 	switch(message[1]){
 		case "subscribe":
 		case "sub":
@@ -122,12 +121,8 @@ app.post("/twilio", function(req, res){
 			twilio.send(req.body.From, REPLIES.default, function(){});
 			break;
 	}
-	
-	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
-});
 
-app.get("/qrtest", function(req, res){ // testing only
-	res.send(qr("tsa-smash4"));
+	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
 app.get("/dbtest", function(req, res){
@@ -142,12 +137,6 @@ app.get("/dbtest", function(req, res){
 	res.send("DB tested.");
 });
 
-app.get("/", static("/"));
-
-app.get("/user/new", static("/user/new.html"));
-
-app.get("/events", static("/events.html"));
-
 app.post("/user/new", function(req, res){
 	if(!checkSchema(req.body, {
 		phone: "string",
@@ -158,80 +147,84 @@ app.post("/user/new", function(req, res){
 	}
 	cryptoString(8, function(err, salt){
 		if(err || !salt){
-			res.status(500).send();
+			res.status(500).send("Internal error: failed generating salt.\n" + err);
 			return;
-		} else {
-			db.query({
-				phone: req.body.phone,
-				$exists: {
-					password: true
-				}
-			}, function(err, data){
-				if(err || !data){
-					res.status(500).send();
-					return;
-				}
-				if(data.length > 0){
-					res.status(200).send("{ok: false, reason: 'Account already exists.'}");
-					return;
-				}
-				db.update({
-					phone: req.body.phone
-				}, {
-					$set: {
-						password: passwordHash(req.body.password, salt),
-						salt: salt
-					},
-						$setOnInsert: {
-							organized: [],
-							participated: [],
-							spectated: [],
-							subscriptions: []
-						}
-				}, {
-					upsert: true
-				}, function(err, dat){
-					res.status(200).send("{ok: true}");
-				});
-			});
 		}
+		db.getUserModel().find({
+			phone: req.body.phone,
+			password: {
+				$exists: true
+			}
+		}, function(err, data){
+			if(err || !data){
+				res.status(500).send("Internal error: failed retrieving data.\n" + err + ", " + data);
+				return;
+			}
+			if(data.length > 0){
+				res.status(200).send("{ok: false, reason: 'Account already exists.'}");
+				return;
+			}
+			db.getUserModel().update({
+				phone: req.body.phone
+			}, {
+				$set: {
+					password: passwordHash(req.body.password, salt),
+					salt: salt
+				},
+				$setOnInsert: {
+					organized: [],
+					participated: [],
+					spectated: [],
+					subscriptions: [],
+					authTokens: []
+				}
+			}, {
+				upsert: true
+			}, function(err, dat){
+				res.status(200).send("{ok: true}");
+			});
+		});
 	});
 });
 
 app.post("/user/auth", function(req, res){
-	if(!sheckSchema(req.body, {
+	if(!checkSchema(req.body, {
 		phone: "string",
 		password: "string"
 	})){
 		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
 	}
-	
-	db.query({
+
+	db.getUserModel().find({
 		phone: req.body.phone,
-		$exists: {
-			password: true
+		password: {
+			$exists: true
 		}
 	}, function(err, data){
 		if(err || !data){
-			res.status(500).send();
+			res.status(500).send("Internal error: failed retreiving data.");
 			return;
 		}
 		if(data.length != 1){
 			res.status(200).send("{ok: false, reason: 'Named user does not exist.'}");
 		}
 		user = data[0];
-		if(user.password == passwordHash(req.body.password, user.password)){
-			cryptoString(24, function(token){
+		if(user.password == passwordHash(req.body.password, user.salt)){
+			cryptoString(24, function(err, token){
+				if(err || !token){
+					res.status(500).send("Internal error: failed generating token.");
+					return;
+				}
 				res.cookie("authToken", token);
 				res.status(200);
 				res.send("{ok: true}");
-				db.users.update({
+				db.getUserModel().update({
 					phone: req.body.phone
 				}, {
 					$push: {
 						authTokens: token
 					}
-				});
+				}, function(){});
 				return;
 			});
 		} else {
@@ -239,6 +232,14 @@ app.post("/user/auth", function(req, res){
 			return;
 		}
 	});
+});
+
+app.get("/", static("/"));
+
+app.get("/events", static("/events.html"));
+
+app.post("/", function(req, res){
+	res.send("yes ");
 });
 
 http.listen(process.env.PORT || 1337, function(){});
