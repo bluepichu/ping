@@ -67,12 +67,13 @@ $(function() {
 			console.log($(this).find("input").is(':checked'));
 			console.log($(this).text());
 			//if ($(this).find("input").is(':checked')) {
-				var $qr = $("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\"/>");
+				$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
+				var $qr = $("#z");
 				$qr.materialbox();
 				$qr.click();
 				$qr.click(function() {
 					$qr.remove();
-				})
+				});
 			//}
 		});
 
