@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
+app.use(bodyparser.json());
 app.use(bodyparser.urlencoded());
 var http = require("http").Server(app);
 var path = require("path");
@@ -25,7 +26,7 @@ var replies = {
 		missing: "You need to specify what to unsubscribe from!  Use PING UNSUBSCRIBE, PING UNSUB, or PING STOP followed by an event handle (optionally with a channel) or ALL if you want to unsubscribe from everything."
 	},
 	help: "To subscribe, send PING SUBSCRIBE or PING SUB followed by the event handle (optionally with a channel).\nTo unsubscribe, send PING UNSUBSCRIBE, PING UNSUB, or PING STOP followed by the event handle (optionally with a channel).\nTo stop all subscriptions, send PING UNSUBSCRIBE ALL, PING UNSUB ALL, or PING STOP ALL.\nTo view this message, send PING HELP.",
-	default: "I don't understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP."
+	default: "I don\"t understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP."
 };
 
 var subscribe = function(tel, path){
@@ -53,19 +54,23 @@ var static = function(pth){
 }
 
 var checkSchema = function(object, schema){
+	console.log(object);
 	for(field in object){
 		if(!(field in schema)){
+			console.log(field, 1);
 			return false;
 		}
 	}
 	for(field in schema){
 		if(schema[field].indexOf("optional") < 0 && !(field in object)){
+			console.log(field, 2);
 			return false;
 		}
 		if(schema[field].indexOf("optional") >= 0 && !(field in object)){
 			continue;
 		}
 		if(schema[field].indexOf((object[field].constructor === Array) ? "array" : typeof(object[field])) < 0){
+			console.log(field, 3);
 			return false;
 		}
 	}
@@ -152,7 +157,7 @@ app.post("/user/new", function(req, res){
 		phone: "string",
 		password: "string"
 	})){
-		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
 	cryptoString(8, function(err, salt){
@@ -171,7 +176,7 @@ app.post("/user/new", function(req, res){
 				return;
 			}
 			if(data.length > 0){
-				res.status(200).send("{ok: false, reason: 'Account already exists.'}");
+				res.status(200).send("{\"ok\": false, \"reason\": \"Account already exists.\"}");
 				return;
 			}
 			db.getUserModel().update({
@@ -191,7 +196,7 @@ app.post("/user/new", function(req, res){
 			}, {
 				upsert: true
 			}, function(err, dat){
-				res.status(200).send("{ok: true}");
+				res.status(200).send("{\"ok\": true}");
 			});
 		});
 	});
@@ -202,7 +207,7 @@ app.post("/user/auth", function(req, res){
 		phone: "string",
 		password: "string"
 	})){
-		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
 
@@ -217,7 +222,7 @@ app.post("/user/auth", function(req, res){
 			return;
 		}
 		if(data.length != 1){
-			res.status(200).send("{ok: false, reason: 'Named user does not exist.'}");
+			res.status(200).send("{\"ok\": false, \"reason\": \"Named user does not exist.\"}");
 			return;
 		}
 		user = data[0];
@@ -228,7 +233,7 @@ app.post("/user/auth", function(req, res){
 					return;
 				}
 				res.cookie("authToken", token);
-				res.status(200).send("{ok: true}");
+				res.status(200).send("{\"ok\": true}");
 				db.getUserModel().update({
 					phone: req.body.phone
 				}, {
@@ -239,20 +244,22 @@ app.post("/user/auth", function(req, res){
 				return;
 			});
 		} else {
-			res.status(200).send("{ok: false, reason: 'Incorrect password.'}");
+			res.status(200).send("{\"ok\": false, \"reason\": \"Incorrect password.\"}");
 			return;
 		}
 	});
 });
 
 app.post("/event/new", function(req, res){
+	console.log(req);
 	if(!checkSchema(req.body, {
 		name: "string",
 		slug: "optional string",
 		description: "optional string",
-		format: "optional string"
+		format: "optional string",
+		public: "optional string"
 	})){
-		res.status(200).send("{ok: false, reason: 'Invalid parameters'}");
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
 	extend(req.body, {
@@ -267,7 +274,7 @@ app.post("/event/new", function(req, res){
 			return;
 		}
 		if(data.length > 0){
-			res.status(200).send("{ok: false, reason: 'An event with that slug already exists.'}");
+			res.status(200).send("{\"ok\": false, \"reason\": \"An event with that slug already exists.\"}");
 			return;
 		}
 		db.getEventModel().create(req.body, function(err, dat){
@@ -275,7 +282,7 @@ app.post("/event/new", function(req, res){
 				res.status(500).send("Internal error: failed inserting data.");
 				return;
 			}
-			res.status(200).send("{ok: true}");
+			res.status(200).send("{\"ok\": true}");
 		});
 	});
 });

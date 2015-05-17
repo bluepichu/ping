@@ -122,4 +122,48 @@ $(function() {
 	modalEvent.addParticipant("hi");
 	cards.add("Smash Tourney", "test-id");
 	//modalEvent.show();
+	
+	$("#create-form").submit(function(e){
+		e.preventDefault();
+		
+		var data = $(this).serializeArray();
+		var json = {};
+		
+		for(var i = 0; i < data.length; i++){
+			json[data[i].name] = data[i].value;
+		}
+		
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			if(this.status != 200){
+				Materialize.toast(this.resoponseText, 4000);
+			} else {
+				var response = JSON.parse(this.responseText);
+				
+				if(response.ok){
+					Materialize.toast("Event created.", 4000);
+					$("#modal-create").closeModal();
+				} else {
+					Materialize.toast("Request failed: " + response.reason, 4000);
+				}
+			}
+		}
+		xhr.open("POST", "/event/new", true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify(json));
+	});
+	
+	$("#create-event").click(function(){
+		$("#create-form").trigger("submit");
+	});
+	
+	$("#create-name").bind("change paste input keyup", function(){
+		if(!$(this).data("previous")){
+			$(this).data("previous", "");
+		}
+		if($("#create-slug").val() == $(this).data("previous").toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, "")){
+			$("#create-slug").val($(this).val().toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""));
+		}
+		$(this).data("previous", $(this).val());
+	});
 });

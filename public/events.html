@@ -139,7 +139,7 @@
 	<div id="modal-create" class="modal">
 		<div class="modal-content">
 			<h4>New Event</h4>
-			<form action="#">
+			<form id="create-form">
 				<div class="row">
 					<div class="col s4">
 						Name
@@ -147,6 +147,17 @@
 					<div class="col s8">
 						<div class="input" style="float: right">
 							<input id="create-name" name="name" type="text" autocomplete="off" required>
+							<span class="bar"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s4">
+						Slug
+					</div>
+					<div class="col s8">
+						<div class="input" style="float: right">
+							<input id="create-slug" name="slug" type="text" autocomplete="off" required>
 							<span class="bar"></span>
 						</div>
 					</div>
@@ -182,7 +193,7 @@
 						<div class="switch">
 							<label style="float: right">
 								No
-								<input id="create-public" type="checkbox" checked="checked">
+								<input id="create-public" type="checkbox" checked="checked" name="public" >
 								<span class="lever"></span>
 								Yes
 							</label>
