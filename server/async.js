@@ -9,11 +9,11 @@ var AsyncHandler = function(done){
 		}
 	}
 
-	this.attach = function(func, args, cb){
+	this.attach = function(func, args, cb, ths){
 		this.asyncCount++;
 		cb = cb.bind({next: this.next.bind(this)});
 		args.push(cb);
-		func.apply(this, args);
+			func.apply(ths || this, args);
 	}
 
 	this.next = function(){

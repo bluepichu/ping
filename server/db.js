@@ -39,7 +39,7 @@ db.once("open", function (callback) {
 		description	: String,
 		format		: String, // Tournament, Convention, Heats
 		
-		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }],
+		channels	: [String],
 		
 		participants: [String],
 		spectators	: [String], // users who subscribe to something in the event?
