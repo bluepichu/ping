@@ -86,24 +86,24 @@
 			<form>
 				<h4>Register</h4>
 				<div class="input">
-					<input id="register-username" name="name" type="number" autocomplete="off" required>
+					<input id="register-username" name="phone" type="number" autocomplete="off" required>
 					<label for="register-username">Phone Number</label>
 					<span class="bar"></span>
 				</div>
 				<div class="input">
-					<input id="register-password" name="name" type="password" autocomplete="off" required>
+					<input id="register-password" name="password" type="password" autocomplete="off" required>
 					<label for="register-password">Password</label>
 					<span class="bar"></span>
 				</div>
 				<div class="input">
-					<input id="register-confirm" name="name" type="password" autocomplete="off" required>
+					<input id="register-confirm" name="confirm" type="password" autocomplete="off" required>
 					<label for="register-confirm">Confirm password</label>
 					<span class="bar"></span>
 				</div>
 			</form>
 		</div>
 		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close" id="register">Register</a>
+			<a class="waves-effect btn-flat modal-action" id="register-submit">Register</a>
 			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
 			<a class="waves-effect btn-flat modal-action" id="register-login">Login</a>
 		</div>
@@ -119,10 +119,11 @@
 					<label for="verify-code">Verification Code</label>
 					<span class="bar"></span>
 				</div>
+				<input id="phone" name="phone" type="text" style="display: none" />
 			</form>
 		</div>
 		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close" id="login">Login</a>
+			<a class="waves-effect btn-flat modal-action" id="verify-submit">Submit</a>
 			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
 		</div>
 	</div>

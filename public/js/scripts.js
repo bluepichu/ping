@@ -30,9 +30,12 @@ $(function() {
 		var $loginModal = $("#modal-login"),
 			$loginUsername = $loginModal.find("#login-username"),
 			$registerModal = $("#modal-register"),
+			$verifyModal = $("#modal-verify"),
 			$registerUsername = $registerModal.find("#register-username"),
 			$registerPassword = $registerModal.find("#register-password"),
 			$registerConfirm = $registerModal.find("#register-confirm"),
+			$registerSubmit = $registerModal.find("#register-submit"),
+			$verifySubmit = $verifyModal.find("#verify-submit"),
 			$clearFields = [
 				$loginModal.find("#login-password"),
 				$registerPassword,
@@ -72,6 +75,74 @@ $(function() {
 		};
 		$registerPassword.change(validatePassword);
 		$registerConfirm.keyup(validatePassword);
+
+		$registerSubmit.click(function(){
+			var data = $registerModal.find("form").serializeArray();
+			var json = {};
+
+			for (var i = 0; i < data.length; i++) {
+				json[data[i].name] = data[i].value;
+			}
+
+			json.phone = "+1" + json.phone;
+
+			if(json.password == "" || json.password != json.confirm){
+				Materialize.toast("Please double check your password fields.", 4000);
+				return;
+			}
+
+			var xhr = new XMLHttpRequest();
+			xhr.onload = function(){
+				if(this.status != 200){
+					Materialize.toast(this.responseText, 4000);
+				} else {
+					var res = JSON.parse(xhr.responseText);	
+					if(res.ok){
+						$registerModal.closeModal();
+						setTimeout(function() {
+							clearAll();
+							$verifyModal.openModal();
+						}, 300);
+					} else {
+						Materialize.toast("Request failed: " + res.reason, 4000); 
+					}
+				}
+			}
+			xhr.open("POST", "/user/verify", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			delete json.confirm;
+			$verifyModal.find("#phone").val(json.phone);
+			xhr.send(JSON.stringify(json));
+		});
+		
+		$verifySubmit.click(function(){
+			var data = $verifyModal.find("form").serializeArray();
+			var json = {};
+
+			for (var i = 0; i < data.length; i++) {
+				json[data[i].name] = data[i].value;
+			}
+
+			var xhr = new XMLHttpRequest();
+			xhr.onload = function(){
+				if(this.status != 200){
+					Materialize.toast(this.responseText, 4000);
+				} else {
+					var res = JSON.parse(xhr.responseText);	
+					if(res.ok){
+						Materialize.toast("You are now registered!", 2000);
+						setTimeout(function(){
+							location.reload();
+						}, 2000);
+					} else {
+						Materialize.toast("Request failed: " + res.reason, 4000); 
+					}
+				}
+			}
+			xhr.open("POST", "/user/new", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(JSON.stringify(json));
+		});
 	}
 	$("#unsubscribe").click(function() {
 		$("#modal-settings").closeModal();
