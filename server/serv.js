@@ -15,6 +15,7 @@ var crypto = require("crypto");
 var extend = require("extend");
 var tweet = require("./twitter");
 var qr = require("./qr");
+var AsyncHandler = require("./async").AsyncHandler;
 
 require("string-format").extend(String.prototype);
 
@@ -264,9 +265,10 @@ app.get("/qrtest", function(req, res){ // testing only
 });
 
 app.get("/twitter", function(req, res){ // testing only
-	res.send(tweet(function(data){
-		alert(data)
-	}, "@ping_1t"));
+	tweet(function(data){
+		console.log('Hi');
+	}, "@ping_1t");
+	res.send();
 });
 
 app.get("/dbtest", function(req, res){
@@ -451,44 +453,56 @@ app.post("/event/new", function(req, res){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}");
 		return;
 	}
-	extend(req.body, {
-		slug: req.body.name.toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""),
-		format: "panel",
-		channels: []
-	});
-	db.getEventModel().find({
-		slug: req.body.slug
+	if(!req.cookies.phone || !req.cookies.authToken){
+		res.status(200).send("{\"ok\": false, \"reason\": \"Insufficient priviliges.\"}");
+		return;
+	} 
+	db.getUserModel().find({
+		phone: req.cookies.phone,
+		authTokens: {
+			$in: [req.cookies.authToken]
+		}
 	}, function(err, data){
 		if(err || !data){
-			res.status(500).send("Internal error: failed retrieving data.");
+			res.status(500).send("Internal error: failed retrieving user data.");
 			return;
 		}
-		if(data.length > 0){
-			res.status(200).send("{\"ok\": false, \"reason\": \"An event with that slug already exists.\"}");
+		if(data.length != 1){
+			res.status(200).send("{\"ok\": false, \"reason\": \"You must login to create an event.\"}");
 			return;
 		}
-		db.getEventModel().create(req.body, function(err, dat){
-			if(err || !dat){
-				res.status(500).send("Internal error: failed inserting data.");
+		extend(req.body, {
+			slug: req.body.name.toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""),
+			format: "panel",
+			channels: ["main"],
+			organizers: [req.cookies.phone]
+		});
+		db.getEventModel().find({
+			slug: req.body.slug
+		}, function(err, data){
+			if(err || !data){
+				res.status(500).send("Internal error: failed retrieving event data.");
 				return;
 			}
-			res.status(200).send("{\"ok\": true}");
-			db.getChannelModel().create({
-				name: "main",
-				subscribers: [],
-				event: dat._id,
-				subChannels: []
-			}, function(err, dt){
-				db.getEventModel().update({
-					_id: dat._id
-				}, {
-					$push: {
-						channels: dt._id
-					}
+			if(data.length > 0){
+				res.status(200).send("{\"ok\": false, \"reason\": \"An event with that slug already exists.\"}");
+				return;
+			}
+			db.getEventModel().create(req.body, function(err, dat){
+				if(err || !dat){
+					res.status(500).send("Internal error: failed inserting data.");
+					return;
+				}
+				res.status(200).send("{\"ok\": true}");
+				db.getChannelModel().create({
+					name: "main",
+					subscribers: [],
+					event: dat._id,
+					subChannels: []
 				}, noCB);
 			});
 		});
-	});
+	}); 
 });
 
 app.get("/event/:handle&slug=:slug", function(req, res){
@@ -499,48 +513,48 @@ app.get("/event/:handle&slug=:slug", function(req, res){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
-	
+
 	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
-		//console.log("gotv here");
-		var participantPhones = [];
-		for(var i = 0; i < data.participants.length; i++){
-			db.getUserModel().findById( data.participants[i], function(errr, person){
-				if(errr || !person){
-					//console.log("supposed participant did not exist");
-				}
-				else{
-					participantPhones.push(person.name);
-				}
-			});
-		}
-		
-		var organizerPhones = [];
-		for(var i = 0; i < data.organizers.length; i++){
-			db.getUserModel().findById( data.organizers[i], function(errr, person){
-				if(errr || !person){
-					//console.log("supposed organizer did not exist");
-				}
-				else{
-					organizer.push(person.name);
-				}
-			});
-		}
+//		//console.log("gotv here");
+//		var participantPhones = [];
+//		for(var i = 0; i < data.participants.length; i++){
+//			db.getUserModel().findById( data.participants[i], function(errr, person){
+//				if(errr || !person){
+//					//console.log("supposed participant did not exist");
+//				}
+//				else{
+//					participantPhones.push(person.name);
+//				}
+//			});
+//		}
+//
+//		var organizerPhones = [];
+//		for(var i = 0; i < data.organizers.length; i++){
+//			db.getUserModel().findById( data.organizers[i], function(errr, person){
+//				if(errr || !person){
+//					//console.log("supposed organizer did not exist");
+//				}
+//				else{
+//					organizerPhones.push(person.name);
+//				}
+//			});
+//		}
 
 		var message = data.toObject();
 		message.ok = true;
-		message.participants = participantPhones;
-		message.organizers	 = organizerPhones;
+//		message.participants = participantPhones;
+//		message.organizers	 = organizerPhones;
 		res.status(200).send(JSON.stringify(message));
 		//console.log(message);
 	});
 });
 
 
-app.get("/", static("/"));
+app.get("/", static("/")); 
 
 app.get("/user/new", static("/user/new.html"));
 

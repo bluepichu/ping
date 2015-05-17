@@ -38,6 +38,7 @@ $(function() {
 			$registerConfirm = $registerModal.find("#register-confirm"),
 			$registerSubmit = $registerModal.find("#register-submit"),
 			$verifySubmit = $verifyModal.find("#verify-submit"),
+			$loginSubmit = $loginModal.find("#login-submit");
 			$clearFields = [
 				$loginModal.find("#login-password"),
 				$registerPassword,
@@ -63,6 +64,36 @@ $(function() {
 		$("#logout").click(function() {
 			$.removeCookie("authToken");
 			location.reload();
+		});
+		$loginSubmit.click(function(){
+			var data = $loginModal.find("form").serializeArray();
+			var json = {};
+
+			for (var i = 0; i < data.length; i++) {
+				json[data[i].name] = data[i].value;
+			}
+
+			json.phone = "+1" + json.phone;
+
+			var xhr = new XMLHttpRequest();
+			xhr.onload = function(){
+				if(this.status != 200){
+					Materialize.toast(this.responseText, 4000);
+				} else {
+					var res = JSON.parse(xhr.responseText);	
+					if(res.ok){
+						Materialize.toast("Login succesful.");
+						setTimeout(function() {
+							location.reload();
+						}, 2000);
+					} else {
+						Materialize.toast("Request failed: " + res.reason, 4000); 
+					}
+				}
+			}
+			xhr.open("POST", "/user/auth", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(JSON.stringify(json));
 		});
 		$registerModal.find("#register-login").click(function() {
 			$loginUsername.val($registerUsername.val());
@@ -120,7 +151,6 @@ $(function() {
 			$verifyModal.find("#phone").val(json.phone);
 			xhr.send(JSON.stringify(json));
 		});
-		
 		$verifySubmit.click(function(){
 			var data = $verifyModal.find("form").serializeArray();
 			var json = {};

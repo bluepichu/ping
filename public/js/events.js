@@ -26,15 +26,15 @@ $(function() {
 			}
 			this.$columns[this.count % 3].append(
 				"<div class=\"card small waves-effect waves-light\">" +
-					"<div class=\"card-image fill-card\">" +
-						img +
-						"<span class=\"card-title\">" + title + "</span>" +
-					"</div>" +
+				"<div class=\"card-image fill-card\">" +
+				img +
+				"<span class=\"card-title\">" + title + "</span>" +
+				"</div>" +
 				"</div>"
-				).data("id", id)
-				.click(function() {
-					modalEvent.show($(this).data("id"));
-				});
+			).data("id", id)
+			.click(function() {
+				modalEvent.show($(this).data("id"));
+			});
 			this.count++;
 		};
 		this.clear = function() {
@@ -53,19 +53,30 @@ $(function() {
 		this.$participants = this.$modal.find("#event-participants .col");
 		this.pcount = 0;
 		this.$channels = this.$modal.find("#event-channels .col");
+		this.$channelSelect = this.$modal.find("#channel-select");
 		this.ccount = 0;
 		this.$submit = this.$modal.find("#submit-event");
 		this.id = undefined;
 		this.favorite = false;
-		this.participants = ["Bob", "Tom", "Odd"];
+		this.participants = [];
+		this.isOrganizer = false;
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
-		this.isOrganizer = false;
+		this.$modal.find(".channel").click(function() {
+			if ($(this).find("input").checked()) {
+				var $qr = $("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\"/>");
+				$qr.materialbox();
+				$qr.click();
+				$qr.click(function() {
+					$qr.remove();
+				})
+			}
+		});
 
 		/**
 		 * Populate modal with event information before showing the modal
 		 * @param {string} id MongoDB id for event
-		 */
+		 */ 
 		this.show = function(id) {
 			//console.log(id);
 			this.id = id;
@@ -78,39 +89,59 @@ $(function() {
 					var rec = JSON.parse(xhr.responseText);	
 					if( rec.ok ){
 						me.setTitle(rec.name);
-						me.setDescription(rec.description || "<p style='opacity: .54;'>No description.</p>");
+						me.setDescription(rec.description);
+						self.$organizers.empty();
+						self.$participants.empty();
+						self.$channels.empty();
+						self.$channelSelect.material_select("destroy");
+						self.$channelSelect.empty();
 						for(var i = 0; i < rec.organizers.length; i++){
 							me.addOrganizer(rec.organizers[i]);
 						}
 						for(var i = 0; i < rec.participants.length; i++){
 							me.addParticipant(rec.participants[i]);
-						}	
+						}
+						for(var i = 0; i < rec.channels.length; i++){
+							me.addChannel(rec.channels[i]);
+						}
+						self.$channelSelect.find("option:first-child").prop("selected", true);
+						self.$channelSelect.material_select();
 						//if (part of user's events...)
 						me.favorite = true;
 						me.$submit.text("Remove");
 						//} else {
-							//this.favorite = false;
-							//this.$submit.text("Add");
+						//this.favorite = false;
+						//this.$submit.text("Add");
 						//}
 						self.isOrganizer = (rec.organizers.indexOf($.cookie("phone")) >= 0);
+						if(self.isOrganizer){
+							$(".organizer-only").css("display", "block");
+						} else {
+							$(".organizer-only").css("display", "none");
+						}
+
 						me.$modal.openModal();
 					}
 					else{
 						Materialize.toast("Request failed: " + rec.reason, 4000);
-					}
+					} 
 				}
 			}
 			xhr.open("GET", "/event/:handle&slug=" + this.id, true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			//console.log("stringy " + JSON.stringify( {id:this.id} ));
 			xhr.send();
-			
+
 		};
 		this.setTitle = function(title) {
 			$("#event-title").text(title);
 		};
 		this.setDescription = function(description) {
-			$("#event-description").text(description)
+			if(!description){
+				$("#event-description").html("<p style='opacity: .54'>No description.</p>");
+			} else {
+				$("#event-description").text(description);
+			}
 		};
 		/**
 		 * Add an organizer
@@ -144,8 +175,8 @@ $(function() {
 			}
 			$(this.$participants[this.pcount]).append(
 				"<div class=\"participant\">" +
-					img +
-					"<span>" + name + "</span>" +
+				img +
+				"<span>" + name + "</span>" +
 				"</div>"
 			);
 			this.pcount = (this.pcount + 1) % 3;
@@ -158,25 +189,26 @@ $(function() {
 		this.addChannel = function(channel, enabled) {
 			$(this.$channels[this.ccount]).append(
 				"<div>" +
-					"<span>" + channel + "</span>" +
-					"<div class=\"switch\" style=\"float: right\">" +
-						"<label>" +
-							"<input type=\"checkbox\"" + (enabled ? "checked=\"checked\"" : "") + ">" +
-							"<span class=\"lever\"></span>" +
-						"</label>" +
-					"</div>" +
+				"<span>" + channel + "</span>" +
+				"<div class=\"switch\" style=\"float: right\">" +
+				"<label>" +
+				"<input type=\"checkbox\"" + (enabled ? "checked=\"checked\"" : "") + ">" +
+				"<span class=\"lever\"></span>" +
+				"</label>" +
+				"</div>" +
 				"</div>"
 			);
+			this.$channelSelect.append("<option value='" + channel + "' name='" + channel + "'>" + channel + "</option>"); 
 			this.ccount = (this.ccount + 1) % 3;
 		};
 		// Add to/remove from user's events
 		this.toggle = function() {
 			console.log(this.id);
 			if (this.favorite) {
-				this.$submit.text("Add");
+				this.$submit.text("Add"); 
 			} else {
 				this.$submit.text("Remove");
-			}
+			} 
 			this.favorite = !this.favorite;
 		};
 		// Reveal additional information modal
@@ -186,7 +218,7 @@ $(function() {
 				complete: function() {
 					setTimeout(function() {self.$modal.openModal()}, 100)
 				}})
-			}, 300);
+								  }, 300);
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
 
@@ -225,9 +257,7 @@ $(function() {
 			})
 		}
 	}();
-	modalEvent.addParticipant("hi");
-	modalEvent.addChannel("hi again");
-	
+
 	var getEventList = function(){
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
@@ -248,11 +278,9 @@ $(function() {
 		xhr.open("GET", "/event/listall", true);
 		xhr.send();
 	}
-	
+
 	getEventList();
-	
-	cards.add("Smash Tourney", "test-id");
-	cards.add("Amaze", "amazing-race");
+
 	$("#create-form").submit(function(e){
 		e.preventDefault();
 
@@ -271,8 +299,12 @@ $(function() {
 				var response = JSON.parse(this.responseText);
 
 				if (response.ok){
-					Materialize.toast("Event created.", 4000);
+					Materialize.toast("Event created.", 2000);
 					$("#modal-create").closeModal();
+					
+					setTimeout(function(){
+						location.reload();
+					}, 2000);
 				} else {
 					Materialize.toast("Request failed: " + response.reason, 4000);
 				}
@@ -282,11 +314,11 @@ $(function() {
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(json));
 	});
-	
+
 	$("#create-event").click(function() {
 		$("#create-form").trigger("submit");
 	});
-	
+
 	$("#create-name").bind("change paste input keyup", function() {
 		if (!$(this).data("previous")) {
 			$(this).data("previous", "");

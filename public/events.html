@@ -82,19 +82,19 @@
 					<form>
 						<h4>Login</h4>
 						<div class="input">
-							<input id="login-username" name="name" type="number" autocomplete="off" required>
+							<input id="login-username" name="phone" type="number" autocomplete="off" required>
 							<label for="login-username">Phone Number</label>
 							<span class="bar"></span>
 						</div>
 						<div class="input">
-							<input id="login-password" name="name" type="password" autocomplete="off" required>
+							<input id="login-password" name="password" type="password" autocomplete="off" required>
 							<label for="login-password">Password</label>
 							<span class="bar"></span>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<a class="waves-effect btn-flat modal-action modal-close" id="login">Login</a>
+					<a class="waves-effect btn-flat modal-action" id="login-submit">Login</a>
 					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
 					<a class="waves-effect btn-flat modal-action" id="login-register">Register</a>
 				</div>
@@ -264,22 +264,31 @@
 							</div>
 						</div>
 					</form>
-					<h5>Post a Message</h5>
-					<form class="row" id="post-message">
-						<div class="input">
-							<input id="message-text" name="message" type="text" autocomplete="off" required>
-							<label for="message-text">Message</label>
-							<span class="bar"></span>
-						</div>
-						<div class="input-field">
-							<select>
-								<option>Singles</option>
-								<option>Doubles</option>
-								<option>Quads</option>
-								<option>Other Channels</option>
-							</select>
-						</div>
-					</form>
+					<div class="organizer-only">
+						<h5>Post a Message</h5>
+						<form class="row" id="post-message">
+							<div class="col s12 m6">
+								<div class="input">
+									<input id="message-text" name="message" type="text" autocomplete="off" required>
+									<label for="message-text">Message</label>
+									<span class="bar"></span>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="input-field">
+									<select id="channel-select">
+										<option>Singles</option>
+										<option>Doubles</option>
+										<option>Quads</option>
+										<option>Other Channels</option>
+									</select>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<a class="waves-effect btn waves-light" style="vertical-align: -36px">Submit</a>
+							</div>
+						</form>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
