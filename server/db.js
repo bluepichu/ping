@@ -23,10 +23,14 @@ db.once("open", function (callback) {
 	var userSchema = mongoose.Schema({
 		name		: String,
 		phone		: String,
+		
 		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }], // channels
 		organized	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is running
 		participated: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is going to
-		spectated	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }] // events the user is spectating
+		spectated	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is spectating
+		
+		password	: String,
+		salt		: String
 	});
 	var eventSchema = mongoose.Schema({
 		name		: String,
