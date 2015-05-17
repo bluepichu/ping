@@ -61,6 +61,7 @@ $(function() {
 		this.participants = ["Bob", "Tom", "Odd"];
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
+		this.isOrganizer = false;
 
 		/**
 		 * Populate modal with event information before showing the modal
@@ -78,7 +79,7 @@ $(function() {
 					var rec = JSON.parse(xhr.responseText);	
 					if( rec.ok ){
 						me.setTitle(rec.name);
-						me.setDescription(rec.description);
+						me.setDescription(rec.description || "<p style='opacity: .54;'>No description.</p>");
 						for(var i = 0; i < rec.participants.length; i++){
 							me.addParticipant(rec.participants[i]);
 						}	
@@ -89,6 +90,7 @@ $(function() {
 							//this.favorite = false;
 							//this.$submit.text("Add");
 						//}
+						self.isOrganizer = (rec.organizers.indexOf($.cookie("phone")) >= 0);
 						me.$modal.openModal();
 					}
 					else{
