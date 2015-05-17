@@ -96,7 +96,7 @@ $(function() {
 			}
 			xhr.open("GET", "/event/:handle", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(json));
+			xhr.send(JSON.stringify({slug:id}));
 			
 			};
 		this.setTitle = function(title) {
