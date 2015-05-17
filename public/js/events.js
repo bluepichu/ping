@@ -80,6 +80,9 @@ $(function() {
 					if( rec.ok ){
 						me.setTitle(rec.name);
 						me.setDescription(rec.description || "<p style='opacity: .54;'>No description.</p>");
+						for(var i = 0; i < rec.organizers.length; i++){
+							me.addOrganizer(rec.organizers[i]);
+						}
 						for(var i = 0; i < rec.participants.length; i++){
 							me.addParticipant(rec.participants[i]);
 						}	

@@ -499,27 +499,41 @@ app.get("/event/:handle&slug=:slug", function(req, res){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
+	
 	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
 		//console.log("gotv here");
-		var participantNames = [];
+		var participantPhones = [];
 		for(var i = 0; i < data.participants.length; i++){
 			db.getUserModel().findById( data.participants[i], function(errr, person){
 				if(errr || !person){
 					//console.log("supposed participant did not exist");
 				}
 				else{
-					participantNames.push(person.name);
+					participantPhones.push(person.name);
+				}
+			});
+		}
+		
+		var organizerPhones = [];
+		for(var i = 0; i < data.organizers.length; i++){
+			db.getUserModel().findById( data.organizers[i], function(errr, person){
+				if(errr || !person){
+					//console.log("supposed organizer did not exist");
+				}
+				else{
+					organizer.push(person.name);
 				}
 			});
 		}
 
 		var message = data.toObject();
 		message.ok = true;
-		message.participants = participantNames;
+		message.participants = participantPhones;
+		message.organizers	 = organizerPhones;
 		res.status(200).send(JSON.stringify(message));
 		//console.log(message);
 	});
