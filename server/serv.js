@@ -416,6 +416,26 @@ app.post("/event/new", function(req, res){
 	});
 });
 
+app.get("/event/:handle", function(req, res){
+	console.log(req);
+	if(!req.body.slug){
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
+		return;
+	}
+	db.getEventModel().findOne({
+		slug: req.body.slug
+	}, function(err, data){
+		if(err || !data){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		var message = {"ok":true};
+		extend(message, data);
+		res.status(200).send(JSON.stringify(message));
+	});
+});
+
+
 app.get("/", static("/"));
 
 app.get("/user/new", static("/user/new.html"));
