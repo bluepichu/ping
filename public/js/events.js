@@ -49,11 +49,14 @@ $(function() {
 		var self = this;
 		this.colCount = 0;
 		this.$modal = $("#modal-event");
+		this.$more = $("#modal-more");
 		this.cols = this.$modal.find(".col");
 		this.$submit = this.$modal.find("#submit-event");
 		this.id = undefined;
 		this.favorite = false;
+		this.participants = ["Bob", "Tom", "Odd"];
 		this.$submit.click(function() {self.toggle()});
+		this.$modal.find("#event-more").click(function() {self.showMore()});
 
 		/**
 		 * Populate modal with event information before showing the modal
@@ -63,6 +66,7 @@ $(function() {
 			//console.log(id);
 			this.id = id;
 			// Grab title, description, participants
+			//this.participants = // give array of participants
 			/*
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function(){
@@ -118,50 +122,94 @@ $(function() {
 			}
 			this.favorite = !this.favorite;
 		};
+		this.showMore = function() {
+			this.$modal.closeModal();
+			setTimeout(function() {self.$more.openModal({
+				complete: function() {
+					setTimeout(function() {self.$modal.openModal()}, 100)
+				}})
+			}, 300);
+			$("#more-title").text($("#event-title").text());
+			$("#more-description").text($("#event-description").text());
+
+			var shuffle = function(array) {
+				var m = array.length, t, i;
+				// While there remain elements to shuffle…
+				while (m) {
+					// Pick a remaining element…
+					i = Math.floor(Math.random() * m--);
+					// And swap it with the current element.
+					t = array[m];
+					array[m] = array[i];
+					array[i] = t;
+				}
+
+				return array;
+			};
+			// Check for data, if no data on server:
+			var data = {teams: [], results: []};
+			var participants = shuffle(this.participants);
+			for (var i = 0; i < participants.length; i+=2) {
+				if (i + 1 === participants.length) {
+					data.teams.push([participants[i], "N/A"]);
+					data.results.push([0, -1]);
+				} else {
+					data.teams.push([participants[i], participants[i + 1]]);
+					data.results.push([undefined, undefined]);
+				}
+			}
+			var saveData = function() {
+				// Do something to save to server
+			};
+			$('#more-bracket').bracket({
+				init: data /* data to initialize the bracket with */,
+				save: saveData
+			})
+		}
 	}();
 	modalEvent.addParticipant("hi");
 	cards.add("Smash Tourney", "test-id");
 	//modalEvent.show();
-	
+
 	$("#create-form").submit(function(e){
 		e.preventDefault();
-		
+
 		var data = $(this).serializeArray();
 		var json = {};
-		
-		for(var i = 0; i < data.length; i++){
+
+		for (var i = 0; i < data.length; i++) {
 			json[data[i].name] = data[i].value;
 		}
-		
+
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
-			if(this.status != 200){
+			if (this.status != 200){
 				Materialize.toast(this.resoponseText, 4000);
 			} else {
 				var response = JSON.parse(this.responseText);
-				
-				if(response.ok){
+
+				if (response.ok){
 					Materialize.toast("Event created.", 4000);
 					$("#modal-create").closeModal();
 				} else {
 					Materialize.toast("Request failed: " + response.reason, 4000);
 				}
 			}
-		}
+		};
 		xhr.open("POST", "/event/new", true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(json));
 	});
 	
-	$("#create-event").click(function(){
+	$("#create-event").click(function() {
 		$("#create-form").trigger("submit");
 	});
 	
-	$("#create-name").bind("change paste input keyup", function(){
-		if(!$(this).data("previous")){
+	$("#create-name").bind("change paste input keyup", function() {
+		if (!$(this).data("previous")) {
 			$(this).data("previous", "");
 		}
-		if($("#create-slug").val() == $(this).data("previous").toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, "")){
+		if ($("#create-slug").val() == $(this).data("previous").toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, "")) {
 			$("#create-slug").val($(this).val().toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""));
 		}
 		$(this).data("previous", $(this).val());

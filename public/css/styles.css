@@ -221,7 +221,12 @@ main .card {
     margin-bottom: 0; }
 
 #modal-event .modal-content #event-description {
-  padding: 1rem 0.75rem; }
+  padding: 0.75rem 1rem 0; }
+#modal-event .modal-content #event-more {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0.75rem; }
 #modal-event .modal-content .participant {
   display: -webkit-box;
   display: -webkit-flex;

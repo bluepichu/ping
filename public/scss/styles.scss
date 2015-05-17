@@ -238,7 +238,13 @@ main {
 }
 #modal-event .modal-content {
 	#event-description {
-		padding: 1rem 0.75rem;
+		padding: 0.75rem 1rem 0;
+	}
+	#event-more {
+		display: block;
+		width: 100%;
+		text-align: center;
+		margin-bottom: 0.75rem;
 	}
 	.participant {
 		display: flex;
