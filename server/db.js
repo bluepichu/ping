@@ -16,7 +16,7 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function (callback) {
 	var channelSchema = mongoose.Schema({
 		name		: String,
-		subscribed	: [mongoose.Schema.Types.Mixed], // all subscribed to the channel; users and loose phones
+		subscribed	: [String], // all subscribed to the channel; users and loose phones
 		event		: { type: mongoose.Schema.ObjectId, ref: "Event" },
 		subChannels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }] // notification to a channel is also sent to all subchannels
 	});
