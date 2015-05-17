@@ -124,6 +124,13 @@ var attachSubChannel = function(channelID, subchannelID){
 	});
 };
 
+var createSubChannel = function(parentID, name, eventID){
+	var subID = newChannel(name, eventID);
+	attachSubChannel(parentID, subID);
+};
+
+
+
 module.exports = {
 	newEvent	: newEvent,
 	Channel		: Channel,
