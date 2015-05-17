@@ -489,6 +489,7 @@ app.get("/event/:handle&slug=:slug", function(req, res){
 		}
 
 		var message = data.toObject();
+		message.ok = true;
 		message.participants = participantNames;
 		res.status(200).send(JSON.stringify(message));
 		console.log(message);
