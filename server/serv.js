@@ -25,8 +25,6 @@ var replies = {
 	default: "I don't understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP."
 };
 
-//
-
 var subscribe = function(tel, path){
 	if(path.length < 1){
 		twilio.send(tel, replies.subscribe.missing, function(){});
@@ -45,34 +43,26 @@ var unsubscribe = function(tel, path){
 	twilio.send(tel, replies.unsubscribe.success, function(){});
 }
 
-var encrypt = function(tel){
-	var enc = "";
-	
-	for(var i = 0; i < tel.length; i++){
-		enc += tel.charAt(i) + 5;
+var static = function(pth){
+	return function(req, res){
+		res.sendFile(pth, {root: path.join(__dirname, "../public")});
 	}
-	
-	return enc;
 }
-
-var decrypt = function(tel){
-	var dec = "";
-	
-	for(var i = 0; i < tel.length; i++){
-		dec += tel.charAt(i) - 5;
-	}
-	
-	return dec;
-}
-
-//
 
 app.get("/css/:file", function(req, res){
 	res.sendFile("/css/" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
-app.get("/js/:file", function(req, res){
-	res.sendFile("/js/" + req.params.file, {root: path.join(__dirname, "../public")});
+app.get(/\/js\/(.*)/, function(req, res){
+	res.sendFile("/js/" + req.params[0], {root: path.join(__dirname, "../public")});
+});
+
+app.get(/\/font\/(.*)/, function(req, res){
+	res.sendFile("/font/" + req.params[0], {root: path.join(__dirname, "../public")});
+});
+
+app.get("/images/:file", function(req, res){
+	res.sendFile("/images/" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
 app.post("/twilio", function(req, res){
@@ -104,19 +94,14 @@ app.post("/twilio", function(req, res){
 	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
-app.get("/twilio", function(req, res){ // testing only
-	twilio.send(["+17032096667", "+17032096667"], "Oh well", function(err, data){
-		if(!err){
-			console.log("success");
-		} else {
-			console.log("failure", err);
-		}
-	});
-	res.send("<a href='sms://+17032096667?body=omg123'>Message sent.</a>");
-});
-
 app.get("/qrtest", function(req, res){ // testing only
 	res.send(qr("tsa-smash4"));
 });
+
+app.get("/", static("/"));
+
+app.get("/user/new", static("/user/new.html"));
+
+app.get("/events", static("/events.html"));
 
 http.listen(process.env.PORT || 1337, function(){});
