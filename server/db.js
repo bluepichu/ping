@@ -16,7 +16,7 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function (callback) {
 	var channelSchema = mongoose.Schema({
 		name		: String,
-		subscribed	: [String], // all subscribed to the channel; users and loose phones
+		subscribers	: [String], // all subscribed to the channel; users and loose phones
 		event		: { type: mongoose.Schema.ObjectId, ref: "Event" },
 		subChannels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }] // notification to a channel is also sent to all subchannels
 	});
@@ -27,7 +27,6 @@ db.once("open", function (callback) {
 		subscriptions	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }], // channels
 		organized	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is running
 		participated: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is going to
-		spectated	: [{ type: mongoose.Schema.ObjectId, ref: "Event" }], // events the user is spectating
 		
 		password	: String,
 		salt		: String,
@@ -41,11 +40,11 @@ db.once("open", function (callback) {
 		
 		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }],
 		
-		participants: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
-		spectators	: [{ type: mongoose.Schema.ObjectId, ref: "User" }], // users who subscribe to something in the event?
-		subEvents	: [{ type: mongoose.Schema.ObjectId, ref: "SubEvent" }]
+		participants: [String],
+		spectators	: [String], // users who subscribe to something in the event?
+		subEvents	: [{ type: mongoose.Schema.ObjectId, ref: "SubEvent" }],
 		// time		: Date
-	
+		organizers	: [String]
 	});
 	var subEventSchema = mongoose.Schema({ // match, heat, or panel
 		name		: String,
@@ -54,8 +53,8 @@ db.once("open", function (callback) {
 		parentEvent : { type: mongoose.Schema.ObjectId, ref: "Event" },
 		
 		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }],
-		participants: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
-		spectators	: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+		participants: [String],
+		spectators	: [String],
 		time		: Date,
 		// endTime	: Date
 	});
