@@ -2,7 +2,7 @@ $(function() {
 
 	var cards = new function() {
 		this.count = 0;
-		this.defaultImg = "<div class=\"bookmark-icon\"><i class=\"mdi-action-event\"></i></div>";
+		this.defaultImg = "<div class=\"icon\"><i class=\"mdi-action-event\"></i></div>";
 		this.$columns = [$("#col1"), $("#col2"), $("#col3")];
 
 		/**
@@ -72,10 +72,15 @@ $(function() {
 		this.setDescription = function(description) {
 			$("#event-description").text(description)
 		};
-		this.addParticipant = function(img, name) {
+		this.addParticipant = function(name, img) {
+			if (img === undefined) {
+				img = "<i class=\"mdi-action-account-circle\"></i>"
+			} else {
+				img = "<img src=\"" + img + "\" />";
+			}
 			$(this.cols[this.colCount]).append(
 				"<div class=\"participant\">" +
-					"<img src=\"" + img + "\" />" +
+					img +
 					"<span>" + name + "</span>" +
 				"</div>"
 			);
@@ -92,6 +97,7 @@ $(function() {
 			this.favorite = !this.favorite;
 		};
 	}();
+	modalEvent.addParticipant("hi");
 	cards.add("Smash Tourney", "test-id");
 	//modalEvent.show();
 });

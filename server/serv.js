@@ -125,6 +125,30 @@ app.post("/twilio", function(req, res){
 	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
+app.post("/event/update", function(req, res){
+	var query = {id:req.body.ID};
+	var updateInfo = {
+		name		: req.body.Name,
+		description : req.body.Description,
+		format		: req.body.Format,
+
+		channels	: req.body.Channels,
+		participants: req.body.Participants,
+		spectators	: req.body.Spectators,
+		subEvents	: req.body.SubEvents
+	};
+	db.getEventModel().update(query, updateInfo, function(err, raw){
+		if(err) console.log("failure to update " + err);
+		else{
+			console.log(raw);
+		}
+	});
+});
+
+app.get("/qrtest", function(req, res){ // testing only
+	res.send(qr("tsa-smash4"));
+});
+
 app.get("/dbtest", function(req, res){
 	db.getEventModel().findOne({name:"HackTJ 3.0"},function(err, evt){
 		db.getChannelModel().findOne({name:"HackTJ 3.0 main channel"}, function(err, chan){

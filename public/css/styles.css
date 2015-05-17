@@ -1,95 +1,193 @@
-/*
-Error: Undefined variable: "$secondary-color".
-        on line 31 of /Users/El1t/Documents/Repo/ping/public/scss/styles.scss
+header nav #page-title {
+  padding-left: 2rem;
+  font-size: 200%;
+  font-weight: 300; }
+header nav ul.tabs {
+  width: 100%; }
+header nav #slide-out {
+  overflow: auto; }
+  header nav #slide-out li {
+    width: 100%; }
+  header nav #slide-out #logo-container {
+    height: 140px;
+    padding: 10px 60px; }
+    header nav #slide-out #logo-container:hover {
+      background-color: inherit; }
+  header nav #slide-out #logo {
+    height: 120px;
+    width: 120px;
+    padding: 0;
+    background: url("../images/ping.png") no-repeat;
+    background-size: contain;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
 
-26: 			border-bottom: 1px solid transparent;
-27: 			transition: border-bottom 0.2s ease;
-28: 		}
-29: 		.bar {
-30: 			&:before, &:after {
-31: 				background: $secondary-color;
-32: 			}
-33: 		}
-34: 	}
-35: }
-36: .progress {
+.dropdown-content.select-dropdown {
+  z-index: 500; }
 
-Backtrace:
-/Users/El1t/Documents/Repo/ping/public/scss/styles.scss:31
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/script/tree/variable.rb:49:in `_perform'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/script/tree/node.rb:50:in `perform'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:394:in `visit_prop'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `block in with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:115:in `with_frame'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block (2 levels) in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `map'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:428:in `visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `block in with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:115:in `with_frame'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block (2 levels) in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `map'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:428:in `visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `block in with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:115:in `with_frame'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block (2 levels) in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `map'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:428:in `visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `block in with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:115:in `with_frame'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block (2 levels) in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `map'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:430:in `block in visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:428:in `visit_rule'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `block in with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:115:in `with_frame'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/stack.rb:79:in `with_base'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:52:in `map'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:52:in `visit_children'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `block in visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/base.rb:36:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:157:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/visitors/perform.rb:8:in `visit'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/root_node.rb:36:in `css_tree'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/tree/root_node.rb:20:in `render'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/engine.rb:268:in `render'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/exec/sass_scss.rb:415:in `run'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/exec/sass_scss.rb:63:in `process_result'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/exec/base.rb:52:in `parse'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/lib/sass/exec/base.rb:19:in `parse!'
-/Applications/CodeKit.app/Contents/Resources/engines/scss/bin/scss:13:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Undefined variable: \"$secondary-color\".\A         on line 31 of /Users/El1t/Documents/Repo/ping/public/scss/styles.scss\A \A 26: 			border-bottom: 1px solid transparent;\A 27: 			transition: border-bottom 0.2s ease;\A 28: 		}\A 29: 		.bar {\A 30: 			&:before, &:after {\A 31: 				background: $secondary-color;\A 32: 			}\A 33: 		}\A 34: 	}\A 35: }\A 36: .progress {"; }
+#search {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 64px;
+  float: right;
+  margin-right: 3rem;
+  overflow: hidden; }
+  #search.active .input {
+    width: 300px; }
+  #search a {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC); }
+  #search i {
+    height: auto;
+    line-height: 100%; }
+  #search .input {
+    float: right;
+    width: 0;
+    margin: 0;
+    overflow: hidden;
+    -webkit-transition: width 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+            transition: width 0.5s cubic-bezier(0.55, 0, 0.1, 1); }
+    #search .input input {
+      border-bottom: 1px solid white;
+      -webkit-transition: border-bottom 0.2s ease;
+              transition: border-bottom 0.2s ease; }
+    #search .input input:focus {
+      border-bottom: 1px solid transparent;
+      -webkit-transition: border-bottom 0.2s ease;
+              transition: border-bottom 0.2s ease; }
+    #search .input .bar:before, #search .input .bar:after {
+      background: white; }
+
+.progress {
+  display: none;
+  background-color: transparent; }
+  .progress.active {
+    display: block; }
+
+.input {
+  position: relative; }
+  .input input {
+    font-size: 18px;
+    display: block;
+    width: 300px;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #757575;
+    -webkit-transition: border-bottom 0.2s ease;
+            transition: border-bottom 0.2s ease; }
+  .input input:focus {
+    outline: none;
+    border-bottom: 1px solid transparent;
+    -webkit-transition: border-bottom 0.2s ease;
+            transition: border-bottom 0.2s ease; }
+  .input label {
+    color: #999;
+    font-size: 1.4em;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    -webkit-transition: 0.2s ease all;
+            transition: 0.2s ease all; }
+  .input input:focus ~ label, .input input:valid ~ label {
+    top: -20px;
+    font-size: 1em;
+    color: #F44336; }
+  .input .bar {
+    position: relative;
+    display: block;
+    width: 300px; }
+    .input .bar:before, .input .bar:after {
+      position: absolute;
+      bottom: 1px;
+      content: "";
+      height: 2px;
+      width: 0;
+      background: #F44336;
+      -webkit-transition: 0.2s ease all;
+              transition: 0.2s ease all; }
+    .input .bar:before {
+      left: 50%; }
+    .input .bar:after {
+      right: 50%; }
+  .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
+    width: 50%; }
+
+main .banner {
+  display: block;
+  max-width: 75%;
+  padding-top: 2rem;
+  margin: auto; }
+main p {
+  padding: 0 2rem; }
+main .card {
+  display: block;
+  background-color: #F44336;
+  cursor: pointer;
+  margin-top: 1rem;
+  -webkit-transition: margin 0s;
+          transition: margin 0s; }
+  main .card.active {
+    margin-top: 0.5rem;
+    -webkit-transition: margin .5s ease-out;
+            transition: margin .5s ease-out; }
+  main .card .icon {
+    text-align: center;
+    color: #FFF;
+    font-size: 200px; }
+  main .card .fill-card {
+    height: 100% !important; }
+  main .card .card-title {
+    width: 100%;
+    background-color: #F44336; }
+
+#modal-event .modal-content #event-description {
+  padding: 1rem 0.75rem; }
+#modal-event .modal-content .participant {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 2rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  #modal-event .modal-content .participant span {
+    font-weight: 300; }
+  #modal-event .modal-content .participant img, #modal-event .modal-content .participant i {
+    display: block;
+    margin-right: 1rem;
+    height: 2rem;
+    width: 2rem;
+    font-size: 200%;
+    line-height: 2rem; }
+
+h4, h5 {
+  font-weight: 300; }
+
+p {
+  font-weight: 300; }
+
+@media only screen and (min-width: 769px) {
+  header, main {
+    padding-left: 240px; } }
