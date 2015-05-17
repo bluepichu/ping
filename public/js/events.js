@@ -1,5 +1,14 @@
 $(function() {
-
+	$(".fixed-action-btn").click(function() {
+		var $modal = $("#modal-create");
+		// Reset modal to defaults
+		$modal.find("#create-name").val("");
+		$modal.find("#create-description").val("");
+		$modal.find("#create-format").val("tournament").material_select();
+		$modal.find("#create-public").prop('checked', true);
+		// Open modal
+		$modal.openModal();
+	});
 	var cards = new function() {
 		this.count = 0;
 		this.defaultImg = "<div class=\"icon\"><i class=\"mdi-action-event\"></i></div>";
@@ -54,9 +63,22 @@ $(function() {
 			//console.log(id);
 			this.id = id;
 			// Grab title, description, participants
-			//this.setTitle()
-			//this.setDescription()
-			//this.addParticipant() * 10000
+			/*
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if (xhr.readyState == 4 && xmlhttp.status == 200) {
+					var rec = JSON.parse(xhr.responseText);
+					this.setTitle(rec.name);
+					this.setDescription(rec.description);
+					for(var i = 0; i < rec.participants.length; i++){
+						this.addParticipant(rec.participants[i]);
+					}
+				}
+			}*/
+			// TODO write this handle I think lol
+			xmlhttp.open("GET","/event/:handle");
+			xmlhttp.send();
+			
 			//if (part of user's events...)
 			this.favorite = true;
 			this.$submit.text("Remove");

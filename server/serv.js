@@ -2,22 +2,20 @@ var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
 app.use(bodyparser.urlencoded());
-app.use(bodyparser.json());
-var cookieparser = require("cookie-parser");
-app.use(cookieparser());
 var http = require("http").Server(app);
 var path = require("path");
 var db = require("./db");
+var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
-var qr = require("./qr");
 var cryptoString = require("random-crypto-string");
 var crypto = require("crypto");
 var extend = require("extend");
+var tweet = require("./twitter");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
 
-var REPLIES = {
+var replies = {
 	subscribe: {
 		success: "You have been subscribed.",
 		missing: "You need to specify what to subscribe to!  Use PING SUBSCRIBE or PING SUB followed by an event handle (optionally with a channel)."
@@ -30,24 +28,22 @@ var REPLIES = {
 	default: "I don't understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP."
 };
 
-var HASH_COUNT = 2;
-
 var subscribe = function(tel, path){
 	if(path.length < 1){
-		twilio.send(tel, REPLIES.subscribe.missing, function(){});
+		twilio.send(tel, replies.subscribe.missing, function(){});
 		return;
 	}
 	// TODO
-	twilio.send(tel, REPLIES.subscribe.success, function(){});
+	twilio.send(tel, replies.subscribe.success, function(){});
 }
 
 var unsubscribe = function(tel, path){
 	if(path.length < 1){
-		twilio.send(tel, REPLIES.unsubscribe.missing, function(){});
+		twilio.send(tel, replies.unsubscribe.missing, function(){});
 		return;
 	}
 	// TODO
-	twilio.send(tel, REPLIES.unsubscribe.success, function(){});
+	twilio.send(tel, replies.unsubscribe.success, function(){});
 }
 
 var static = function(pth){
@@ -102,12 +98,12 @@ app.get("/images/:file", function(req, res){
 
 app.post("/twilio", function(req, res){
 	var message = req.body.Body.toLowerCase().split(/[\s\/]/g);
-
+	
 	if(message[0] != "ping"){
-		twilio.send(req.body.From, REPLIES.default, function(){});
+		twilio.send(req.body.From, replies.default, function(){});
 		return;
 	}
-
+	
 	switch(message[1]){
 		case "subscribe":
 		case "sub":
@@ -119,38 +115,24 @@ app.post("/twilio", function(req, res){
 			unsubscribe(req.body.From, message.slice(2));
 			break;
 		case "help":
-			twilio.send(req.body.From, REPLIES.help, function(){});
+			twilio.send(req.body.From, replies.help, function(){});
 			break;
 		case "default":
-			twilio.send(req.body.From, REPLIES.default, function(){});
+			twilio.send(req.body.From, replies.default, function(){});
 			break;
 	}
-
+	
 	res.sendFile("/twilio.xml" + req.params.file, {root: path.join(__dirname, "../public")});
-});
-
-app.post("/event/update", function(req, res){
-	var query = {id:req.body.ID};
-	var updateInfo = {
-		name		: req.body.Name,
-		description : req.body.Description,
-		format		: req.body.Format,
-
-		channels	: req.body.Channels,
-		participants: req.body.Participants,
-		spectators	: req.body.Spectators,
-		subEvents	: req.body.SubEvents
-	};
-	db.getEventModel().update(query, updateInfo, function(err, raw){
-		if(err) console.log("failure to update " + err);
-		else{
-			console.log(raw);
-		}
-	});
 });
 
 app.get("/qrtest", function(req, res){ // testing only
 	res.send(qr("tsa-smash4"));
+});
+
+app.get("/twitter", function(req, res){ // testing only
+	res.send(tweet(function(data){
+		alert(data)
+	}, "@ping_1t"));
 });
 
 app.get("/dbtest", function(req, res){
@@ -299,6 +281,8 @@ app.post("/event/new", function(req, res){
 });
 
 app.get("/", static("/"));
+
+app.get("/user/new", static("/user/new.html"));
 
 app.get("/events", static("/events.html"));
 
