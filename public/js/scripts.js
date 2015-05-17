@@ -120,7 +120,6 @@ $(function() {
 			$verifyModal.find("#phone").val(json.phone);
 			xhr.send(JSON.stringify(json));
 		});
-		
 		$verifySubmit.click(function(){
 			var data = $verifyModal.find("form").serializeArray();
 			var json = {};
