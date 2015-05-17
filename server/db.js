@@ -40,6 +40,9 @@ db.once("open", function (callback) {
 		format		: String, // Tournament, Convention, Heats
 		image		: String,
 		
+		bracketData	: String,
+		bracketResult:String,
+		
 		channels	: [{ type: mongoose.Schema.ObjectId, ref: "Channel" }],
 		
 		participants: [String],
