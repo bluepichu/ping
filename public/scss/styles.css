@@ -102,24 +102,24 @@ header nav #slide-out {
       .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
         width: 50%; }
     /* line 109, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
-    .input input:focus ~ label, .input input:valid ~ label, .input input:invalid ~ label {
-      top: -20px;
+    .input input:focus ~ label, .input input:valid ~ label {
+      top: -20px !important;
       font-size: 1em;
       color: #29B6F6;
       opacity: 1; }
     /* line 115, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
-    .input input:invalid ~ label {
-      color: #F44336; }
-    /* line 118, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
     .input input:valid ~ .bar:before, .input input:valid ~ .bar:after {
       background: #29B6F6; }
+    /* line 118, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+    .input input:invalid ~ label {
+      color: #F44336; }
   /* line 122, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   .input label {
     position: absolute;
     left: 5px;
     top: -5px;
     color: black;
-    font-size: 1.4em;
+    font-size: 140%;
     font-weight: normal;
     pointer-events: none;
     opacity: 0.56;
@@ -274,25 +274,29 @@ main .card {
 #modal-event .modal-content .channel {
   margin-bottom: 0.75rem; }
 
-/* line 285, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 284, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+#logout {
+  float: left; }
+
+/* line 288, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 #modal-create .modal-content .input {
   margin: 0; }
 
-/* line 289, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 292, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 h4, h5 {
   font-weight: 300; }
 
-/* line 292, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 295, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 p {
   font-weight: 300; }
 
-/* line 296, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+/* line 299, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
 @media only screen and (min-width: 769px) {
-  /* line 303, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
+  /* line 306, C:/Users/Matthew/Dropbox/Programming/github/ping/public/scss/styles.scss */
   header, main {
     padding-left: 240px; } }
 

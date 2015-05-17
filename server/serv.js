@@ -424,6 +424,20 @@ app.post("/user/auth", function(req, res){
 			return;
 		}
 	});
+}); 
+
+app.get("/event/listall", function(req, res){
+	db.getEventModel().find({}, function(err, data){
+		if(err || data.length < 1){
+			res.status(500).send("Internal error: failed retrieving data.");
+			return;
+		}
+		var message = {ok:true, events:[]};
+		for(var i = 0; i < data.length; i++){
+			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format});
+		}
+		res.status(200).send(JSON.stringify(message));
+	});
 });
 
 app.post("/event/new", function(req, res){
@@ -459,21 +473,21 @@ app.post("/event/new", function(req, res){
 				return;
 			}
 			res.status(200).send("{\"ok\": true}");
+			db.getChannelModel().create({
+				name: "main",
+				subscribers: [],
+				event: dat._id,
+				subChannels: []
+			}, function(err, dt){
+				db.getEventModel().update({
+					_id: dat._id
+				}, {
+					$push: {
+						channels: dt._id
+					}
+				}, noCB);
+			});
 		});
-	});
-});
-
-app.get("/event/listall", function(req, res){
-	db.getEventModel().find({}, function(err, data){
-		if(err || data.length < 1){
-			res.status(500).send("Internal error: failed retrieving data.");
-			return;
-		}
-		var message = {ok:true, events:[]};
-		for(var i = 0; i < data.length; i++){
-			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format});
-		}
-		res.status(200).send(JSON.stringify(message));
 	});
 });
 
