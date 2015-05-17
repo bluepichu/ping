@@ -7823,7 +7823,7 @@ header nav #page-title {
 header nav ul.tabs {
   width: 100%; }
 header nav #slide-out {
-  overflow: scroll; }
+  overflow: auto; }
   header nav #slide-out li {
     width: 100%; }
   header nav #slide-out #logo-container {
@@ -7948,6 +7948,27 @@ header nav #slide-out {
   .input input:focus ~ .bar:before, .input input:focus ~ .bar:after {
     width: 50%; }
 
+main .card {
+  display: block;
+  background-color: #F44336;
+  cursor: pointer;
+  margin-top: 1rem;
+  -webkit-transition: margin 0s;
+          transition: margin 0s; }
+  main .card.active {
+    margin-top: 0.5rem;
+    -webkit-transition: margin .5s ease-out;
+            transition: margin .5s ease-out; }
+  main .card .bookmark-icon {
+    text-align: center;
+    color: #FFF;
+    font-size: 200px; }
+  main .card .fill-card {
+    height: 100% !important; }
+  main .card .card-title {
+    width: 100%;
+    background-color: #F44336; }
+
 #modal-event .modal-content #event-description {
   padding: 1rem 0.75rem; }
 #modal-event .modal-content .participant {
@@ -7969,7 +7990,7 @@ header nav #slide-out {
     height: 2rem;
     width: 2rem; }
 
-h4 {
+h4, h5 {
   font-weight: 300; }
 
 p {

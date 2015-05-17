@@ -32,13 +32,21 @@
 			<li id="logo-container">
 				<a href="index.html" id="logo" class="waves-effect waves-circle waves"></a>
 			</li>
-			<li class="waves-effect"><a href="events.html"><b>Events</b></a></li>
+			<li class="waves-effect"><a href="events"><b>Events</b></a></li>
 			<li class="waves-effect"><a id="settings"><b>Settings</b></a></li>
 		</ul>
 		<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 	</nav>
 </header>
 <main>
+	<div class="row">
+		<div class="col s12 m6 l4" id="col1">
+		</div>
+		<div class="col s12 m6 l4" id="col2">
+		</div>
+		<div class="col s12 m6 l4" id="col3">
+		</div>
+	</div>
 	<!-- Modal Settings -->
 	<div id="modal-settings" class="modal">
 		<div class="modal-content">
@@ -97,18 +105,19 @@
 	</div>
 	<div id="modal-event" class="modal">
 		<div class="modal-content">
-			<h4>Test event!</h4>
+			<h4 id="event-title">Smash 4 Tournament</h4>
 			<p id="event-description">
 				This is a real event!
 			</p>
+			<h5>Participants</h5>
 			<div class="row">
-				<div class="col s6">
+				<div class="col s12 m6">
 					<div class="participant">
 						<img src="images/ping.png" />
 						<span>BB</span>
 					</div>
 				</div>
-				<div class="col s6">
+				<div class="col s12 m6"">
 					<div class="participant">
 						<img src="images/ping.png" />
 						<span>CC</span>
@@ -117,7 +126,7 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close" id="add-event">Add</a>
+			<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
 			<a class="waves-effect btn-flat modal-action modal-close">Done</a>
 		</div>
 	</div>
