@@ -1,340 +1,353 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-	<meta charset="UTF-8">
-	<title>Events | Ping</title>
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>Events | Ping</title>
 
-	<!--Let browser know website is optimized for mobile-->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<link rel="manifest" href="manifest.json" />
-	<link rel="icon" sizes="192x192" href="images/launcher-icon-4x.png">
+		<!--Let browser know website is optimized for mobile-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="manifest" href="manifest.json" />
+		<link rel="icon" sizes="192x192" href="images/launcher-icon-4x.png">
 
-	<!--Import materialize.css and styles-->
-	<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection" />
-	<link type="text/css" rel="stylesheet" href="css/jquery.bracket.css" />
-	<link type="text/css" rel="stylesheet" href="css/styles.css" />
+		<!--Import materialize.css and styles-->
+		<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection" />
+		<link type="text/css" rel="stylesheet" href="css/jquery.bracket.css" />
+		<link type="text/css" rel="stylesheet" href="css/styles.css" />
 
-	<!-- Import scripts -->
-	<script type="text/javascript" src="js/min/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/min/jquery.cookie.min.js"></script>
-	<script type="text/javascript" src="js/min/jquery.bracket.min.js"></script>
-	<script type="text/javascript" src="js/scripts.js"></script>
-	<script type="text/javascript" src="js/events.js"></script>
-</head>
-<body>
-<header>
-	<nav class="top-nav">
-		<div class="nav-wrapper">
-			<a id="page-title" href="./">Events</a>
-			<div id="search">
-				<a class="waves-effect waves-circle waves-light"><i class="mdi-action-search"></i></a>
-				<div class="input">
-					<input id="search-term" type="text" autocomplete="off" required>
-					<span class="bar"></span>
-				</div>
-			</div>
-		</div>
-		<ul id="slide-out" class="side-nav fixed">
-			<li id="logo-container">
-				<a href="./" id="logo" class="waves-effect waves-circle waves"></a>
-			</li>
-			<li class="waves-effect"><a href="events">Events</a></li>
-			<li class="waves-effect"><a id="settings">Settings</a></li>
-		</ul>
-		<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-	</nav>
-</header>
-<main>
-	<div class="row">
-		<div class="col s12 m6 l4" id="col1">
-		</div>
-		<div class="col s12 m6 l4" id="col2">
-		</div>
-		<div class="col s12 m6 l4" id="col3">
-		</div>
-	</div>
-	<div class="fixed-action-btn">
-		<a class="btn-floating btn-large waves-effect waves-light light-blue accent-3">
-			<i class="large mdi-content-add"></i>
-		</a>
-	</div>
-	<!-- Modal Login -->
-	<div id="modal-login" class="modal">
-		<div class="modal-content">
-			<form>
-				<h4>Login</h4>
-				<div class="input">
-					<input id="login-username" name="name" type="number" autocomplete="off" required>
-					<label for="login-username">Phone Number</label>
-					<span class="bar"></span>
-				</div>
-				<div class="input">
-					<input id="login-password" name="name" type="password" autocomplete="off" required>
-					<label for="login-password">Password</label>
-					<span class="bar"></span>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close" id="login">Login</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
-			<a class="waves-effect btn-flat modal-action" id="login-register">Register</a>
-		</div>
-	</div>
-	<!-- Modal Registration -->
-	<div id="modal-register" class="modal">
-		<div class="modal-content">
-			<form>
-				<h4>Register</h4>
-				<div class="input">
-					<input id="register-username" name="phone" type="number" autocomplete="off" required>
-					<label for="register-username">Phone Number</label>
-					<span class="bar"></span>
-				</div>
-				<div class="input">
-					<input id="register-password" name="password" type="password" autocomplete="off" required>
-					<label for="register-password">Password</label>
-					<span class="bar"></span>
-				</div>
-				<div class="input">
-					<input id="register-confirm" name="confirm" type="password" autocomplete="off" required>
-					<label for="register-confirm">Confirm password</label>
-					<span class="bar"></span>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action" id="register-submit">Register</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
-			<a class="waves-effect btn-flat modal-action" id="register-login">Login</a>
-		</div>
-	</div>
-	<!-- Modal Verification -->
-	<div id="modal-verify" class="modal">
-		<div class="modal-content">
-			<form>
-				<h4>Verify Your Phone Number</h4>
-				<p>The last step before you can use your account is to verify your phone number.  A text has been sent to your phone containing an 8-character verification code, which you must enter below.</p>
-				<div class="input">
-					<input id="verify-code" name="verificationCode" type="text" autocomplete="off" required>
-					<label for="verify-code">Verification Code</label>
-					<span class="bar"></span>
-				</div>
-				<input id="phone" name="phone" type="text" style="display: none" />
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action" id="verify-submit">Submit</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
-		</div>
-	</div>
-	<!-- Modal Settings -->
-	<div id="modal-settings" class="modal">
-		<div class="modal-content">
-			<h4>Settings</h4>
-			<form action="#">
-				<div class="row">
-					<div class="col s4">
-						Notifications
-					</div>
-					<div class="col s8">
-						<div class="switch">
-							<label style="float: right">
-								Disabled
-								<input type="checkbox" checked="checked" id="automatic-quantity">
-								<span class="lever"></span>
-								Enabled
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col s4">
-						Remove All Subscriptions
-					</div>
-					<div class="col s8">
-						<a class="waves-effect waves-light btn" style="float: right" id="unsubscribe">Remove</a>
-					</div>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close" id="save-settings">Save</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
-			<a class="waves-effect btn-flat modal-action modal-close" id="logout">Logout</a>
-		</div>
-	</div>
-	<!-- Modal Confirm Delete -->
-	<div id="modal-confirmation" class="modal">
-		<div class="modal-content">
-			<h4>Are you sure?</h4>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close">Yes</a>
-			<a class="waves-effect btn-flat modal-action modal-close">No</a>
-		</div>
-	</div>
-	<!-- Modal View Event -->
-	<div id="modal-event" class="modal modal-fixed-footer">
-		<div class="modal-content">
-			<h4 id="event-title">Smash 4 Tournament</h4>
-			<p id="event-description">
-				This is a real event!
-			</p>
-			<div class="waves-effect btn-flat" style="float: right" id="event-more">More Info</div>
-			<h5>Organizers</h5>
-			<div class="row" id="event-organizers">
-				<div class="col s12 m6">
-				</div>
-				<div class="col s12 m6">
-				</div>
-			</div>
-			<h5>Participants</h5>
-			<div class="row" id="event-participants">
-				<div class="col s12 m6 l4">
-					<div class="participant">
-						<img src="images/ping.png" />
-						<span>BB</span>
-					</div>
-				</div>
-				<div class="col s12 m6 l4">
-					<div class="participant">
-						<img src="images/ping.png" />
-						<span>CC</span>
-					</div>
-				</div>
-				<div class="col s12 m6 l4">
-					<div class="participant">
-						<img src="images/ping.png" />
-						<span>DD</span>
-					</div>
-				</div>
-			</div>
-			<h5>Channels</h5>
-			<form class="row" id="event-channels">
-				<div class="col s12 m6 l4">
-					<div class="channel">
-						<span>Singles</span>
-						<div class="switch" style="float: right">
-							<label>
-								<input type="checkbox" checked="checked">
-								<span class="lever"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="col s12 m6 l4">
-					<div class="channel">
-						<span>Doubles</span>
-						<div class="switch" style="float: right">
-							<label>
-								<input type="checkbox" checked="checked">
-								<span class="lever"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="col s12 m6 l4">
-					<div class="channel">
-						<span>Quads</span>
-						<div class="switch" style="float: right">
-							<label>
-								<input type="checkbox" checked="checked">
-								<span class="lever"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Done</a>
-		</div>
-	</div>
-	<div id="modal-more" class="modal modal-fixed-footer">
-		<div class="modal-content">
-			<h4 id="more-title"></h4>
-			<p id="more-description" class="flow-text"></p>
-			<div id="more-bracket"></div>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action modal-close">Back</a>
-		</div>
-	</div>
-	<!-- Modal Create Event -->
-	<div id="modal-create" class="modal modal-fixed-footer">
-		<div class="modal-content">
-			<h4>New Event</h4>
-			<form id="create-form">
-				<div class="row">
-					<div class="col s4">
-						Name
-					</div>
-					<div class="col s8">
-						<div class="input" style="float: right">
-							<input id="create-name" name="name" type="text" autocomplete="off" required>
+		<!-- Import scripts -->
+		<script type="text/javascript" src="js/min/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="js/min/jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="js/min/jquery.bracket.min.js"></script>
+		<script type="text/javascript" src="js/scripts.js"></script>
+		<script type="text/javascript" src="js/events.js"></script>
+	</head>
+	<body>
+		<header>
+			<nav class="top-nav">
+				<div class="nav-wrapper">
+					<a id="page-title" href="./">Events</a>
+					<div id="search">
+						<a class="waves-effect waves-circle waves-light"><i class="mdi-action-search"></i></a>
+						<div class="input">
+							<input id="search-term" type="text" autocomplete="off" required>
 							<span class="bar"></span>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col s4">
-						Slug
-					</div>
-					<div class="col s8">
-						<div class="input" style="float: right">
-							<input id="create-slug" name="slug" type="text" autocomplete="off" required>
+				<ul id="slide-out" class="side-nav fixed">
+					<li id="logo-container">
+						<a href="./" id="logo" class="waves-effect waves-circle waves"></a>
+					</li>
+					<li class="waves-effect"><a href="events">Events</a></li>
+					<li class="waves-effect"><a id="settings">Settings</a></li>
+				</ul>
+				<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+			</nav>
+		</header>
+		<main>
+			<div class="row">
+				<div class="col s12 m6 l4" id="col1">
+				</div>
+				<div class="col s12 m6 l4" id="col2">
+				</div>
+				<div class="col s12 m6 l4" id="col3">
+				</div>
+			</div>
+			<div class="fixed-action-btn">
+				<a class="btn-floating btn-large waves-effect waves-light light-blue accent-3">
+					<i class="large mdi-content-add"></i>
+				</a>
+			</div>
+			<!-- Modal Login -->
+			<div id="modal-login" class="modal">
+				<div class="modal-content">
+					<form>
+						<h4>Login</h4>
+						<div class="input">
+							<input id="login-username" name="name" type="number" autocomplete="off" required>
+							<label for="login-username">Phone Number</label>
 							<span class="bar"></span>
 						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col s4">
-						Description
-					</div>
-					<div class="col s8">
-						<div class="textarea" style="float: right">
-							<textarea id="create-description" name="description" required></textarea>
+						<div class="input">
+							<input id="login-password" name="name" type="password" autocomplete="off" required>
+							<label for="login-password">Password</label>
 							<span class="bar"></span>
 						</div>
-					</div>
+					</form>
 				</div>
-				<div class="row">
-					<div class="col s4">
-						Format
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action modal-close" id="login">Login</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+					<a class="waves-effect btn-flat modal-action" id="login-register">Register</a>
+				</div>
+			</div>
+			<!-- Modal Registration -->
+			<div id="modal-register" class="modal">
+				<div class="modal-content">
+					<form>
+						<h4>Register</h4>
+						<div class="input">
+							<input id="register-username" name="phone" type="number" autocomplete="off" required>
+							<label for="register-username">Phone Number</label>
+							<span class="bar"></span>
+						</div>
+						<div class="input">
+							<input id="register-password" name="password" type="password" autocomplete="off" required>
+							<label for="register-password">Password</label>
+							<span class="bar"></span>
+						</div>
+						<div class="input">
+							<input id="register-confirm" name="confirm" type="password" autocomplete="off" required>
+							<label for="register-confirm">Confirm password</label>
+							<span class="bar"></span>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action" id="register-submit">Register</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+					<a class="waves-effect btn-flat modal-action" id="register-login">Login</a>
+				</div>
+			</div>
+			<!-- Modal Verification -->
+			<div id="modal-verify" class="modal">
+				<div class="modal-content">
+					<form>
+						<h4>Verify Your Phone Number</h4>
+						<p>The last step before you can use your account is to verify your phone number.  A text has been sent to your phone containing an 8-character verification code, which you must enter below.</p>
+						<div class="input">
+							<input id="verify-code" name="verificationCode" type="text" autocomplete="off" required>
+							<label for="verify-code">Verification Code</label>
+							<span class="bar"></span>
+						</div>
+						<input id="phone" name="phone" type="text" style="display: none" />
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action" id="verify-submit">Submit</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+				</div>
+			</div>
+			<!-- Modal Settings -->
+			<div id="modal-settings" class="modal">
+				<div class="modal-content">
+					<h4>Settings</h4>
+					<form action="#">
+						<div class="row">
+							<div class="col s4">
+								Notifications
+							</div>
+							<div class="col s8">
+								<div class="switch">
+									<label style="float: right">
+										Disabled
+										<input type="checkbox" checked="checked" id="automatic-quantity">
+										<span class="lever"></span>
+										Enabled
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s4">
+								Remove All Subscriptions
+							</div>
+							<div class="col s8">
+								<a class="waves-effect waves-light btn" style="float: right" id="unsubscribe">Remove</a>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action modal-close" id="save-settings">Save</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+					<a class="waves-effect btn-flat modal-action modal-close" id="logout">Logout</a>
+				</div>
+			</div>
+			<!-- Modal Confirm Delete -->
+			<div id="modal-confirmation" class="modal">
+				<div class="modal-content">
+					<h4>Are you sure?</h4>
+				</div>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action modal-close">Yes</a>
+					<a class="waves-effect btn-flat modal-action modal-close">No</a>
+				</div>
+			</div>
+			<!-- Modal View Event -->
+			<div id="modal-event" class="modal modal-fixed-footer">
+				<div class="modal-content">
+					<h4 id="event-title">Smash 4 Tournament</h4>
+					<p id="event-description">
+						This is a real event!
+					</p>
+					<div class="waves-effect btn-flat" style="float: right" id="event-more">More Info</div>
+					<h5>Organizers</h5>
+					<div class="row" id="event-organizers">
+						<div class="col s12 m6">
+						</div>
+						<div class="col s12 m6">
+						</div>
 					</div>
-					<div class="col s8">
-						<select style="float: right" name="format" id="create-format">
-							<option value="tournament" selected>Tournament</option>
-							<option value="heat">Heats</option>
-							<option value="panel">Panel</option>
+					<h5>Participants</h5>
+					<div class="row" id="event-participants">
+						<div class="col s12 m6 l4">
+							<div class="participant">
+								<img src="images/ping.png" />
+								<span>BB</span>
+							</div>
+						</div>
+						<div class="col s12 m6 l4">
+							<div class="participant">
+								<img src="images/ping.png" />
+								<span>CC</span>
+							</div>
+						</div>
+						<div class="col s12 m6 l4">
+							<div class="participant">
+								<img src="images/ping.png" />
+								<span>DD</span>
+							</div>
+						</div>
+					</div>
+					<h5>Channels</h5>
+					<form class="row" id="event-channels">
+						<div class="col s12 m6 l4">
+							<div class="channel">
+								<span>Singles</span>
+								<div class="switch" style="float: right">
+									<label>
+										<input type="checkbox" checked="checked">
+										<span class="lever"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="col s12 m6 l4">
+							<div class="channel">
+								<span>Doubles</span>
+								<div class="switch" style="float: right">
+									<label>
+										<input type="checkbox" checked="checked">
+										<span class="lever"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="col s12 m6 l4">
+							<div class="channel">
+								<span>Quads</span>
+								<div class="switch" style="float: right">
+									<label>
+										<input type="checkbox" checked="checked">
+										<span class="lever"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</form>
+					<h5>Post a Message</h5> 
+					<form class="row" id="post-message">
+						<input id="message-text" name="message" type="text" autocomplete="off" required>
+							<label for="message-text">Verification Code</label>
+							<span class="bar"></span>
+
+						<select>
+							<option>Singles</option>
+							<option>Doubles</option>
+							<option>Quads</option>
+							<option>Other Channels</option>
 						</select>
-					</div>
+					</form>
 				</div>
-				<div class="row">
-					<div class="col s4">
-						Public
-					</div>
-					<div class="col s8">
-						<div class="switch">
-							<label style="float: right">
-								No
-								<input id="create-public" type="checkbox" checked="checked" name="public" >
-								<span class="lever"></span>
-								Yes
-							</label>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action" id="submit-event">Add</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Done</a>
+				</div>
+			</div>
+			<div id="modal-more" class="modal modal-fixed-footer">
+				<div class="modal-content">
+					<h4 id="more-title"></h4>
+					<p id="more-description" class="flow-text"></p>
+					<div id="more-bracket"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action modal-close">Back</a>
+				</div>
+			</div>
+			<!-- Modal Create Event -->
+			<div id="modal-create" class="modal modal-fixed-footer">
+				<div class="modal-content">
+					<h4>New Event</h4>
+					<form id="create-form">
+						<div class="row">
+							<div class="col s4">
+								Name
+							</div>
+							<div class="col s8">
+								<div class="input" style="float: right">
+									<input id="create-name" name="name" type="text" autocomplete="off" required>
+									<span class="bar"></span>
+								</div>
+							</div>
 						</div>
-					</div>
+						<div class="row">
+							<div class="col s4">
+								Slug
+							</div>
+							<div class="col s8">
+								<div class="input" style="float: right">
+									<input id="create-slug" name="slug" type="text" autocomplete="off" required>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s4">
+								Description
+							</div>
+							<div class="col s8">
+								<div class="textarea" style="float: right">
+									<textarea id="create-description" name="description" required></textarea>
+									<span class="bar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s4">
+								Format
+							</div>
+							<div class="col s8">
+								<select style="float: right" name="format" id="create-format">
+									<option value="tournament" selected>Tournament</option>
+									<option value="heat">Heats</option>
+									<option value="panel">Panel</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s4">
+								Public
+							</div>
+							<div class="col s8">
+								<div class="switch">
+									<label style="float: right">
+										No
+										<input id="create-public" type="checkbox" checked="checked" name="public" >
+										<span class="lever"></span>
+										Yes
+									</label>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a class="waves-effect btn-flat modal-action" id="create-event">Create</a>
-			<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
-		</div>
-	</div>
-</main>
-<script type="text/javascript" src="js/materialize.js"></script>
-</body>
+				<div class="modal-footer">
+					<a class="waves-effect btn-flat modal-action" id="create-event">Create</a>
+					<a class="waves-effect btn-flat modal-action modal-close">Cancel</a>
+				</div>
+			</div>
+		</main>
+		<script type="text/javascript" src="js/materialize.js"></script>
+	</body>
 </html>

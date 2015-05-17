@@ -112,7 +112,7 @@ $(function() {
 					}
 				}
 			}
-			xhr.open("POST", "/user/verify", true);
+			xhr.open("POST", "/user/new", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			delete json.confirm;
 			$verifyModal.find("#phone").val(json.phone);
@@ -143,7 +143,7 @@ $(function() {
 					}
 				}
 			}
-			xhr.open("POST", "/user/new", true);
+			xhr.open("POST", "/user/verify", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(json));
 		});
