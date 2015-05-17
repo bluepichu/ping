@@ -258,6 +258,8 @@ main .card {
     font-size: 200px; }
   main .card .fill-card {
     height: 100% !important; }
+  main .card img {
+    height: 100%; }
   main .card .card-title {
     width: 100%;
     background-color: #F44336; }
