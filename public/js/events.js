@@ -97,7 +97,8 @@ $(function() {
 						self.$channelSelect.find("option:first-child").prop("selected", true);
 						self.$channelSelect.material_select();
 						// QR code gen
-						self.$modal.find("#event-channels .channel input").click(function() {
+						console.log(self.$modal.find("#event-channels").find(".channel input"));
+						self.$modal.find("#event-channels").find(".channel input").click(function() {
 							console.log("clicked channel");
 							//console.log($(this).is(':checked'));
 							console.log($(this).parent().parent().parent().text().trim().toLowerCase());
