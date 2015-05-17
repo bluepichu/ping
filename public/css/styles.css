@@ -234,6 +234,9 @@ header nav #slide-out {
 main .banner {
   display: block;
   max-width: 75%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
   padding-top: 2rem;
   margin: auto; }
 main p {
@@ -332,6 +335,9 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0; }
 
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  header, main {
+    padding-left: 240px; } }
 @media only screen and (min-width: 769px) {
   header, main {
     padding-left: 240px; } }

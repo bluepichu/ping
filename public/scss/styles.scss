@@ -248,6 +248,9 @@ main {
 	.banner {
 		display: block;
 		max-width: 75%;
+		max-height: 80%;
+		width: auto;
+		height: auto;
 		padding-top: 2rem;
 		margin: auto;
 	}
@@ -353,8 +356,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-@include desktop {
-	header, main {
+header, main {
+	@include tablet {
+		padding-left: 240px;
+	}
+	@include desktop {
 		padding-left: 240px;
 	}
 }

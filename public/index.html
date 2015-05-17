@@ -7,6 +7,7 @@
 	<!--Let browser know website is optimized for mobile-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<link rel="manifest" href="manifest.json" />
+	<meta name="theme-color" content="#F44336">
 	<link rel="icon" sizes="192x192" href="images/launcher-icon-4x.png">
 	<!-- Should only appear on this main page -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +32,7 @@
 			<div id="search" class="hide-on-small-and-down">
 				<a class="waves-effect waves-circle waves-light"><i class="mdi-action-search"></i></a>
 				<div class="input">
-					<input id="search-term" type="text" autocomplete="off" required>
+					<input id="search-term" type="search" autocomplete="off" required>
 					<span class="bar"></span>
 				</div>
 			</div>
@@ -87,10 +88,10 @@
 			<h4>Settings</h4>
 			<form action="#">
 				<div class="row">
-					<div class="col s4">
+					<div class="col s12 m4">
 						Notifications
 					</div>
-					<div class="col s8">
+					<div class="col s12 m8">
 						<div class="switch">
 							<label style="float: right">
 								Disabled
@@ -102,10 +103,10 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col s4">
+					<div class="col s12 m4">
 						Remove All Subscriptions
 					</div>
-					<div class="col s8">
+					<div class="col s12 m8">
 						<a class="waves-effect waves-light btn" style="float: right" id="unsubscribe">Remove</a>
 					</div>
 				</div>
