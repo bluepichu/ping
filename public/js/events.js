@@ -59,10 +59,20 @@ $(function() {
 		this.id = undefined;
 		this.favorite = false;
 		this.participants = [];
+		this.isOrganizer = false;
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
-		this.isOrganizer = false;
- 
+		this.$modal.find(".channel").click(function() {
+			if ($(this).find("input").checked()) {
+				var $qr = $("body").append("<img src=\"/qr/" + self.id + "/" + $(this).text().toLowerCase() + "\" class=\"materialboxed\"/>");
+				$qr.materialbox();
+				$qr.click();
+				$qr.click(function() {
+					$qr.remove();
+				})
+			}
+		});
+
 		/**
 		 * Populate modal with event information before showing the modal
 		 * @param {string} id MongoDB id for event
@@ -257,7 +267,7 @@ $(function() {
 				var rec = JSON.parse(xhr.responseText);	
 				if( rec.ok ){
 					for(var i = 0; i < rec.events.length; i++){
-						cards.add(rec.events[i].name, rec.events[i].slug);
+						cards.add(rec.events[i].name, rec.events[i].slug, rec.events[i].image);
 					}
 				}
 				else{
@@ -317,5 +327,10 @@ $(function() {
 			$("#create-slug").val($(this).val().toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""));
 		}
 		$(this).data("previous", $(this).val());
+	});
+	
+	$("#new-channel").click(function(){
+		$("#modal-event").closeModal();
+		setTimeout(function() {$("#modal-add-channel").openModal()}, 300);
 	});
 });

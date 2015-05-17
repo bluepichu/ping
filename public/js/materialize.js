@@ -632,7 +632,11 @@ if ($) { Vel = $.Velocity } else { Vel = Velocity};
         $(modal).closeModal(options);
       });
 
-      $("#lean-overlay").css({ display : "block", opacity : 0 });
+      $("#lean-overlay").css({ display : "block", opacity : 0 })
+        .on("touchmove", function(e) {
+            e.stopPropagation();
+              e.preventDefault();
+        });
 
       $(modal).css({
         display : "block",

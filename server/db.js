@@ -38,6 +38,7 @@ db.once("open", function (callback) {
 		slug		: String,
 		description	: String,
 		format		: String, // Tournament, Convention, Heats
+		image		: String,
 		
 		channels	: [String],
 		
