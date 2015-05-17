@@ -7,6 +7,7 @@ var path = require("path");
 var db = require("./db");
 var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
+var getQR = require("./qrcode");
 
 var morgan = require("morgan");
 app.use(morgan("dev"));
@@ -90,6 +91,10 @@ app.get("/twilio", function(req, res){ // testing only
 		}
 	});
 	res.send("<a href='sms://+17032096667&body=omg'>Message sent.</a>");
+});
+
+app.get("/qrtest", function(req, res){ // testing only
+	getQR.getQR("handle");
 });
 
 http.listen(process.env.PORT || 1337, function(){});

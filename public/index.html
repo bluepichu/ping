@@ -2,9 +2,54 @@
 <html>
 <head lang="en">
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Ping</title>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+	<!--Import materialize.css and styles-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+
+	<!-- Import scripts -->
+	<script type="text/javascript" src="js/min/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
 </head>
 <body>
-
+<header>
+	<nav class="top-nav">
+		<div class="nav-wrapper">
+			<a id="page-title" href="./">Ping</a>
+			<div id="search">
+				<a class="waves-effect waves-circle waves-light"><i class="mdi-action-search"></i></a>
+				<div class="input">
+					<input id="search-term" type="text" autocomplete="off" required>
+					<span class="bar"></span>
+				</div>
+			</div>
+		</div>
+		<ul id="slide-out" class="side-nav fixed">
+			<li class="logo">
+				<a href="index.html" id="logo-container" class="brand-logo">
+					<img id="main-logo" src="images/logo_512px.png"/>
+				</a></li>
+			<li id="domain-list" class="no-padding list-acc">
+				<ul class="collapsible collapsible-accordion">
+					<li>
+						<a class="collapsible-header"><b>Channels</b></a>
+						<div class="collapsible-body">
+							<ul id="domain">
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</li>
+			<li class="waves-effect"><a id="settings"><b>Settings</b></a></li>
+		</ul>
+		<a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+	</nav>
+</header>
+<main>
+</main>
+<script type="text/javascript" src="js/materialize.js"></script>
 </body>
 </html>
