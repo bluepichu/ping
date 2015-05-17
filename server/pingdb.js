@@ -67,17 +67,50 @@ var newEvent = function(name, description){
 	var evt = new Event();
 	evt.name = name;
 	evt.description = description;
-	evt.save(function(err, user_Saved){
+	//evt.channels.push();
+	evt.save(function(err, evt_saved){
 	    if(err){
 	        throw err;
 	        console.log(err);
 	    }else{
-	        console.log('saved!');
+	        console.log('new event saved!');
 	    }
 	});
-	return evt;
-}
+	return evt.id;
+};
 
+var newSubEvent = function(parentID, name, description){
+	var subevt	= new SubEvent();
+	subevt.name	= name;
+	subevt.parentEvent = parentID;
+	// push new channel
+	subevt.save(function(err, evt_saved){
+	    if(err){
+	        throw err;
+	        console.log(err);
+	    }else{
+	        console.log('new subevent saved!');
+	    }
+	});
+	return subevt.id;
+};
+
+var newChannel = function(name, eventID){
+	var chnl	= new Channel();
+	chnl.name	= name;
+	chnl.event	= eventID;
+	chnl.save(function(err, evt_saved){
+	    if(err){
+	        throw err;
+	        console.log(err);
+	    }else{
+	        console.log('new channel saved!');
+	    }
+	});
+};
+
+var addSubChannel = function(channelID, subchannelID){
+};
 
 module.exports = {
 	newEvent	: newEvent,
@@ -85,5 +118,5 @@ module.exports = {
 	User		: User,
 	Event		: Event,
 	SubEvent	: SubEvent
-}
+};
 
