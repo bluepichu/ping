@@ -106,17 +106,17 @@ header nav {
 				width: 50%;
 			}
 		}
-		&:focus ~ label, &:valid ~ label, &:invalid ~ label {
-			top: -20px;
+		&:focus ~ label, &:valid ~ label {
+			top: -20px !important;
 			font-size: 1em;
 			color: #29B6F6;
 			opacity: 1;
 		}
+		&:valid ~ .bar:before, &:valid ~ .bar:after {
+			background: #29B6F6;
+		}
 		&:invalid ~ label {
 			color: $primary-color;
-		}
-		&:valid ~ .bar:before, &:valid ~ .bar:after {
-			background: #29B6F6
 		}
 	}
 	label {
@@ -124,7 +124,7 @@ header nav {
 		left: 5px;
 		top: -5px;
 		color: black;
-		font-size: 1.4em;
+		font-size: 140%;
 		font-weight: normal;
 		pointer-events: none;
 		opacity: 0.56;
