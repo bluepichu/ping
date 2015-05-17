@@ -301,7 +301,7 @@ $(function() {
 				if (response.ok){
 					Materialize.toast("Event created.", 2000);
 					$("#modal-create").closeModal();
-					
+
 					setTimeout(function(){
 						location.reload();
 					}, 2000);
@@ -328,9 +328,37 @@ $(function() {
 		}
 		$(this).data("previous", $(this).val());
 	});
-	
+
 	$("#new-channel").click(function(){
 		$("#modal-event").closeModal();
 		setTimeout(function() {$("#modal-add-channel").openModal()}, 300);
+	}); 
+	
+	$("#post-message-submit").click(function(){
+		$("form#post-message").submit();
+	});
+	
+	$("form#post-message").submit(function(e){
+		e.preventDefault();
+		
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			if (this.status != 200){
+				Materialize.toast(this.responseText, 4000);
+			} else {
+				var response = JSON.parse(this.responseText);
+
+				if (response.ok){
+					Materialize.toast("Message posted.");
+				} else {
+					Materialize.toast("Request failed: " + response.reason, 4000);
+				}
+			}
+		};
+		xhr.open("POST", "/post/" + modalEvent.id + "/" + $("#channel-select").val(), true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify({
+			message: $("message-text").val()
+		}));
 	});
 });
