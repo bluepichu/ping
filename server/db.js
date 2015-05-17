@@ -129,12 +129,13 @@ var createSubChannel = function(parentID, name, eventID){
 	attachSubChannel(parentID, subID);
 };
 
-
-
 module.exports = {
-	newEvent	: newEvent,
 	Channel		: Channel,
 	User		: User,
 	Event		: Event,
-	SubEvent	: SubEvent
+	SubEvent	: SubEvent,
+	newEvent	: newEvent,
+	newSubEvent	: newSubEvent,
+	newChannel	: newChannel,
+	createSubChannel:createSubChannel
 };
