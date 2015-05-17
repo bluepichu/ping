@@ -41,7 +41,7 @@ db.once("open", function (callback) {
 		image		: String,
 		
 		channels	: [String],
-		
+
 		participants: [String],
 		spectators	: [String], // users who subscribe to something in the event?
 		subEvents	: [{ type: mongoose.Schema.ObjectId, ref: "SubEvent" }],
