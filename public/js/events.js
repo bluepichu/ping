@@ -62,20 +62,6 @@ $(function() {
 		this.isOrganizer = false;
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
-		this.$modal.find("#event-channels").find(".channel input").click(function() {
-			console.log("clicked channel");
-			//console.log($(this).is(':checked'));
-			console.log($(this).parent().parent().parent().text());
-			if ($(this).is(':checked')) {
-				$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
-				var $qr = $("#z");
-				$qr.materialbox();
-				$qr.click();
-				$qr.click(function() {
-					$qr.remove();
-				});
-			}
-		});
 
 		/**
 		 * Populate modal with event information before showing the modal
@@ -110,6 +96,21 @@ $(function() {
 						}
 						self.$channelSelect.find("option:first-child").prop("selected", true);
 						self.$channelSelect.material_select();
+						// QR code gen
+						self.$modal.find("#event-channels .channel input").click(function() {
+							console.log("clicked channel");
+							//console.log($(this).is(':checked'));
+							console.log($(this).parent().parent().parent().text().trim().toLowerCase());
+							//if ($(this).is(':checked')) {
+							$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
+							var $qr = $("#z");
+							$qr.materialbox();
+							$qr.click();
+							$qr.click(function() {
+								$qr.remove();
+							});
+							//}
+						});
 						//if (part of user's events...)
 						me.favorite = true;
 						me.$submit.text("Remove");
