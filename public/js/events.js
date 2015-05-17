@@ -362,7 +362,7 @@ $(function() {
 		xhr.open("POST", "/post/" + modalEvent.id + "/" + $("#channel-select").val(), true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify({
-			message: $("message-text").val()
+			message: $("#message-text").val()
 		}));
 	});
 });
