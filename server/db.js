@@ -13,7 +13,15 @@ var Event;
 var SubEvent;
 
 db.on("error", console.error.bind(console, "connection error:"));
+
+// when the db starts, initialize
 db.once("open", function (callback) {
+	
+	// schema define the patterns for the documents in the database
+	// each 'type' has its own collection
+	// these set up the expected form for data in the documents
+	// and provide a way to access the collections
+	
 	var channelSchema = mongoose.Schema({
 		name		: String,
 		subscribers	: [String], // all subscribed to the channel; users and loose phones
@@ -48,6 +56,8 @@ db.once("open", function (callback) {
 		// time		: Date
 		organizers	: [String]
 	});
+	
+	// I don't think we ended up implementing/using this
 	var subEventSchema = mongoose.Schema({ // match, heat, or panel
 		name		: String,
 		description	: String,
@@ -69,6 +79,13 @@ db.once("open", function (callback) {
 });
 
 console.log("pingdb initialized");
+
+
+// I forgot to tell Matt that I wrote these functions so he wrote a lot of the server code
+// assuming they didn't exist, writing his own functions :(
+// if these work right they could simplify things, but we ended up
+// removing a lot of the built-in mongo ID stuff so these functions don't quite function properly
+// Also because of the callback structure there is some limit to ease of integration with other server functions
 
 var newEvent = function(name, description, format){
 	var evt = new Event();
@@ -162,6 +179,10 @@ var createSubChannel = function(parentID, name, eventID){
 	var subID = newChannel(name, eventID);
 	attachSubChannel(parentID, subID);
 };
+
+
+// these functions work though, allowing serv.js to access the database collections
+// for each document type
 
 var getChannelModel = function(){
 	return Channel;
