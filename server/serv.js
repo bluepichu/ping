@@ -33,6 +33,9 @@ app.use(morgan("dev"));
 // I don't know what this is for
 var HASH_COUNT = 2;
 
+
+// ------TWILIO SUB UNSUB
+
 // stuff that gets sent as texts when people message the service number
 var REPLIES = {
 	subscribe: {
@@ -71,7 +74,7 @@ var subscribe = function(tel, path){
 	// 'slug' means simplified unique name / identifier
 	db.getEventModel().find({
 		slug: path[0] // path[0] is the event slug
-	}, function(err, data){ // callback
+	}, function(err, data){ // callback happens upon completion of database access, either failure with err containing info or success with data containing info
 		if(err || !data){
 			console.log(err);
 			twilio.send(tel, REPLIES.error, noCB); // erroror
@@ -202,15 +205,21 @@ var unsubscribe = function(tel, path){
 	});
 }
 
-var static = function(pth){
+
+//  ----- EXPRESS PAGE SERVING
+// this is the part that does the server
+// using expressjs
+
+var static = function(pth){ 
 	return function(req, res){
-		res.sendFile(pth, {root: path.join(__dirname, "../public")});
+		res.sendFile(pth, {root: path.join(__dirname, "../public")}); // serve stuff in the public folder when their urls are accessed
 	}
 }
 
+// checks that the object has the info that is required for it to be used in later code. schema specifies said required info
 var checkSchema = function(object, schema){
 	for(field in object){
-		if(!(field in schema)){
+		if(!(field in schema)){ // matches fields in the object with fields in the schema
 			return false;
 		}
 	}
@@ -218,17 +227,17 @@ var checkSchema = function(object, schema){
 		if(schema[field].indexOf("optional") < 0 && !(field in object)){
 			return false;
 		}
-		if(schema[field].indexOf("optional") >= 0 && !(field in object)){
+		if(schema[field].indexOf("optional") >= 0 && !(field in object)){ // optional in one vs the other
 			continue;
 		}
-		if(schema[field].indexOf((object[field].constructor === Array) ? "array" : typeof(object[field])) < 0){
+		if(schema[field].indexOf((object[field].constructor === Array) ? "array" : typeof(object[field])) < 0){ // array != not array
 			return false;
 		}
 	}
 	return true;
 }
 
-var passwordHash = function(password, salt){
+var passwordHash = function(password, salt){ // hashes passwords
 	for(var i = 0; i < HASH_COUNT; i++){
 		var hash = crypto.createHash("sha512");
 		password = hash.update(password).update(salt).digest("base64");
@@ -236,25 +245,31 @@ var passwordHash = function(password, salt){
 	return password;
 }
 
+// serve css
 app.get("/css/:file", function(req, res){
 	res.sendFile("/css/" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
+// serve js
 app.get(/\/js\/(.*)/, function(req, res){
 	res.sendFile("/js/" + req.params[0], {root: path.join(__dirname, "../public")});
 });
 
+// serve fonts
 app.get(/\/font\/(.*)/, function(req, res){
 	res.sendFile("/font/" + req.params[0], {root: path.join(__dirname, "../public")});
 });
 
+// serve images
 app.get("/images/:file", function(req, res){
 	res.sendFile("/images/" + req.params.file, {root: path.join(__dirname, "../public")});
 });
 
+// make requests to 'twilio' urls call the appropriate functions
 app.post("/twilio", function(req, res){
 	var message = req.body.Body.toLowerCase().split(/[\s\/]/g);
-
+	
+	// messages must start with the word 'ping', otherwise just respond with default reply
 	if(message[0] != "ping"){
 		twilio.send(req.body.From, REPLIES.default, noCB);
 		return;
@@ -263,7 +278,7 @@ app.post("/twilio", function(req, res){
 	switch(message[1]){
 		case "subscribe":
 		case "sub":
-			subscribe(req.body.From, message.slice(2));
+			subscribe(req.body.From, message.slice(2)); // slice off the 'ping'
 			break;
 		case "unsubscribe":
 		case "unsub":
@@ -281,10 +296,12 @@ app.post("/twilio", function(req, res){
 	res.sendFile("/twilio.xml", {root: path.join(__dirname, "../public")});
 });
 
+// test for qr code generation
 app.get("/qrtest", function(req, res){ // testing only
 	res.send(qr("tsa-smash4"));
 });
 
+// test for twitter integration
 app.get("/twitter", function(req, res){ // testing only
 	tweet(function(data){
 		console.log('Hi');
@@ -292,6 +309,7 @@ app.get("/twitter", function(req, res){ // testing only
 	res.send();
 });
 
+// test for examining database functionality
 app.get("/dbtest", function(req, res){
 	db.getEventModel().findOne({name:"HackTJ 3.0"},function(err, evt){
 		db.getChannelModel().findOne({name:"HackTJ 3.0 main channel"}, function(err, chan){
@@ -304,43 +322,47 @@ app.get("/dbtest", function(req, res){
 	res.send("DB tested.");
 });
 
+// handle post requests sent by frontend to create a new user / get someone registered with ping
 app.post("/user/new", function(req, res){
-	if(!checkSchema(req.body, {
+	// when user sends a post request it contains a json object with the required info
+	if(!checkSchema(req.body, { // make sure request sent has the appropriate information needed to create the user using the scheme check
 		phone: "string",
 		password: "string"
 	})){
-		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}");
+		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}"); // if does not satisfy, send a failure message
 		return;
 	}
-	cryptoString(8, function(err, salt){
+	cryptoString(8, function(err, salt){ // ask Matt / look up about cryptoString
 		if(err || !salt){
 			res.status(500).send("Internal error: failed generating salt.\n" + err);
 			return;
 		}
-		db.getUserModel().find({
-			phone: req.body.phone,
-			password: {
-				$exists: true
+		db.getUserModel().find({ // find a user that has the phone number and has a password
+			phone: req.body.phone, // some 'users' have only a number stored. you don't want to have to create an account to subscribe
+			password: { 		// but you can register an account with a pssword to manage your own events and maybe other things?
+				$exists: true // if they have a password, they are registered. if they don't, they may just be subscribed as a number, not a registered loginable user
 			}
-		}, function(err, data){
+		}, function(err, data){ // callback
 			if(err || !data){
 				res.status(500).send("Internal error: failed retrieving data.\n" + err + ", " + data);
 				return;
 			}
 			if(data.length > 0){
-				res.status(200).send("{\"ok\": false, \"reason\": \"Account already exists.\"}");
-				return;
+				res.status(200).send("{\"ok\": false, \"reason\": \"Account already exists.\"}");	// if the requested 'new user' already has a phone number + password 
+				return;																				// in the database, they are already registered
 			}
-			cryptoString(8, function(err, verCode){
-				db.getUserModel().update({
+			
+			// if no existing registered user with given number
+			cryptoString(8, function(err, verCode){ // again I'm not sure what cryptoString does here
+				db.getUserModel().update({ // update the database, adding the user
 					phone: req.body.phone
 				}, {
 					$set: {
-						password: passwordHash(req.body.password, salt),
-						salt: salt,
+						password: passwordHash(req.body.password, salt), // hash their password
+						salt: salt,	// salty
 						verification: verCode
 					},
-					$setOnInsert: {
+					$setOnInsert: { // make sure that these arrays are initialized for the user object
 						organized: [],
 						participated: [],
 						spectated: [],
@@ -349,8 +371,8 @@ app.post("/user/new", function(req, res){
 					}
 				}, {
 					upsert: true
-				}, function(err, dat){
-					res.status(200).send("{\"ok\": true}");
+				}, function(err, dat){ // send success messages
+					res.status(200).send("{\"ok\": true}"); 
 					twilio.send(req.body.phone, "Your Ping account verification code is \"" + verCode + "\".  If you didn't try to make an account on Ping, you may ignore this message.");
 				});
 			});
@@ -358,8 +380,8 @@ app.post("/user/new", function(req, res){
 	});
 });
 
-app.post("/user/verify", function(req, res){
-	if(!checkSchema(req.body, {
+app.post("/user/verify", function(req, res){ 
+	if(!checkSchema(req.body, { 
 		phone: "string",
 		verificationCode: "string"
 	})){
