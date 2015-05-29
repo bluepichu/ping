@@ -15,7 +15,7 @@ var cookieparser = require("cookie-parser");
 app.use(cookieparser());
 var http = require("http").Server(app);
 var path = require("path");
-var db = require("./db");
+var db = require("./db"); // notice this loads db.js
 var ObjectId = db.ObjectId;
 var twilio = require("./twilio");
 var cryptoString = require("random-crypto-string");
@@ -323,6 +323,8 @@ app.get("/dbtest", function(req, res){
 });
 
 // handle post requests sent by frontend to create a new user / get someone registered with ping
+// note this doesn't register them directly; it sends a message to the phone with a verification code
+// which the phone owner can ignore to not get mixed up
 app.post("/user/new", function(req, res){
 	// when user sends a post request it contains a json object with the required info
 	if(!checkSchema(req.body, { // make sure request sent has the appropriate information needed to create the user using the scheme check
@@ -380,6 +382,7 @@ app.post("/user/new", function(req, res){
 	});
 });
 
+// handle when someone sends in their verification code
 app.post("/user/verify", function(req, res){ 
 	if(!checkSchema(req.body, { 
 		phone: "string",
@@ -389,7 +392,7 @@ app.post("/user/verify", function(req, res){
 		return;
 	}
 
-	db.getUserModel().find({
+	db.getUserModel().find({ // find the user object created earlier
 		phone: req.body.phone,
 		verification: req.body.verificationCode
 	}, function(err, data){
@@ -401,6 +404,7 @@ app.post("/user/verify", function(req, res){
 			res.status(200).send("{\"ok\": false, \"reason\": \"Invalid verification code.\"}");
 			return;
 		}
+		// if the user was there, give them an auth token (don't ask me on specifics)
 		cryptoString(24, function(err, token){
 			if(err || !token){
 				res.status(500).send("Internal error: failed generating token.");
@@ -423,6 +427,7 @@ app.post("/user/verify", function(req, res){
 	});
 });
 
+// handle when someone sends in auth information (login?)
 app.post("/user/auth", function(req, res){
 	if(!checkSchema(req.body, {
 		phone: "string",
@@ -471,13 +476,14 @@ app.post("/user/auth", function(req, res){
 	});
 }); 
 
+// handle requests from the front end for information on all available events. used when displaying the events page
 app.get("/event/listall", function(req, res){
 	db.getEventModel().find({}, function(err, data){
 		if(err || data.length < 1){
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
-		var message = {ok:true, events:[]};
+		var message = {ok:true, events:[]}; // returned info is json
 		for(var i = 0; i < data.length; i++){
 			message.events.push({name:data[i].name, slug:data[i].slug, format:data[i].format, image:data[i].image});
 		}
@@ -485,6 +491,7 @@ app.get("/event/listall", function(req, res){
 	});
 });
 
+// handle attempts to create a new event
 app.post("/event/new", function(req, res){
 	if(!checkSchema(req.body, {
 		name: "string",
