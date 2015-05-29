@@ -1,3 +1,7 @@
+// OK fine lucas I'll wriTE COMMENTS
+
+// js import stuff
+
 var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
@@ -22,8 +26,10 @@ require("string-format").extend(String.prototype);
 var morgan = require("morgan");
 app.use(morgan("dev"));
 
+// I don't know what this is for
 var HASH_COUNT = 2;
 
+// stuff that gets sent as texts when people message the service number
 var REPLIES = {
 	subscribe: {
 		success: "You have succesfully subscribed to {0}.",
@@ -44,58 +50,68 @@ var REPLIES = {
 	welcome: "Welcome to Ping!  This system will allow you to receive text notifications for various events and channels.  For more information, visit urlhere.com or reply PING HELP."
 };
 
+// I don't know what this does
 var noCB = function(){};
 
+
+// I didn't write this function so some things may not be correct
+// when someone sends in a message through twilio requesting subscription to a channel this function gets used
 var subscribe = function(tel, path){
 	console.log(path);
 	if(path.length < 1){
-		twilio.send(tel, REPLIES.subscribe.missing, noCB);
+		twilio.send(tel, REPLIES.subscribe.missing, noCB); // twilio tells them is bad thing they are trying to subscribe to
 		return;
-	}
+	} 
+	
+	// database query to find the requested channel
+	// 'slug' means simplified unique name / identifier
 	db.getEventModel().find({
-		slug: path[0]
-	}, function(err, data){
+		slug: path[0] // path[0] is the event slug
+	}, function(err, data){ // callback
 		if(err || !data){
 			console.log(err);
-			twilio.send(tel, REPLIES.error, noCB);
+			twilio.send(tel, REPLIES.error, noCB); // erroror
 			return;
 		}
 		if(data.length != 1){
-			twilio.send(tel, REPLIES.subscribe.nonexistentEvent, noCB);
+			twilio.send(tel, REPLIES.subscribe.nonexistentEvent, noCB); // the event doesn't exist (db query found nothing)
 			return;
 		}
+		
+		// if query found an event
 		var event = data[0];
-		db.getChannelModel().find({
+		db.getChannelModel().find({ // db query to find the channel
 			event: event._id,
-			name: path[1] || "main"
-		}, function(err, data){
+			name: path[1] || "main" // path[1] is the channel name; if nonexistent, attempt subscription to main channel
+		}, function(err, data){ // callback
 			console.log(err, data);
 			if(err || !data){
 				console.log(err);
-				twilio.send(tel, REPLIES.error, noCB);
+				twilio.send(tel, REPLIES.error, noCB); // there is an error
 				return;
 			}
-			if(data.length != 1){
-				twilio.send(tel, REPLIES.subscribe.nonexistentChannel, noCB);
+			if(data.length != 1){ // this comment is pointless
+				twilio.send(tel, REPLIES.subscribe.nonexistentChannel, noCB); // db found nothing
 				return;
 			}
-			db.getUserModel().update({
-				phone: tel
+			// if we found a channel
+			db.getUserModel().update({ // update the database
+				phone: tel // find the user with the number that sent the stuff
 			}, {
 				$addToSet: {
-					subscriptions: data[0]._id
+					subscriptions: data[0]._id	// subscribe them
 				}
 			}, {
 				upsert: true
 			}, function(err, dat){
 				if(err || !dat){
 					console.log(err);
-					twilio.send(tel, REPLIES.error, noCB);
+					twilio.send(tel, REPLIES.error, noCB); // go figure
 					return;
 				}
 				console.log(dat);
 				if(dat.upserted){
-					twilio.send(tel, REPLIES.welcome, noCB);
+					twilio.send(tel, REPLIES.welcome, noCB); // if had to insert a new user, send welcome message?
 				}
 				twilio.send(tel, REPLIES.subscribe.success.format(path[0] + (path[1] ? " " + path[1] : "")), noCB);
 				db.getChannelModel().update({
