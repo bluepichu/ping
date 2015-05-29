@@ -1,5 +1,9 @@
 // OK fine lucas I'll wriTE COMMENTS
 
+// events have associated channels
+// an event has a main channel that incorporates all subhappenings in that event
+// when one subscribes they can do so to any number of specific channels
+
 // js import stuff
 
 var express = require("express");
@@ -126,27 +130,28 @@ var subscribe = function(tel, path){
 	});
 }
 
+// called when message comes in requesting unsub.
 var unsubscribe = function(tel, path){
 	if(path.length < 1){
 		twilio.send(tel, REPLIES.unsubscribe.missing, noCB);
 		return;
 	}
-	db.getUserModel().find({
+	db.getUserModel().find({ // query database for user with phone number that made reqest
 		phone: tel
-	}, function(err, data){
+	}, function(err, data){ 
 		if(err || !data){
 			twilio.send(tel, REPLIES.error, noCB);
 			return;
 		}
-		if(data.length == 0){
+		if(data.length == 0){ // no one with that phone number?
 			twilio.send(tel, REPLIES.unsubscribe.notSubscribed);
 			return;
 		}
 		var user = data[0];
-		db.getEventModel().find({
-			slug: path[0]
-		}, function(err, dat){
-			if(err || !dat){
+		db.getEventModel().find({ // this query finds event
+			slug: path[0] // path[0] is the event slug
+		}, function(err, dat){ 
+			if(err || !dat){ // really 'if error's should be pretty self-explanatory
 				twilio.send(tel, REPLIES.error, noCB);
 				return;
 			}
@@ -155,9 +160,9 @@ var unsubscribe = function(tel, path){
 				return;
 			}
 			var event = dat[0];
-			db.getChannelModel().find({
-				event: event._id,
-				name: path[1] || "main"
+			db.getChannelModel().find({ // find the channel  
+				event: event._id,		
+				name: path[1] || "main" // path[1] is the channel name
 			}, function(err, dt){
 				if(err || !dat){
 					twilio.send(tel, REPLIES.error, noCB);
@@ -172,25 +177,25 @@ var unsubscribe = function(tel, path){
 					twilio.send(tel, REPLIES.unsubscribe.notSubscribed.format(path[0] + (path[1] ? " " + path[1] : "")), noCB);
 					return;
 				}
-				db.getUserModel().update({
+				db.getUserModel().update({ // update user database: find the user
 					_id: user._id
 				}, {
 					$pull: {
-						subscriptions: channel._id
+						subscriptions: channel._id // take away the subscription
 					}
 				}, noCB);
-				db.getChannelModel().update({
+				db.getChannelModel().update({ // update channel database: find the channel
 					_id: channel._id
 				}, {
 					$pull: {
-						subscribers: tel
+						subscribers: tel // remove the user's number from the subs list
 					}
-				}, function(err, d){
-					if(err || !d){
+				}, function(err, d){ // callback
+					if(err || !d){ // something went wrong
 						twilio.send(tel, REPLIES.error, noCB);
 						return;
 					}
-					twilio.send(tel, REPLIES.unsubscribe.success.format(path[0] + (path[1] ? " " + path[1] : "")), noCB);
+					twilio.send(tel, REPLIES.unsubscribe.success.format(path[0] + (path[1] ? " " + path[1] : "")), noCB); // successful unsubscribe
 				});
 			});
 		});
