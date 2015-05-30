@@ -216,6 +216,8 @@ var static = function(pth){
 	}
 }
 
+// ------ STUFF lol VERIFYING REQUEST INPUT AND CRYPTO
+
 // checks that the object has the info that is required for it to be used in later code. schema specifies said required info
 var checkSchema = function(object, schema){
 	for(field in object){
@@ -245,6 +247,10 @@ var passwordHash = function(password, salt){ // hashes passwords
 	return password;
 }
 
+
+// ----- MORE EXPRESS SERVING, ALSO HANDLING HTTP REQUESTS TO ADD AND MODIFY AND GET INFORMATION
+// THATS LIKE THE REST OF IT
+
 // serve css
 app.get("/css/:file", function(req, res){
 	res.sendFile("/css/" + req.params.file, {root: path.join(__dirname, "../public")});
@@ -264,6 +270,7 @@ app.get(/\/font\/(.*)/, function(req, res){
 app.get("/images/:file", function(req, res){
 	res.sendFile("/images/" + req.params.file, {root: path.join(__dirname, "../public")});
 });
+
 
 // make requests to 'twilio' urls call the appropriate functions
 app.post("/twilio", function(req, res){
@@ -491,9 +498,9 @@ app.get("/event/listall", function(req, res){
 	});
 });
 
-// handle attempts to create a new event
+// handle requests to create a new event
 app.post("/event/new", function(req, res){
-	if(!checkSchema(req.body, {
+	if(!checkSchema(req.body, { // check the scheme of the request info
 		name: "string",
 		slug: "optional string",
 		description: "optional string",
@@ -503,31 +510,31 @@ app.post("/event/new", function(req, res){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}");
 		return;
 	}
-	if(!req.cookies.phone || !req.cookies.authToken){
+	if(!req.cookies.phone || !req.cookies.authToken){ // check cookies to see if client is logged in
 		res.status(200).send("{\"ok\": false, \"reason\": \"Insufficient priviliges.\"}");
 		return;
 	} 
-	db.getUserModel().find({
-		phone: req.cookies.phone,
+	db.getUserModel().find({ // query db, looking for that supposed logged in user
+		phone: req.cookies.phone, // check that they exist
 		authTokens: {
-			$in: [req.cookies.authToken]
+			$in: [req.cookies.authToken] // check their authToken to verify their session 
 		}
-	}, function(err, data){
+	}, function(err, data){ // callback, I'm going to stop noting these
 		if(err || !data){
 			res.status(500).send("Internal error: failed retrieving user data.");
 			return;
 		}
-		if(data.length != 1){
+		if(data.length != 1){ //  query didn't find just 1 user that had the auth token
 			res.status(200).send("{\"ok\": false, \"reason\": \"You must login to create an event.\"}");
 			return;
 		}
-		extend(req.body, {
-			slug: req.body.name.toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""),
-			format: "panel",
-			channels: ["main"],
-			organizers: [req.cookies.phone]
+		extend(req.body, { // extend extends the object we checked schema of earlier, adding on this default info - for some, only if none was provided as optional
+			slug: req.body.name.toLowerCase().replace(/\s+/g, "-").replace(/[^A-Za-z0-9-]/g, ""), // create a simplified slug identifier
+			format: "panel", // default event format, could be tournament or heats
+			channels: ["main"], // every event starts with a main channel that encompasses the event
+			organizers: [req.cookies.phone] // the user session that created the event is an event organizer, has rights to modify 
 		});
-		db.getEventModel().find({
+		db.getEventModel().find({ // query db, looking for the slug created just above. if the db finds something, event already exists
 			slug: req.body.slug
 		}, function(err, data){
 			if(err || !data){
@@ -538,13 +545,13 @@ app.post("/event/new", function(req, res){
 				res.status(200).send("{\"ok\": false, \"reason\": \"An event with that slug already exists.\"}");
 				return;
 			}
-			db.getEventModel().create(req.body, function(err, dat){
+			db.getEventModel().create(req.body, function(err, dat){ // if doesn't already exist, add the event to the db
 				if(err || !dat){
 					res.status(500).send("Internal error: failed inserting data.");
 					return;
 				}
 				res.status(200).send("{\"ok\": true}");
-				db.getChannelModel().create({
+				db.getChannelModel().create({ // and add a channel for the event
 					name: "main",
 					subscribers: [],
 					event: dat._id,
@@ -555,73 +562,54 @@ app.post("/event/new", function(req, res){
 	}); 
 });
 
+// handle requests for information about events
 app.get("/event/:handle&slug=:slug", function(req, res){
-	//console.log(req.query, req.params.handle, req.params.id, req.params.slug);
-	//if(!req.params.slug && !req.params.id){
-	if(!req.params.slug){
-		//console.log("dbid " + req.params.id);
+	// slug is a param in the url
+	
+	if(!req.params.slug){ // request needs a slug, otherwise wat yuo talking about?!
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters\"}");
 		return;
 	}
 
-	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){
-		if(err || !data){
+	db.getEventModel().findOne( {slug: req.params.slug}, function(err, data){ // db query finds an event with that slug
+		if(err || !data){ // if fails to find, err
 			res.status(500).send("Internal error: failed retrieving data.");
 			return;
 		}
-//		//console.log("gotv here");
-//		var participantPhones = [];
-//		for(var i = 0; i < data.participants.length; i++){
-//			db.getUserModel().findById( data.participants[i], function(errr, person){
-//				if(errr || !person){
-//					//console.log("supposed participant did not exist");
-//				}
-//				else{
-//					participantPhones.push(person.name);
-//				}
-//			});
-//		}
-//
-//		var organizerPhones = [];
-//		for(var i = 0; i < data.organizers.length; i++){
-//			db.getUserModel().findById( data.organizers[i], function(errr, person){
-//				if(errr || !person){
-//					//console.log("supposed organizer did not exist");
-//				}
-//				else{
-//					organizerPhones.push(person.name);
-//				}
-//			});
-//		}
-
+		// there was a bunch of code here replacing stuff in the object with different stuff but we didn't want it in the end
 		var message = data.toObject();
 		message.ok = true;
-//		message.participants = participantPhones;
-//		message.organizers	 = organizerPhones;
 		res.status(200).send(JSON.stringify(message));
 		//console.log(message);
 	});
 });
 
-
+// serve home
 app.get("/", static("/")); 
 
+// serve /user/new
 app.get("/user/new", static("/user/new.html"));
 
+// go figure
 app.get("/events", static("/events.html"));
 
+// handle requests from organizers to send messages out on channels
 app.post("/post/:event/:channel", function(req, res){
-	if(!checkSchema(req.body, {
+	// event (slug) and channel are params in the url
+	
+	if(!checkSchema(req.body, { // request info must have a message
 		message: "string"
 	})){
 		res.status(200).send("{\"ok\": false, \"reason\": \"Invalid parameters.\"}");
 		return;
 	}
-	if(!req.cookies.phone || !req.cookies.authToken){
+	if(!req.cookies.phone || !req.cookies.authToken){ // no client phone / auth cookie
 		res.status(200).send("{\"ok\": false, \"reason\": \"Insufficient priviliges.\"}");
 		return;
 	} 
-	db.getUserModel().find({
+	
+	// query database for login / auth 
+	db.getUserModel().find({ 
 		phone: req.cookies.phone,
 		authTokens: {
 			$in: [req.cookies.authToken]
@@ -631,31 +619,33 @@ app.post("/post/:event/:channel", function(req, res){
 			res.status(500).send("Internal error: failed reading user data.");
 			return;
 		}
-		if(data.length != 1){
+		if(data.length != 1){ 	// failed login/auth check
 			res.status(200).send("{\"ok\": false, \"reason\": \"Insufficient priviliges.\"}");
 			return;
 		}
+		
+		// if login/auth checks out
 		var user = data[0];
-		db.getEventModel().find({
-			slug: req.params.event,
-			organizers: {
+		db.getEventModel().find({ // find an event that has  
+			slug: req.params.event, // the event slug provided in request url
+			organizers: {			// and the user making the request as an organizer
 				$in: [req.cookies.phone]
 			}
-		}, function(err, dat){
+		}, function(err, dat){ 
 			console.log(dat, req.params.event, req.cookies.phone);
 			if(err || !dat){
 				res.status(500).send("Internal error: failed reading event data.");
 				return;
 			}
-			if(dat.length != 1){
-				res.status(200).send("{\"ok\": false, \"reason\": \"Event does not exist or insufficient priviliges.\"}");
+			if(dat.length != 1){	// if query gave unsatisfactory return
+				res.status(200).send("{\"ok\": false, \"reason\": \"Event does not exist or insufficient priviliges.\"}"); // be concerned
 				return;
 			}
 			console.log(dat);
 			var event = dat[0];
-			db.getChannelModel().find({
-				event: event._id,
-				name: req.params.channel
+			db.getChannelModel().find({ // query db for the channel, looking for
+				event: event._id,		// id from the event we found in the last query
+				name: req.params.channel // channel name provided in request url
 			}, function(err, dt){
 				if(err || !dt){
 					res.status(500).send("Internal error: failed reading channel data.");
@@ -665,6 +655,8 @@ app.post("/post/:event/:channel", function(req, res){
 					res.status(200).send("{\"ok\": false, \"reason\": \"Channel does not exist.\"}");
 					return;
 				}
+				// if found, use twilio to send out a message
+				// then respond 'we cool' to the http request
 				var channel = dt[0];
 				twilio.send(channel.subscribers, "[" + event.slug + (channel.name == "main" ? "]" : "/" + channel.name + "]") + " " + req.body.message, noCB);
 				res.status(200).send("{\"ok\": true}");
@@ -673,8 +665,9 @@ app.post("/post/:event/:channel", function(req, res){
 	});
 });
 
+// handle requests for qr codes
 app.get("/qr/:event/:channel", function(req, res){
 	res.send(qr(req.params.event, req.params.channel));
 });
 
-http.listen(process.env.PORT || 1337, noCB);
+http.listen(process.env.PORT || 1337, noCB); // hey, listen! 
