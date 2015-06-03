@@ -408,7 +408,8 @@
 				var n = d.name ? d.name : "--",
 					p = a('<div class="team"></div>'),
 					q = a('<div class="label"></div>').appendTo(p);
-				return 0 === c && p.attr("data-resultid", "team-" + k), e.decorator.render(q, n, j), b(d.idx) && p.attr("data-teamid", d.idx), null === d.name ? p.addClass("na") : g(o).name === d.name ? p.addClass("win") : h(o).name === d.name && p.addClass("lose"), p.append(l), null !== d.name && i && e.save && e.save && (q.addClass("editable"), q.click(function() {
+				return 0 === c && p.attr("data-resultid", "team-" + k), e.decorator.render(q, n, j), b(d.idx) && p.attr("data-teamid", d.idx), null === d.name ? p.addClass("na") : g(o).name === d.name ? p.addClass("win") : h(o).name === d.name && p.addClass("lose"), p.append(l), null !== d.name && i && e.save && e.save
+					&& /*(q.addClass("editable"), q.click(function() {
 					function b() {
 						function h(h, i) {
 							h && (e.init.teams[~~(d.idx / 2)][d.idx % 2] = h), f(!0), g.click(b);
@@ -419,7 +420,8 @@
 					}
 					var g = a(this);
 					b()
-				}), d.name && (l.addClass("editable"), l.click(function() {
+					}),*/
+					d.name && (l.addClass("editable"), l.click(function() {
 					function c() {
 						e.unbind();
 						var g;
@@ -440,7 +442,7 @@
 					}
 					var e = a(this);
 					c()
-				}))), p
+				}))/*)*/, p
 			}
 			var o = {
 					a: d[0],
