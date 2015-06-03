@@ -44,55 +44,66 @@ $(function() {
 			});
 		};
 	};
+
+	/**
+	 * Modal for event viewing
+	 * Call {@link modalEvent#show()} with id to open the modal
+	 */
 	var modalEvent = new function() {
 		var self = this;
 		this.$modal = $("#modal-event");
 		this.$more = $("#modal-more");
 		this.$organizers = this.$modal.find("#event-organizers .col");
+		/** For sorting organizers into columns */
 		this.ocount = 0;
 		this.$participants = this.$modal.find("#event-participants .col");
+		/** For sorting participants into columns */
 		this.pcount = 0;
 		this.$channels = this.$modal.find("#event-channels .col");
 		this.$channelSelect = this.$modal.find("#channel-select");
+		/** For sorting channels into columns */
 		this.ccount = 0;
 		this.$submit = this.$modal.find("#submit-event");
+		/** The slug for the modal to display */
 		this.id = undefined;
-		this.favorite = false;
+		this.favorite = false; // TODO: currently only aesthetic
+		/** Array of participants for tournament bracket */
 		this.participants = [];
+		/** Whether or not to display message broadcast field */
 		this.isOrganizer = false;
+
+		// Initialize modal buttons
 		this.$submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
 
 		/**
 		 * Populate modal with event information before showing the modal
-		 * @param {string} id MongoDB id for event
+		 * @param {string} id MongoDB slug for event
 		 */ 
 		this.show = function(id) {
-			//console.log(id);
 			this.id = id;
-			var me = this;
 			var xhr = new XMLHttpRequest();
-			xhr.onload = function(){
-				if(this.status != 200){
+			xhr.onload = function() {
+				if (this.status != 200) {
 					Materialize.toast(this.responseText, 4000);
 				} else {
 					var rec = JSON.parse(xhr.responseText);	
-					if( rec.ok ){
-						me.setTitle(rec.name);
-						me.setDescription(rec.description);
+					if (rec.ok) {
+						self.setTitle(rec.name);
+						self.setDescription(rec.description);
 						self.$organizers.empty();
 						self.$participants.empty();
 						self.$channels.empty();
 						self.$channelSelect.material_select("destroy");
 						self.$channelSelect.empty();
-						for(var i = 0; i < rec.organizers.length; i++){
-							me.addOrganizer(rec.organizers[i]);
+						for (var i = 0; i < rec.organizers.length; i++){
+							self.addOrganizer(rec.organizers[i]);
 						}
-						for(var i = 0; i < rec.participants.length; i++){
-							me.addParticipant(rec.participants[i]);
+						for (var i = 0; i < rec.participants.length; i++){
+							self.addParticipant(rec.participants[i]);
 						}
-						for(var i = 0; i < rec.channels.length; i++){
-							me.addChannel(rec.channels[i]);
+						for (var i = 0; i < rec.channels.length; i++){
+							self.addChannel(rec.channels[i]); // TODO: show enabled/disabled channel
 						}
 						self.$channelSelect.find("option:first-child").prop("selected", true);
 						self.$channelSelect.material_select();
@@ -112,47 +123,59 @@ $(function() {
 							});
 							//}
 						});
-						//if (part of user's events...)
-						me.favorite = true;
-						me.$submit.text("Remove");
+						// TODO: check if added event or not
+						self.favorite = true;
+						self.$submit.text("Remove");
 						//} else {
 						//this.favorite = false;
 						//this.$submit.text("Add");
 						//}
 						self.isOrganizer = (rec.organizers.indexOf($.cookie("phone")) >= 0);
-						if(self.isOrganizer){
+						if (self.isOrganizer){
 							$(".organizer-only").css("display", "block");
 						} else {
 							$(".organizer-only").css("display", "none");
 						}
-
-						me.$modal.openModal();
-					}
-					else{
+						// Open the modal
+						self.$modal.openModal();
+					} else {
 						Materialize.toast("Request failed: " + rec.reason, 4000);
 					} 
 				}
-			}
+			};
 			xhr.open("GET", "/event/:handle&slug=" + this.id, true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			//console.log("stringy " + JSON.stringify( {id:this.id} ));
 			xhr.send();
-
 		};
+
+		/**
+		 * Set the title of the modal
+		 * @param title {string} Title of the event to display
+		 * @see modalEvent#show()
+		 */
 		this.setTitle = function(title) {
 			$("#event-title").text(title);
 		};
+
+		/**
+		 * Set the description of the event
+		 * @param description {string?} Description to display
+		 * @see modalEvent#show()
+		 */
 		this.setDescription = function(description) {
-			if(!description){
-				$("#event-description").html("<p style='opacity: .54'>No description.</p>");
-			} else {
+			if (description) {
 				$("#event-description").text(description);
+			} else {
+				$("#event-description").html("<p style='opacity: .54'>No description.</p>");
 			}
 		};
+
 		/**
-		 * Add an organizer
-		 * @param {string} name
-		 * @param {URL?} img
+		 * Add an organizer to event modal
+		 * @param {string} name Name of organizer
+		 * @param {URL?} img Location of profile image
+		 * @see modalEvent#show()
 		 */
 		this.addOrganizer = function(name, img) {
 			if (img === undefined) {
@@ -168,10 +191,12 @@ $(function() {
 			);
 			this.ocount = (this.ocount + 1) % 2;
 		};
+
 		/**
-		 * Add a participant
-		 * @param {string} name
-		 * @param {URL?} img
+		 * Add a participant to event modal
+		 * @param {string} name Name of participant
+		 * @param {URL?} img Location of profile image
+		 * @see modalEvent#show()
 		 */
 		this.addParticipant = function(name, img) {
 			if (img === undefined) {
@@ -187,10 +212,12 @@ $(function() {
 			);
 			this.pcount = (this.pcount + 1) % 3;
 		};
+
 		/**
-		 * Add a channel
-		 * @param {string} channel
-		 * @param {string?} enabled
+		 * Add a channel to event modal
+		 * @param {string} channel Name of channel
+		 * @param {boolean} enabled Channel enabled or disabled
+		 * @see modalEvent#show()
 		 */
 		this.addChannel = function(channel, enabled) {
 			$(this.$channels[this.ccount]).append(
@@ -207,7 +234,10 @@ $(function() {
 			this.$channelSelect.append("<option value='" + channel + "' name='" + channel + "'>" + channel + "</option>"); 
 			this.ccount = (this.ccount + 1) % 3;
 		};
-		// Add to/remove from user's events
+
+		/**
+		 * Add or remove event as "favorite"
+		 */
 		this.toggle = function() {
 			console.log(this.id);
 			if (this.favorite) {
@@ -216,33 +246,46 @@ $(function() {
 				this.$submit.text("Remove");
 			} 
 			this.favorite = !this.favorite;
+			// TODO: Preferably do something on the server end
 		};
-		// Reveal additional information modal
+
+		/**
+		 * Open new modal with (longer?) description and tournament bracket
+		 * On close, opens main event modal back up
+		 */
 		this.showMore = function() {
+			// Only one modal can open at a time, add callback to open main modal after close
 			this.$modal.closeModal();
-			setTimeout(function() {self.$more.openModal({
-				complete: function() {
-					setTimeout(function() {self.$modal.openModal()}, 100)
-				}})
-								  }, 300);
+			setTimeout(function() {
+				self.$more.openModal({
+					complete: function() {
+						setTimeout(function() {self.$modal.openModal()}, 100)
+					}
+				})
+			}, 300);
+			// Populate title and description fields
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
 
-			var shuffle = function(array) {
-				var m = array.length, t, i;
+			/**
+			 * Shuffle an array
+			 * @param arr Array to shuffle
+			 * @returns {*} Shuffled array
+			 */
+			var shuffle = function(arr) {
+				var m = arr.length, t, i;
 				// While there remain elements to shuffle…
 				while (m) {
 					// Pick a remaining element…
 					i = Math.floor(Math.random() * m--);
 					// And swap it with the current element.
-					t = array[m];
-					array[m] = array[i];
-					array[i] = t;
+					t = arr[m];
+					arr[m] = arr[i];
+					arr[i] = t;
 				}
-
-				return array;
+				return arr;
 			};
-			// Check for data, if no data on server:
+			// Check for data, if no data on server, initialize with empty arrays
 			var data = {teams: [], results: []};
 			var participants = shuffle(this.participants);
 			for (var i = 0; i < participants.length; i+=2) {
@@ -255,39 +298,42 @@ $(function() {
 				}
 			}
 			var saveData = function() {
-				// Do something to save to server
+				// TODO: Do something to save to server
 			};
+			// Create tournament bracket on empty div
 			$('#more-bracket').bracket({
 				init: data /* data to initialize the bracket with */,
 				save: saveData
-			})
+			});
+			// TODO: fix tournament bracket!
 		}
 	}();
 
-	var getEventList = function(){
+	// Query server for events
+	var getEventList = function() {
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
-			if(this.status != 200){
+			if (this.status != 200){
 				Materialize.toast(this.responseText, 4000);
 			} else {
-				var rec = JSON.parse(xhr.responseText);	
-				if( rec.ok ){
-					for(var i = 0; i < rec.events.length; i++){
+				var rec = JSON.parse(xhr.responseText);
+				if (rec.ok){
+					for (var i = 0; i < rec.events.length; i++) {
 						cards.add(rec.events[i].name, rec.events[i].slug, rec.events[i].image);
 					}
-				}
-				else{
+				} else {
 					Materialize.toast("Request failed: " + rec.reason, 4000);
 				}
 			}
-		}
+		};
 		xhr.open("GET", "/event/listall", true);
 		xhr.send();
-	}
+	};
 
 	getEventList();
 
-	$("#create-form").submit(function(e){
+	// Submit event creation
+	$("#create-form").submit(function(e) {
 		e.preventDefault();
 
 		var data = $(this).serializeArray();
@@ -325,6 +371,7 @@ $(function() {
 		$("#create-form").trigger("submit");
 	});
 
+	// TODO: un-uglify this
 	$("#create-name").bind("change paste input keyup", function() {
 		if (!$(this).data("previous")) {
 			$(this).data("previous", "");
@@ -339,14 +386,14 @@ $(function() {
 		$("#modal-event").closeModal();
 		setTimeout(function() {$("#modal-add-channel").openModal()}, 300);
 	}); 
-	
+
 	$("#post-message-submit").click(function(){
 		$("form#post-message").submit();
 	});
-	
+
 	$("form#post-message").submit(function(e){
 		e.preventDefault();
-		
+
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
 			if (this.status != 200){

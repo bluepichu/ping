@@ -1,9 +1,12 @@
 $(function() {
+	// Initialize materialize select menus
 	$('select').material_select();
+	// Initialize materialize sidenav
 	$(".button-collapse").sideNav();
 	var $search = $("#search"),
 		$searchTerm = $("#search-term");
 
+	// Setup search bar
 	$searchTerm.change(function() {
 		// search?
 	});
@@ -23,12 +26,15 @@ $(function() {
 			}, 300);
 		}
 	});
+
 	// Check login status
 	if ($.cookie("authToken")) {
+		// User is logged in, show settings
 		$("#settings").click(function() {
 			$("#modal-settings").openModal();
 		});
 	} else {
+		// Setup login request
 		var $loginModal = $("#modal-login"),
 			$loginUsername = $loginModal.find("#login-username"),
 			$registerModal = $("#modal-register"),
@@ -80,9 +86,9 @@ $(function() {
 				if(this.status != 200){
 					Materialize.toast(this.responseText, 4000);
 				} else {
-					var res = JSON.parse(xhr.responseText);	
+					var res = JSON.parse(xhr.responseText);
 					if(res.ok){
-						Materialize.toast("Login succesful.");
+						Materialize.toast("Login successful.");
 						setTimeout(function() {
 							location.reload();
 						}, 2000);
@@ -90,7 +96,7 @@ $(function() {
 						Materialize.toast("Request failed: " + res.reason, 4000); 
 					}
 				}
-			}
+			};
 			xhr.open("POST", "/user/auth", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(json));
@@ -133,7 +139,7 @@ $(function() {
 				if(this.status != 200){
 					Materialize.toast(this.responseText, 4000);
 				} else {
-					var res = JSON.parse(xhr.responseText);	
+					var res = JSON.parse(xhr.responseText);
 					if(res.ok){
 						$registerModal.closeModal();
 						setTimeout(function() {
@@ -144,7 +150,7 @@ $(function() {
 						Materialize.toast("Request failed: " + res.reason, 4000); 
 					}
 				}
-			}
+			};
 			xhr.open("POST", "/user/new", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			delete json.confirm;
@@ -164,7 +170,7 @@ $(function() {
 				if(this.status != 200){
 					Materialize.toast(this.responseText, 4000);
 				} else {
-					var res = JSON.parse(xhr.responseText);	
+					var res = JSON.parse(xhr.responseText);
 					if(res.ok){
 						Materialize.toast("You are now registered!", 2000);
 						setTimeout(function(){
@@ -174,7 +180,7 @@ $(function() {
 						Materialize.toast("Request failed: " + res.reason, 4000); 
 					}
 				}
-			}
+			};
 			xhr.open("POST", "/user/verify", true);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(json));
