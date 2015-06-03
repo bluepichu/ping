@@ -46,15 +46,19 @@
 
 	function i(b, c, d) {
 		var e, f = d.find(".team[data-teamid=" + b + "]");
-		return e = c ? c : "highlight", {
+		return e = c ? c : "highlight",
+
+		// Added shorthand if/else to the highlight/dehighlight functions to prevent
+		// highlighting of the non team boxes
+		{
 			highlight: function() {
 				f.each(function() {
-					a(this).addClass(e), a(this).hasClass("win") && a(this).parent().find(".connector").addClass(e)
+					(b != "-1" ? a(this).addClass(e) : function(){}), a(this).hasClass("win") && a(this).parent().find(".connector").addClass(e)
 				})
 			},
 			deHighlight: function() {
 				f.each(function() {
-					a(this).removeClass(e), a(this).parent().find(".connector").removeClass(e)
+					(b != "-1" ? a(this).removeClass(e) : function(){}), a(this).parent().find(".connector").removeClass(e)
 				})
 			}
 		}

@@ -80,7 +80,11 @@ var tbracket = (function() {
 	var strictSeeds = function() {
 		var half = participants.length / 2;
 		for (var i = 0; i < half; i++) {
-			matchups.push([participants[i], participants[participants.length - i - 1]]);
+			matchups.push(null);
+		}
+		for (i = 0; i < half; i++) {
+			matchups[(i%2 == 0 ? i/2 : half-(i-1)/2-1)] =
+				[participants[i], participants[participants.length - i - 1]];
 		}
 	};
 
@@ -121,9 +125,9 @@ var tbracket = (function() {
 	 * userData: optional data given when bracket is created.
 	 */
 	var saveFn = function(data, userData) {
-		console.log(data);
-		// matchups = data.teams;
-		// results = data.results;
+		//console.log(data);
+		matchups = data.teams;
+		results = data.results;
 		// console.log(matchups, results);
 
 		//var json = jQuery.toJSON(data);
