@@ -1,3 +1,10 @@
+/*
+
+ NOT IN USE CURRENTLY
+
+ */
+
+
 /**
  * Created by Lucas on 6/2/15.
  */
@@ -7,6 +14,11 @@ var CHALLONGE_BASE_URL = 'https://api.challonge.com/v1/';
 var request = require('request');
 var AsyncHandler = require("./async").AsyncHandler;
 
+/**
+ * Create a tournament
+ * @param {JSON} settings JSON object defining the tournament settings
+ * @param {function} cb Callback function for the response
+ */
 var createTournament = function(settings, cb) {
 	request({
 		url: CHALLONGE_BASE_URL + 'tournaments',
@@ -34,6 +46,12 @@ var createTournament = function(settings, cb) {
 	});
 };
 
+/**
+ * Add a number of players
+ * @param {JSON[]} players Array of JSON objects defining participants to be added to the tournament
+ * @param {integer} tournamentid Tournament identification number
+ * @param {function} cb Callback function for the response
+ */
 var addPlayers = function(players, tournamentid, cb) {
 	var playerIds = [];
 	for(var i = 0; i < players.length; i++){
@@ -55,6 +73,12 @@ var addPlayers = function(players, tournamentid, cb) {
 	}
 };
 
+/**
+ * Add a player
+ * @param {JSON} players JSON object defining the participant to be added to the tournament
+ * @param {integer} tournamentid Tournament identification number
+ * @param {function} cb Callback function for the response
+ */
 var addPlayer = function(player, tournamentid, cb) {
 	request({
 		url: CHALLONGE_BASE_URL + 'tournaments/' + tournamentid + '/participants',
@@ -79,6 +103,12 @@ var addPlayer = function(player, tournamentid, cb) {
 	});
 };
 
+/**
+ * Create a tournament
+ * @param {JSON[]} players Array of JSON objects defining participants to be added to the tournament
+ * @param {integer} tournamentid Tournament identification number
+ * @param {function} cb Callback function for the response
+ */
 var alterTournament = function(altertype) {
 	function alter(tournamentid, cb) {
 		request({
@@ -104,6 +134,13 @@ var alterTournament = function(altertype) {
 	}
 };
 
+/**
+ * Get the matches in a tournament
+ * @param {integer} tournamentid Tournament identification number
+ * @param {string} state Filter certain matches based on whether they are 'all', 'open', 'pending', 'complete'
+ * @param {integer} participant Filter certain matches based on the participant id
+ * @param {function} cb Callback function for the response
+ */
 var getMatches = function(tournamentid, state, participant, cb) {
 	var req = {
 		api_key: CHALLONGE_API_KEY
@@ -138,6 +175,13 @@ var getMatches = function(tournamentid, state, participant, cb) {
 	});
 };
 
+/**
+ * Submit scores of a match
+ * @param {integer} tournamentid Tournament identification number
+ * @param {integer} matchid Match identification number
+ * @param {string} results CSV of the match/game scores (e.g. '1-3,3-0,3-2')
+ * @param {function} cb Callback function for the response
+ */
 var submitMatch = function(tournamentid, matchid, results, cb) {
 	request({
 		url: CHALLONGE_BASE_URL + 'tournaments/' + tournamentid + '/matches/' + matchid,
