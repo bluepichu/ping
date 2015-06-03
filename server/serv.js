@@ -52,13 +52,17 @@ var REPLIES = {
 		nonexistentEvent: "That event doesn't exist."
 	},
 	help: "To subscribe, send PING SUBSCRIBE or PING SUB followed by the event handle (optionally with a channel).\nTo unsubscribe, send PING UNSUBSCRIBE, PING UNSUB, or PING STOP followed by the event handle (optionally with a channel).\nTo stop all subscriptions, send PING UNSUBSCRIBE ALL, PING UNSUB ALL, or PING STOP ALL.\nTo view this message, send PING HELP.\nFor more information, visit urlhere.com.",
-	default: "I don\"t understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP.",
+	default: "I don't understand that command.  (Did you forget to start with PING?)  To view help, reply PING HELP.",
 	error: "Your request failed due to a server error.  Try again later.",
 	welcome: "Welcome to Ping!  This system will allow you to receive text notifications for various events and channels.  For more information, visit urlhere.com or reply PING HELP."
 };
 
-// I don't know what this does
-var noCB = function(){};
+// Blank Callback
+var noCB = function(err){
+	if(err){
+		console.log(err);
+	}
+};
 
 
 // I didn't write this function so some things may not be correct
