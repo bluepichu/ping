@@ -118,6 +118,7 @@ var tbracket = (function() {
 	};
 
 	var isInitialized = function() {return initialized;};
+	var isConsolation = function() {return thirdplacematch;};
 
 	/* Called whenever bracket is modified
 	 *
@@ -194,8 +195,10 @@ var tbracket = (function() {
 
 	//Prototype
 	tbracket.prototype = {
+		//Functions
 		constructor: tbracket,
 		isInitialized: isInitialized,
+		isConsolation: isConsolation,
 		getData: getData,
 		addParticipant: addParticipant,
 		startTournament: startTournament,

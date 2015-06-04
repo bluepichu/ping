@@ -267,12 +267,29 @@ $(function() {
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
 
+			// TODO: Tournament Bracket
+
+			// Hard coded data for now
+			var tb = new tbracket('double', 'strict');
+			for (var i = 0; i < 7; i++) {
+				tb.addParticipant("Team " + (i + 1));
+			}
+			tb.startTournament();
+			$(function() {
+				$('#more-bracket').bracket({
+					init: tb.getData(), /* data to initialize the bracket with */
+					skipConsolationRound: !tb.isConsolation(),
+					save: tb.saveFn,
+					userData: ""	// TODO MongoDB integration
+				})
+			});
+
 			/**
 			 * Shuffle an array
 			 * @param arr Array to shuffle
 			 * @returns {*} Shuffled array
 			 */
-			var shuffle = function(arr) {
+			/* var shuffle = function(arr) {
 				var m = arr.length, t, i;
 				// While there remain elements to shuffle…
 				while (m) {
@@ -300,12 +317,12 @@ $(function() {
 			var saveData = function() {
 				// TODO: Do something to save to server
 			};
-			// Create tournament bracket on empty div
-			$('#more-bracket').bracket({
-				init: data /* data to initialize the bracket with */,
-				save: saveData
-			});
-			// TODO: fix tournament bracket!
+
+			 // Create tournament bracket on empty div
+			 $('#more-bracket').bracket({
+			 init: data ,
+			 save: saveData
+			 }); */
 		}
 	}();
 
