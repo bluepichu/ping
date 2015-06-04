@@ -259,7 +259,9 @@ $(function() {
 			setTimeout(function() {
 				self.$more.openModal({
 					complete: function() {
-						setTimeout(function() {self.$modal.openModal()}, 100)
+						setTimeout(function() {
+							self.$modal.openModal()
+						}, 100)
 					}
 				})
 			}, 300);
@@ -267,23 +269,59 @@ $(function() {
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
 
-			// TODO: Tournament Bracket
+			// TODO Make the button interface nice (or switch to tabs or something)
+			// Button
+			$("#large-bracket-button").click(function(){
+				replaceButtons();
+				displayBracket();
+			});
+			$("#large-match-button").click(function() {
+				replaceButtons();
+				displayMatches();
+			});
 
+			var replaceButtons = function() {
+				var bb = $("#large-bracket-button");
+				var mb = $("#large-match-button");
+				bb.removeClass("btn-large");
+				bb.addClass("btn");
+				mb.removeClass("btn-large");
+				mb.addClass("btn");
+			};
+
+			// TODO Integrate participant/backend stuff with tournament creation
 			// Hard coded data for now
-			var tb = new tbracket('double', 'strict');
+			var tb = new tbracket('single', 'strict');
 			for (var i = 0; i < 7; i++) {
 				tb.addParticipant("Team " + (i + 1));
 			}
 			tb.startTournament();
-			$(function() {
-				$('#more-bracket').bracket({
-					init: tb.getData(), /* data to initialize the bracket with */
-					skipConsolationRound: !tb.isConsolation(),
-					save: tb.saveFn,
-					userData: ""	// TODO MongoDB integration
-				})
-			});
-			modbrackets(); // Keep at the end of this.showMore
+
+			// TODO: Tournament Bracket
+			var displayMatches = function() {
+				var b = $('#more-bracket');
+				if (!b.is(':empty')) {
+					b.empty();
+				}
+			};
+
+			var displayBracket = function() {
+				$(function() {
+					var ml = $('#more-matchlist');
+					if (!ml.is(':empty')) {
+						ml.empty();
+					}
+					// TODO CSS to center the bracket
+					$('#more-bracket').bracket({
+						init: tb.getData(), /* data to initialize the bracket with */
+						skipConsolationRound: !tb.isConsolation(),
+						save: tb.saveFn,
+						userData: "",	// TODO MongoDB integration
+						// TODO pull up modal with participant data/phone #s
+						onMatchClick: function(data) {console.log(data);}
+					});
+				});
+			};
 
 			/**
 			 * Shuffle an array
@@ -433,27 +471,3 @@ $(function() {
 		}));
 	});
 });
-
-// Additional code to modify behavior and appearance of the jQuery brackets
-var modbrackets = function() {
-
-	var validMatch = function(e) {
-		for (var i = 0; i < 2; i++) {
-			if ($(e.target.parentElement.parentElement).find('.team')[i].getAttribute('data-teamid') == '-1') {
-				return false
-			}
-		}
-		return true;
-	};
-
-	$(document).ready(function() {
-		$('.tools').remove();
-		$('.label').click(function(e) {
-			if (validMatch(e)) {
-				console.log('click', e.target);
-				// TODO Add code to call modal window and obtain participant data / send text to them
-			}
-		});
-	});
-
-};
