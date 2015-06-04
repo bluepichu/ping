@@ -283,6 +283,7 @@ $(function() {
 					userData: ""	// TODO MongoDB integration
 				})
 			});
+			modbrackets(); // Keep at the end of this.showMore
 
 			/**
 			 * Shuffle an array
@@ -432,3 +433,27 @@ $(function() {
 		}));
 	});
 });
+
+// Additional code to modify behavior and appearance of the jQuery brackets
+var modbrackets = function() {
+
+	var validMatch = function(e) {
+		for (var i = 0; i < 2; i++) {
+			if ($(e.target.parentElement.parentElement).find('.team')[i].getAttribute('data-teamid') == '-1') {
+				return false
+			}
+		}
+		return true;
+	};
+
+	$(document).ready(function() {
+		$('.tools').remove();
+		$('.label').click(function(e) {
+			if (validMatch(e)) {
+				console.log('click', e.target);
+				// TODO Add code to call modal window and obtain participant data / send text to them
+			}
+		});
+	});
+
+};
