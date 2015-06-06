@@ -1,6 +1,8 @@
 $(function() {
 	// Initialize materialize select menus
 	$('select').material_select();
+	// Initialize materialize tabs
+	$('ul.tabs').tabs();
 	// Initialize materialize sidenav
 	$(".button-collapse").sideNav();
 	var $search = $("#search"),

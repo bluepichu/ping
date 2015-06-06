@@ -48,6 +48,7 @@ $(function() {
 	/**
 	 * Modal for event viewing
 	 * Call {@link modalEvent#show()} with id to open the modal
+	 * @constructor
 	 */
 	var modalEvent = new function() {
 		var self = this;
@@ -71,6 +72,8 @@ $(function() {
 		this.participants = [];
 		/** Whether or not to display message broadcast field */
 		this.isOrganizer = false;
+		this.$matches = this.$more.find("#more-matches");
+		this.$brackets = this.$more.find("#more-brackets");
 
 		// Initialize modal buttons
 		this.$submit.click(function() {self.toggle()});
@@ -250,6 +253,36 @@ $(function() {
 		};
 
 		/**
+		 * Add a match to the match list
+		 * @param {Object} players The players involved in the match
+		 * @param {string} players.first The player to be displayed on the left
+		 * @param {string} players.second The player to be displayed on the right
+		 * @param {Object?} icons The images to display next to each name
+		 * @param {URL?} icons.first The link to the left player's image
+		 * @param {URL?} icons.second The link the the right player's image
+		 */
+		this.addMatch = function(players, icons) {
+			// Check if icons are provided or replace with default icon
+			if (icons === undefined) {
+				icons = {
+					first: "<i class=\"mdi-action-account-circle\"></i>",
+					second: "<i class=\"mdi-action-account-circle\"></i>"
+				}
+			} else {
+				icons.first = icons.first ? "<img class=\"circle\" src=\"" + icons.first + "\" />" :
+					"<i class=\"mdi-action-account-circle\"></i>";
+				icons.second = icons.second ? "<img class=\"circle\" src=\"" + icons.second + "\" />" :
+					"<i class=\"mdi-action-account-circle\"></i>";
+			}
+			$(  "<div class=\"waves-effect match-item\">" +
+					icons.first + "<span>" + players.first + "</span>" +
+					+ "<h1>vs.</h1>" +
+					"<span>" + players.second + "</span>" + icons.second +
+				"</div>"
+			).appendTo(this.$matches).data("id", 1); // TODO: add id to each match
+		};
+
+		/**
 		 * Open new modal with (longer?) description and tournament bracket
 		 * On close, opens main event modal back up
 		 */
@@ -268,26 +301,14 @@ $(function() {
 			// Populate title and description fields
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
+			if (!this.$matches.is(':empty')) {
+				this.$matches.empty();
+			}
+			if (!this.$brackets.is(':empty')) {
+				this.$brackets.empty();
+			}
 
-			// TODO Make the button interface nice (or switch to tabs or something)
-			// Button
-			$("#large-bracket-button").click(function(){
-				replaceButtons();
-				displayBracket();
-			});
-			$("#large-match-button").click(function() {
-				replaceButtons();
-				displayMatches();
-			});
-
-			var replaceButtons = function() {
-				var bb = $("#large-bracket-button");
-				var mb = $("#large-match-button");
-				bb.removeClass("btn-large");
-				bb.addClass("btn");
-				mb.removeClass("btn-large");
-				mb.addClass("btn");
-			};
+			// TODO: add matches to list using this.addMatch()
 
 			// TODO Integrate participant/backend stuff with tournament creation
 			// Hard coded data for now
@@ -297,71 +318,15 @@ $(function() {
 			}
 			tb.startTournament();
 
-			// TODO: Tournament Bracket
-			var displayMatches = function() {
-				var b = $('#more-bracket');
-				if (!b.is(':empty')) {
-					b.empty();
-				}
-			};
-
-			var displayBracket = function() {
-				$(function() {
-					var ml = $('#more-matchlist');
-					if (!ml.is(':empty')) {
-						ml.empty();
-					}
-					// TODO CSS to center the bracket
-					$('#more-bracket').bracket({
-						init: tb.getData(), /* data to initialize the bracket with */
-						skipConsolationRound: !tb.isConsolation(),
-						save: tb.saveFn,
-						userData: "",	// TODO MongoDB integration
-						// TODO pull up modal with participant data/phone #s
-						onMatchClick: function(data) {console.log(data);}
-					});
-				});
-			};
-
-			/**
-			 * Shuffle an array
-			 * @param arr Array to shuffle
-			 * @returns {*} Shuffled array
-			 */
-			/* var shuffle = function(arr) {
-				var m = arr.length, t, i;
-				// While there remain elements to shuffle…
-				while (m) {
-					// Pick a remaining element…
-					i = Math.floor(Math.random() * m--);
-					// And swap it with the current element.
-					t = arr[m];
-					arr[m] = arr[i];
-					arr[i] = t;
-				}
-				return arr;
-			};
-			// Check for data, if no data on server, initialize with empty arrays
-			var data = {teams: [], results: []};
-			var participants = shuffle(this.participants);
-			for (var i = 0; i < participants.length; i+=2) {
-				if (i + 1 === participants.length) {
-					data.teams.push([participants[i], "N/A"]);
-					data.results.push([0, -1]);
-				} else {
-					data.teams.push([participants[i], participants[i + 1]]);
-					data.results.push([undefined, undefined]);
-				}
-			}
-			var saveData = function() {
-				// TODO: Do something to save to server
-			};
-
-			 // Create tournament bracket on empty div
-			 $('#more-bracket').bracket({
-			 init: data ,
-			 save: saveData
-			 }); */
+			// TODO CSS to center the bracket
+			this.$brackets.bracket({
+				init: tb.getData(), /* data to initialize the bracket with */
+				skipConsolationRound: !tb.isConsolation(),
+				save: tb.saveFn,
+				userData: "",	// TODO MongoDB integration
+				// TODO pull up modal with participant data/phone #s
+				onMatchClick: function(data) {console.log(data);}
+			});
 		}
 	}();
 

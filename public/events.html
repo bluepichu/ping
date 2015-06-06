@@ -302,13 +302,28 @@
 				<div class="modal-content">
 					<h4 id="more-title"></h4>
 					<p id="more-description" class="flow-text"></p>
+					<form class="row" id="more-add-participant">
+						<div class="col s12 m9">
+							<div class="input">
+								<input id="more-participant-name" name="message" type="text" autocomplete="off" required>
+								<label for="more-participant-name">Participant</label>
+								<span class="bar"></span>
+							</div>
+						</div>
+						<div class="col s12 m3">
+							<a class="waves-effect btn waves-light" id="more-participant-submit">Add</a>
+						</div>
+					</form>
 					<!--Experimental code -->
-					<!-- TODO determine on how to display tournament data -->
-					<a id="large-match-button" class="waves-effect waves-light btn-large">Match List</a>
-					<a id="large-bracket-button" class="waves-effect waves-light btn-large">Bracket</a>
-					<div id="more-matchlist"></div>
+					<div class="col s12">
+						<ul class="tabs">
+							<li class="tab col s3"><a href="#more-matches" class="active">Match List</a></li>
+							<li class="tab col s3"><a class="active" href="#more-brackets">Brackets</a></li>
+						</ul>
+					</div>
 					<!--Experimental code -->
-					<div id="more-bracket"></div>
+					<div id="more-matches"></div>
+					<div id="more-brackets"></div>
 				</div>
 				<div class="modal-footer">
 					<a class="waves-effect btn-flat modal-action modal-close">Back</a>
