@@ -10,7 +10,7 @@ $(function() {
 
 	// Setup search bar
 	$searchTerm.change(function() {
-		// search?
+		// TODO: search?
 	});
 	$search.find("a").click(function() {
 		if ($search.hasClass("active")) {
@@ -85,18 +85,18 @@ $(function() {
 
 			var xhr = new XMLHttpRequest();
 			xhr.onload = function(){
-				if(this.status != 200){
+				if(this.status != 200) {
 					Materialize.toast(this.responseText, 4000);
+					return;
+				}
+				var res = JSON.parse(xhr.responseText);
+				if(res.ok){
+					Materialize.toast("Login successful.");
+					setTimeout(function() {
+						location.reload();
+					}, 2000);
 				} else {
-					var res = JSON.parse(xhr.responseText);
-					if(res.ok){
-						Materialize.toast("Login successful.");
-						setTimeout(function() {
-							location.reload();
-						}, 2000);
-					} else {
-						Materialize.toast("Request failed: " + res.reason, 4000); 
-					}
+					Materialize.toast("Request failed: " + res.reason, 4000);
 				}
 			};
 			xhr.open("POST", "/user/auth", true);
@@ -112,7 +112,7 @@ $(function() {
 			}, 300);
 		});
 		var validatePassword = function() {
-			if($registerPassword.val() != $registerConfirm.val()) {
+			if ($registerPassword.val() != $registerConfirm.val()) {
 				$registerConfirm[0].setCustomValidity("Passwords Don't Match");
 			} else {
 				$registerConfirm[0].setCustomValidity("");
@@ -137,20 +137,20 @@ $(function() {
 			}
 
 			var xhr = new XMLHttpRequest();
-			xhr.onload = function(){
-				if(this.status != 200){
+			xhr.onload = function() {
+				if(this.status != 200) {
 					Materialize.toast(this.responseText, 4000);
+					return;
+				}
+				var res = JSON.parse(xhr.responseText);
+				if(!res.ok){
+					$registerModal.closeModal();
+					setTimeout(function() {
+						clearAll();
+						$verifyModal.openModal();
+					}, 300);
 				} else {
-					var res = JSON.parse(xhr.responseText);
-					if(res.ok){
-						$registerModal.closeModal();
-						setTimeout(function() {
-							clearAll();
-							$verifyModal.openModal();
-						}, 300);
-					} else {
-						Materialize.toast("Request failed: " + res.reason, 4000); 
-					}
+					Materialize.toast("Request failed: " + res.reason, 4000);
 				}
 			};
 			xhr.open("POST", "/user/new", true);
@@ -169,18 +169,18 @@ $(function() {
 
 			var xhr = new XMLHttpRequest();
 			xhr.onload = function(){
-				if(this.status != 200){
+				if(this.status != 200) {
 					Materialize.toast(this.responseText, 4000);
+					return;
+				}
+				var res = JSON.parse(xhr.responseText);
+				if(res.ok){
+					Materialize.toast("You are now registered!", 2000);
+					setTimeout(function(){
+						location.reload();
+					}, 2000);
 				} else {
-					var res = JSON.parse(xhr.responseText);
-					if(res.ok){
-						Materialize.toast("You are now registered!", 2000);
-						setTimeout(function(){
-							location.reload();
-						}, 2000);
-					} else {
-						Materialize.toast("Request failed: " + res.reason, 4000); 
-					}
+					Materialize.toast("Request failed: " + res.reason, 4000);
 				}
 			};
 			xhr.open("POST", "/user/verify", true);

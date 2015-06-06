@@ -15,9 +15,9 @@ $(function() {
 
 		/**
 		 * Add a card
-		 * @param {string} title Title for card
-		 * @param {string} id Hex identifier for mongo query
-		 * @param {string?} image URL for image
+		 * @param {string} title    - Title for card
+		 * @param {string} id       - Hex identifier for mongo query
+		 * @param {string?} image   - URL for image
 		 */
 		this.add = function(title, id, image) {
 			var img = "<img src=\"" + image + "\"/>";
@@ -37,6 +37,9 @@ $(function() {
 			});
 			this.count++;
 		};
+		/**
+		 * Clear cards
+		 */
 		this.clear = function() {
 			this.count = 0;
 			this.$columns.forEach(function (column) {
@@ -89,62 +92,62 @@ $(function() {
 			xhr.onload = function() {
 				if (this.status != 200) {
 					Materialize.toast(this.responseText, 4000);
-				} else {
-					var rec = JSON.parse(xhr.responseText);	
-					if (rec.ok) {
-						self.setTitle(rec.name);
-						self.setDescription(rec.description);
-						self.$organizers.empty();
-						self.$participants.empty();
-						self.$channels.empty();
-						self.$channelSelect.material_select("destroy");
-						self.$channelSelect.empty();
-						for (var i = 0; i < rec.organizers.length; i++){
-							self.addOrganizer(rec.organizers[i]);
-						}
-						for (var i = 0; i < rec.participants.length; i++){
-							self.addParticipant(rec.participants[i]);
-						}
-						for (var i = 0; i < rec.channels.length; i++){
-							self.addChannel(rec.channels[i]); // TODO: show enabled/disabled channel
-						}
-						self.$channelSelect.find("option:first-child").prop("selected", true);
-						self.$channelSelect.material_select();
-						// QR code gen
-						console.log(self.$modal.find("#event-channels").find(".channel input"));
-						self.$modal.find("#event-channels").find(".channel input").click(function() {
-							console.log("clicked channel");
-							//console.log($(this).is(':checked'));
-							console.log($(this).parent().parent().parent().text().trim().toLowerCase());
-							//if ($(this).is(':checked')) {
-							$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
-							var $qr = $("#z");
-							$qr.materialbox();
-							$qr.click();
-							$qr.click(function() {
-								$qr.remove();
-							});
-							//}
-						});
-						// TODO: check if added event or not
-						self.favorite = true;
-						self.$submit.text("Remove");
-						//} else {
-						//this.favorite = false;
-						//this.$submit.text("Add");
-						//}
-						self.isOrganizer = (rec.organizers.indexOf($.cookie("phone")) >= 0);
-						if (self.isOrganizer){
-							$(".organizer-only").css("display", "block");
-						} else {
-							$(".organizer-only").css("display", "none");
-						}
-						// Open the modal
-						self.$modal.openModal();
-					} else {
-						Materialize.toast("Request failed: " + rec.reason, 4000);
-					} 
+					return;
 				}
+				var rec = JSON.parse(xhr.responseText);
+				if (!rec.ok) {
+					Materialize.toast("Request failed: " + rec.reason, 4000);
+					return;
+				}
+				self.setTitle(rec.name);
+				self.setDescription(rec.description);
+				self.$organizers.empty();
+				self.$participants.empty();
+				self.$channels.empty();
+				self.$channelSelect.material_select("destroy");
+				self.$channelSelect.empty();
+				for (var i = 0; i < rec.organizers.length; i++){
+					self.addOrganizer(rec.organizers[i]);
+				}
+				for (var i = 0; i < rec.participants.length; i++){
+					self.addParticipant(rec.participants[i]);
+				}
+				for (var i = 0; i < rec.channels.length; i++){
+					self.addChannel(rec.channels[i]); // TODO: show enabled/disabled channel
+				}
+				self.$channelSelect.find("option:first-child").prop("selected", true);
+				self.$channelSelect.material_select();
+				// QR code gen
+				console.log(self.$modal.find("#event-channels").find(".channel input"));
+				self.$modal.find("#event-channels").find(".channel input").click(function() {
+					console.log("clicked channel");
+					//console.log($(this).is(':checked'));
+					console.log($(this).parent().parent().parent().text().trim().toLowerCase());
+					//if ($(this).is(':checked')) {
+					$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
+					var $qr = $("#z");
+					$qr.materialbox();
+					$qr.click();
+					$qr.click(function() {
+						$qr.remove();
+					});
+					//}
+				});
+				// TODO: check if added event or not
+				self.favorite = true;
+				self.$submit.text("Remove");
+				//} else {
+				//this.favorite = false;
+				//this.$submit.text("Add");
+				//}
+				self.isOrganizer = (rec.organizers.indexOf($.cookie("phone")) >= 0);
+				if (self.isOrganizer){
+					$(".organizer-only").css("display", "block");
+				} else {
+					$(".organizer-only").css("display", "none");
+				}
+				// Open the modal
+				self.$modal.openModal();
 			};
 			xhr.open("GET", "/event/:handle&slug=" + this.id, true);
 			xhr.setRequestHeader("Content-Type", "application/json");
@@ -163,7 +166,7 @@ $(function() {
 
 		/**
 		 * Set the description of the event
-		 * @param description {string?} Description to display
+		 * @param {string} [description] Description to display
 		 * @see modalEvent#show()
 		 */
 		this.setDescription = function(description) {
@@ -177,7 +180,7 @@ $(function() {
 		/**
 		 * Add an organizer to event modal
 		 * @param {string} name Name of organizer
-		 * @param {URL?} img Location of profile image
+		 * @param {URL} [img] Location of profile image
 		 * @see modalEvent#show()
 		 */
 		this.addOrganizer = function(name, img) {
@@ -198,7 +201,7 @@ $(function() {
 		/**
 		 * Add a participant to event modal
 		 * @param {string} name Name of participant
-		 * @param {URL?} img Location of profile image
+		 * @param {URL} [img] Location of profile image
 		 * @see modalEvent#show()
 		 */
 		this.addParticipant = function(name, img) {
@@ -255,11 +258,11 @@ $(function() {
 		/**
 		 * Add a match to the match list
 		 * @param {Object} players The players involved in the match
-		 * @param {string} players.first The player to be displayed on the left
-		 * @param {string} players.second The player to be displayed on the right
-		 * @param {Object?} icons The images to display next to each name
-		 * @param {URL?} icons.first The link to the left player's image
-		 * @param {URL?} icons.second The link the the right player's image
+		 * @config {string} first The player to be displayed on the left
+		 * @config {string} second The player to be displayed on the right
+		 * @param {Object} [icons] The images to display next to each name
+		 * @config {URL} [first] The link to the left player's image
+		 * @config {URL} [second] The link the the right player's image
 		 */
 		this.addMatch = function(players, icons) {
 			// Check if icons are provided or replace with default icon
@@ -365,23 +368,23 @@ $(function() {
 		}
 
 		var xhr = new XMLHttpRequest();
-		xhr.onload = function(){
+		xhr.onload = function() {
 			if (this.status != 200){
 				Materialize.toast(this.responseText, 4000);
-			} else {
-				var response = JSON.parse(this.responseText);
-
-				if (response.ok){
-					Materialize.toast("Event created.", 2000);
-					$("#modal-create").closeModal();
-
-					setTimeout(function(){
-						location.reload();
-					}, 2000);
-				} else {
-					Materialize.toast("Request failed: " + response.reason, 4000);
-				}
+				return;
 			}
+			var response = JSON.parse(this.responseText);
+
+			if (!response.ok) {
+				Materialize.toast("Request failed: " + response.reason, 4000);
+				return;
+			}
+			Materialize.toast("Event created.", 2000);
+			$("#modal-create").closeModal();
+
+			setTimeout(function(){
+				location.reload();
+			}, 2000);
 		};
 		xhr.open("POST", "/event/new", true);
 		xhr.setRequestHeader("Content-Type", "application/json");
@@ -419,14 +422,14 @@ $(function() {
 		xhr.onload = function(){
 			if (this.status != 200){
 				Materialize.toast(this.responseText, 4000);
-			} else {
-				var response = JSON.parse(this.responseText);
+				return;
+			}
+			var response = JSON.parse(this.responseText);
 
-				if (response.ok){
-					Materialize.toast("Message posted.");
-				} else {
-					Materialize.toast("Request failed: " + response.reason, 4000);
-				}
+			if (response.ok){
+				Materialize.toast("Message posted.");
+			} else {
+				Materialize.toast("Request failed: " + response.reason, 4000);
 			}
 		};
 		xhr.open("POST", "/post/" + modalEvent.id + "/" + $("#channel-select").val(), true);
