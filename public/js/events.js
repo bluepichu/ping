@@ -57,29 +57,47 @@ $(function() {
 		var self = this;
 		this.$modal = $("#modal-event");
 		this.$more = $("#modal-more");
-		this.$organizers = this.$modal.find("#event-organizers .col");
-		/** For sorting organizers into columns */
-		this.ocount = 0;
-		this.$participants = this.$modal.find("#event-participants .col");
-		/** For sorting participants into columns */
-		this.pcount = 0;
-		this.$channels = this.$modal.find("#event-channels .col");
-		this.$channelSelect = this.$modal.find("#channel-select");
-		/** For sorting channels into columns */
-		this.ccount = 0;
-		this.$submit = this.$modal.find("#submit-event");
-		/** The slug for the modal to display */
+		/**
+		 * @namespace
+		 * @prop {object} $ - jQuery selectors
+		 * @prop {object} counts - Index for sorting items into columns
+		 * @type {{$: {organizers: JQuery, participants: JQuery, channels: JQuery, submit: JQuery}, counts: {organizers: number, participants: number, channels: number}}}
+		 */
+		this.modal = {
+			$: {
+				organizers: self.$modal.find("#event-organizers .col"),
+				participants: self.$modal.find("#event-organizers .col"),
+				channels: self.$modal.find("#event-channels .col"),
+				channelSelect: self.$modal.find("#channel-select"),
+				submit: self.$modal.find("#submit-event")
+			},
+			counts: {
+				organizers: 0,
+				participants: 0,
+				channels: 0
+			}
+		};
+		/**
+		 * @namespace
+		 * @type {{$: {matches: JQuery, brackets: JQuery}}}
+		 * @prop $ - jQuery selectors
+		 */
+		this.more = {
+			$: {
+				matches: self.$more.find("#more-matches"),
+				brackets: self.$more.find("#more-brackets")
+			}
+		};
+		/** The slug for the modal to display
+		 * @type {string} */
 		this.id = undefined;
 		this.favorite = false; // TODO: currently only aesthetic
-		/** Array of participants for tournament bracket */
-		this.participants = [];
-		/** Whether or not to display message broadcast field */
+		/** Whether or not to display message broadcast field
+		 * @type {boolean} */
 		this.isOrganizer = false;
-		this.$matches = this.$more.find("#more-matches");
-		this.$brackets = this.$more.find("#more-brackets");
 
 		// Initialize modal buttons
-		this.$submit.click(function() {self.toggle()});
+		this.modal.$.submit.click(function() {self.toggle()});
 		this.$modal.find("#event-more").click(function() {self.showMore()});
 
 		/**
@@ -101,11 +119,11 @@ $(function() {
 				}
 				self.setTitle(rec.name);
 				self.setDescription(rec.description);
-				self.$organizers.empty();
-				self.$participants.empty();
-				self.$channels.empty();
-				self.$channelSelect.material_select("destroy");
-				self.$channelSelect.empty();
+				self.modal.$.organizers.empty();
+				self.modal.$.participants.empty();
+				self.modal.$.channels.empty();
+				self.modal.$.channelSelect.material_select("destroy");
+				self.modal.$.channelSelect.empty();
 				for (var i = 0; i < rec.organizers.length; i++){
 					self.addOrganizer(rec.organizers[i]);
 				}
@@ -115,14 +133,12 @@ $(function() {
 				for (var i = 0; i < rec.channels.length; i++){
 					self.addChannel(rec.channels[i]); // TODO: show enabled/disabled channel
 				}
-				self.$channelSelect.find("option:first-child").prop("selected", true);
-				self.$channelSelect.material_select();
+				self.modal.$.channelSelect.find("option:first-child").prop("selected", true);
+				self.modal.$.channelSelect.material_select();
 				// QR code gen
 				console.log(self.$modal.find("#event-channels").find(".channel input"));
 				self.$modal.find("#event-channels").find(".channel input").click(function() {
 					console.log("clicked channel");
-					//console.log($(this).is(':checked'));
-					console.log($(this).parent().parent().parent().text().trim().toLowerCase());
 					//if ($(this).is(':checked')) {
 					$("body").append("<img src=\"/qr/" + self.id + "/" + $(this).parent().parent().parent().text().trim().toLowerCase() + "\" class=\"materialboxed\" id=\"z\"/>");
 					var $qr = $("#z");
@@ -135,7 +151,7 @@ $(function() {
 				});
 				// TODO: check if added event or not
 				self.favorite = true;
-				self.$submit.text("Remove");
+				self.modal.$.submit.text("Remove");
 				//} else {
 				//this.favorite = false;
 				//this.$submit.text("Add");
@@ -189,13 +205,13 @@ $(function() {
 			} else {
 				img = "<img src=\"" + img + "\" />";
 			}
-			$(this.$participants[this.ocount]).append(
-				"<div class=\"participant\">" + // Who cares if it uses the same css as participants
+			$(this.modal.$.organizers[this.modal.counts.organizers]).append(
+				"<div class=\"organizer\">" +
 				img +
 				"<span>" + name + "</span>" +
 				"</div>"
 			);
-			this.ocount = (this.ocount + 1) % 2;
+			this.modal.counts.organizers = (this.modal.counts.organizers + 1) % 2;
 		};
 
 		/**
@@ -210,13 +226,13 @@ $(function() {
 			} else {
 				img = "<img src=\"" + img + "\" />";
 			}
-			$(this.$participants[this.pcount]).append(
+			$(this.modal.$.participants[this.modal.counts.participants]).append(
 				"<div class=\"participant\">" +
 				img +
 				"<span>" + name + "</span>" +
 				"</div>"
 			);
-			this.pcount = (this.pcount + 1) % 3;
+			this.modal.counts.participants = (this.modal.counts.participants + 1) % 3;
 		};
 
 		/**
@@ -226,7 +242,7 @@ $(function() {
 		 * @see modalEvent#show()
 		 */
 		this.addChannel = function(channel, enabled) {
-			$(this.$channels[this.ccount]).append(
+			$(this.modal.$.channels[this.modal.counts.channels]).append(
 				"<div>" +
 				"<span>" + channel + "</span>" +
 				"<div class=\"switch\" style=\"float: right\">" +
@@ -237,8 +253,8 @@ $(function() {
 				"</div>" +
 				"</div>"
 			);
-			this.$channelSelect.append("<option value='" + channel + "' name='" + channel + "'>" + channel + "</option>"); 
-			this.ccount = (this.ccount + 1) % 3;
+			this.modal.$.channelSelect.append("<option value='" + channel + "' name='" + channel + "'>" + channel + "</option>");
+			this.modal.counts.channels = (this.modal.counts.channels + 1) % 3;
 		};
 
 		/**
@@ -247,9 +263,9 @@ $(function() {
 		this.toggle = function() {
 			console.log(this.id);
 			if (this.favorite) {
-				this.$submit.text("Add"); 
+				this.modal.$.submit.text("Add");
 			} else {
-				this.$submit.text("Remove");
+				this.modal.$.submit.text("Remove");
 			} 
 			this.favorite = !this.favorite;
 			// TODO: Preferably do something on the server end
@@ -282,7 +298,7 @@ $(function() {
 					+ "<h1>vs.</h1>" +
 					"<span>" + players.second + "</span>" + icons.second +
 				"</div>"
-			).appendTo(this.$matches).data("id", 1); // TODO: add id to each match
+			).appendTo(this.more.$.matches).data("id", 1); // TODO: add id to each match
 		};
 
 		/**
@@ -304,16 +320,16 @@ $(function() {
 			// Populate title and description fields
 			$("#more-title").text($("#event-title").text());
 			$("#more-description").text($("#event-description").text());
-			if (!this.$matches.is(':empty')) {
-				this.$matches.empty();
+			if (!this.more.$.matches.is(':empty')) {
+				this.more.$.matches.empty();
 			}
-			if (!this.$brackets.is(':empty')) {
-				this.$brackets.empty();
+			if (!this.more.$.brackets.is(':empty')) {
+				this.more.$.brackets.empty();
 			}
 
 			// TODO: add matches to list using this.addMatch()
 
-			// TODO Integrate participant/backend stuff with tournament creation
+			// TODO: Integrate participant/backend stuff with tournament creation
 			// Hard coded data for now
 			var tb = new tbracket('single', 'strict');
 			for (var i = 0; i < 7; i++) {
@@ -321,13 +337,13 @@ $(function() {
 			}
 			tb.startTournament();
 
-			// TODO CSS to center the bracket
-			this.$brackets.bracket({
+			// TODO: CSS to center the bracket
+			this.more.$.brackets.bracket({
 				init: tb.getData(), /* data to initialize the bracket with */
 				skipConsolationRound: !tb.isConsolation(),
 				save: tb.saveFn,
-				userData: "",	// TODO MongoDB integration
-				// TODO pull up modal with participant data/phone #s
+				userData: "",	// TODO: MongoDB integration
+				// TODO: pull up modal with participant data/phone #s
 				onMatchClick: function(data) {console.log(data);}
 			});
 		}

@@ -298,7 +298,7 @@ main .card {
   text-align: center;
   margin-bottom: 0.75rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.24); }
-#modal-event .modal-content .participant {
+#modal-event .modal-content .participant, #modal-event .modal-content .organizer {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -310,9 +310,9 @@ main .card {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center; }
-  #modal-event .modal-content .participant span {
+  #modal-event .modal-content .participant span, #modal-event .modal-content .organizer span {
     font-weight: 300; }
-  #modal-event .modal-content .participant img, #modal-event .modal-content .participant i {
+  #modal-event .modal-content .participant img, #modal-event .modal-content .participant i, #modal-event .modal-content .organizer img, #modal-event .modal-content .organizer i {
     display: block;
     margin-right: 1rem;
     height: 2rem;
@@ -323,11 +323,33 @@ main .card {
 #modal-event .modal-content .channel {
   margin-bottom: 0.75rem; }
 
-#logout {
-  float: left; }
+#modal-more #more-matches .match-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0.5rem;
+  border: solid 1px #333; }
+  #modal-more #more-matches .match-item img:first-child, #modal-more #more-matches .match-item i:first-child {
+    justify-self: flex-start; }
+  #modal-more #more-matches .match-item img:last-child, #modal-more #more-matches .match-item i:last-child {
+    justify-self: flex-end; }
+  #modal-more #more-matches .match-item span:first-of-type {
+    justify-self: flex-start; }
+  #modal-more #more-matches .match-item span:last-of-type {
+    justify-self: flex-end; }
+  #modal-more #more-matches .match-item h1 {
+    justify-self: center; }
 
 #modal-create .modal-content .input {
   margin: 0; }
+
+#logout {
+  float: left; }
 
 h4, h5 {
   font-weight: 300; }
